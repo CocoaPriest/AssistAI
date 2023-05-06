@@ -46,6 +46,7 @@
 			children = (
 				9ECCB0B82A0445B6002F1239 /* pindexer */,
 				9ECCB0B72A0445B6002F1239 /* Products */,
+				9ECCB0C42A06C763002F1239 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +65,13 @@
 				9ECCB0B92A0445B6002F1239 /* main.swift */,
 			);
 			path = pindexer;
+			sourceTree = "<group>";
+		};
+		9ECCB0C42A06C763002F1239 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,6 +265,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PYNP4H8XK8;
 				ENABLE_HARDENED_RUNTIME = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/tmp/tokenizer",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -269,6 +281,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PYNP4H8XK8;
 				ENABLE_HARDENED_RUNTIME = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/tmp/tokenizer",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};

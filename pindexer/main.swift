@@ -49,7 +49,7 @@ func numOfTokens(fileContent: String) -> Int {
     return num
 }
 
-func callAPI(text: String) {
+func callAPI(text: String, filePath: String) {
     // Define the URL and create the URL object
     guard let url = URL(string: "https://api.openai.com/v1/embeddings") else {
         print("Invalid URL")
@@ -96,7 +96,7 @@ func callAPI(text: String) {
                         if let dataObj = data[0] as? [String: Any],
                         let embeddings = dataObj["embedding"] as? [Double] {
 //                            print("embeddings: \(embeddings)")
-                            processEmbeddings(embeddings)
+                            addEmbeddingsToPinecone(embeddings, filePath: filePath)
                         }
                     }
 
@@ -118,8 +118,67 @@ func callAPI(text: String) {
     }
 }
 
-func processEmbeddings(_ embeddings: [Double]) {
+func addEmbeddingsToPinecone(_ embeddings: [Double], filePath: String) {
+    guard let url = URL(string: "https://pa-78b11f8.svc.us-west4-gcp.pinecone.io/vectors/upsert") else {
+        print("Invalid URL")
+        exit(1) // Exit with an error code
+    }
 
+    let metadata: [String: Any] = [
+        "link" : filePath
+    ]
+
+    let vectors: [String: Any] = [
+        "id": UUID().uuidString,
+        "metadata" : metadata,
+        "values": embeddings
+    ]
+
+    // Create the JSON data.
+    let jsonData: [String: Any] = [
+        "vectors": vectors,
+        "namespace": ""
+    ]
+
+    print(jsonData)
+
+    do {
+        // Convert the JSON data to Data object
+        let postData = try JSONSerialization.data(withJSONObject: jsonData, options: [])
+
+        // Create a URLRequest object
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("33d36e33-0cb0-4e91-8f5d-0c23ae5ff698", forHTTPHeaderField: "Api-Key")
+        request.httpBody = postData
+
+        // Create a DispatchSemaphore
+        let semaphore = DispatchSemaphore(value: 0)
+
+        // Create a URLSessionDataTask to send the request
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            // Handle response and errors
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                semaphore.signal() // Signal that the request is complete
+                return
+            }
+
+            let httpResponse = response as? HTTPURLResponse
+            print(httpResponse!)
+
+            semaphore.signal() // Signal that the request is complete
+        }
+
+        task.resume() // Start the task
+
+        // Wait for the semaphore to be signaled
+        semaphore.wait()
+
+    } catch {
+        print("Error creating JSON data: \(error.localizedDescription)")
+    }
 }
 
 if let files = filesInDirectory(atPath: "/Users/kostik/Library/Mobile Documents/iCloud~md~obsidian/Documents/tmp", withExtension: "md") {
@@ -129,7 +188,7 @@ if let files = filesInDirectory(atPath: "/Users/kostik/Library/Mobile Documents/
         let content = loadContent(atPath: file.path(percentEncoded: false))
         let tokens = numOfTokens(fileContent: content)
         print(tokens)
-        callAPI(text: content)
+        callAPI(text: content, filePath: file.path)
     }
 } else {
     print("Failed to find files")
