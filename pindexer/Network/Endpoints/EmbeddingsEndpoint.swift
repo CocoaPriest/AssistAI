@@ -18,11 +18,17 @@ extension OpenAIEndpoint: Endpoint {
     }
 
     var path: String {
-        return "/embeddings"
+        switch self {
+        case .getEmbedding:
+            return "/embeddings"
+        }
     }
 
     var method: RequestMethod {
-        return .post
+        switch self {
+        case .getEmbedding:
+            return .post
+        }
     }
 
     var header: [String: String]? {

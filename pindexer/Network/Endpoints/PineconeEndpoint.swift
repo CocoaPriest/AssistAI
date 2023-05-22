@@ -18,11 +18,17 @@ extension PineconeEndpoint: Endpoint {
     }
 
     var path: String {
-        return "/upsert"
+        switch self {
+        case .insertEmbedding:
+            return "/upsert"
+        }
     }
 
     var method: RequestMethod {
-        return .post
+        switch self {
+        case .insertEmbedding:
+            return .post
+        }
     }
 
     var header: [String: String]? {
@@ -32,7 +38,6 @@ extension PineconeEndpoint: Endpoint {
         ]
     }
 
-    // TODO: remove this mess
     var body: [String: Any]? {
         switch self {
         case .insertEmbedding(let id, let embedding, let filePath):
@@ -46,7 +51,6 @@ extension PineconeEndpoint: Endpoint {
                 "values": embedding
             ]
 
-            // Create the JSON data.
             let jsonData: [String: Any] = [
                 "vectors": vectors,
                 "namespace": ""
