@@ -1,6 +1,6 @@
 //
 //  Endpoint.swift
-//  koozyk
+//  pindexer
 //
 //  Created by Konstantin Gonikman on 29.01.23.
 //

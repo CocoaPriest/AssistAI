@@ -1,6 +1,6 @@
 //
 //  EmbeddingResponse.swift
-//  koozyk
+//  pindexer
 //
 //  Created by Konstantin Gonikman on 26.01.23.
 //
