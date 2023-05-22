@@ -11,10 +11,11 @@ import os.log
 final class PIndexer {
     private let rootDirectory: String
     private let tiktoken = TiktokenSwift()
-    private let embeddingsService = EmbeddingsService()
+    private let embeddingsService: EmbeddingsServiceable
 
     init(rootDirectory: String) {
         self.rootDirectory = rootDirectory
+        self.embeddingsService = EmbeddingsService()
     }
 
     func run() async {
@@ -37,8 +38,23 @@ final class PIndexer {
             let tokens = tiktoken.numOfTokens(fileContent: content)
             OSLog.general.log("\(tokens, privacy: .public) tokens (local calc)")
 
-            let embedding = try! await embeddingsService.getEmbedding(text: content)
-            OSLog.general.log("\(embedding, privacy: .public)")
+            do {
+                let embedding = try await self.getEmbedding(text: content)
+                OSLog.general.log("\(embedding, privacy: .public)")
+            } catch {
+                OSLog.general.error("Can't get embedding")
+            }
+        }
+    }
+
+    private func getEmbedding(text: String) async throws -> [Double] {
+        let result = await embeddingsService.getEmbedding(text: text)
+        switch result {
+        case .success(let embedding):
+            return embedding
+        case .failure(let error):
+            OSLog.general.error("Service error: \(error.localizedDescription)")
+            throw error
         }
     }
 

@@ -13,10 +13,14 @@
 		9ECCB0DD2A1B85DA002F1239 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9ECCB0E02A1B8727002F1239 /* PIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DF2A1B8727002F1239 /* PIndexer.swift */; };
 		9ECCB0E22A1B8CC3002F1239 /* TiktokenSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */; };
-		9ECCB0E42A1B8FD4002F1239 /* EmbeddingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E32A1B8FD4002F1239 /* EmbeddingsService.swift */; };
 		9ECCB0E62A1B9333002F1239 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E52A1B9333002F1239 /* Data+Extensions.swift */; };
-		9ECCB0E92A1B943C002F1239 /* EmbeddingsServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E82A1B943C002F1239 /* EmbeddingsServiceError.swift */; };
 		9ECCB0EB2A1B945B002F1239 /* EmbeddingResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */; };
+		9ECCB10A2A1B9E51002F1239 /* EmbeddingsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0F02A1B9E51002F1239 /* EmbeddingsEndpoint.swift */; };
+		9ECCB1172A1B9E51002F1239 /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1022A1B9E51002F1239 /* HttpClient.swift */; };
+		9ECCB1182A1B9E51002F1239 /* RequestMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1032A1B9E51002F1239 /* RequestMethod.swift */; };
+		9ECCB1192A1B9E51002F1239 /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1042A1B9E51002F1239 /* RequestError.swift */; };
+		9ECCB11A2A1B9E51002F1239 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1052A1B9E51002F1239 /* Endpoint.swift */; };
+		9ECCB11B2A1B9E51002F1239 /* EmbeddingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* EmbeddingsService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,10 +43,14 @@
 		9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
 		9ECCB0DF2A1B8727002F1239 /* PIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PIndexer.swift; sourceTree = "<group>"; };
 		9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiktokenSwift.swift; sourceTree = "<group>"; };
-		9ECCB0E32A1B8FD4002F1239 /* EmbeddingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddingsService.swift; sourceTree = "<group>"; };
 		9ECCB0E52A1B9333002F1239 /* Data+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
-		9ECCB0E82A1B943C002F1239 /* EmbeddingsServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddingsServiceError.swift; sourceTree = "<group>"; };
 		9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbeddingResponse.swift; sourceTree = "<group>"; };
+		9ECCB0F02A1B9E51002F1239 /* EmbeddingsEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbeddingsEndpoint.swift; sourceTree = "<group>"; };
+		9ECCB1022A1B9E51002F1239 /* HttpClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
+		9ECCB1032A1B9E51002F1239 /* RequestMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestMethod.swift; sourceTree = "<group>"; };
+		9ECCB1042A1B9E51002F1239 /* RequestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestError.swift; sourceTree = "<group>"; };
+		9ECCB1052A1B9E51002F1239 /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		9ECCB1072A1B9E51002F1239 /* EmbeddingsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbeddingsService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +89,7 @@
 				9ECCB0DA2A1B856C002F1239 /* main.swift */,
 				9ECCB0DF2A1B8727002F1239 /* PIndexer.swift */,
 				9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */,
-				9ECCB0E72A1B9432002F1239 /* Embeddings */,
+				9ECCB0ED2A1B9E51002F1239 /* Network */,
 				9ECCB0EC2A1B9982002F1239 /* VectorDB */,
 				9ECCB0DE2A1B85DD002F1239 /* Extensions */,
 			);
@@ -104,22 +112,58 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		9ECCB0E72A1B9432002F1239 /* Embeddings */ = {
-			isa = PBXGroup;
-			children = (
-				9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */,
-				9ECCB0E32A1B8FD4002F1239 /* EmbeddingsService.swift */,
-				9ECCB0E82A1B943C002F1239 /* EmbeddingsServiceError.swift */,
-			);
-			path = Embeddings;
-			sourceTree = "<group>";
-		};
 		9ECCB0EC2A1B9982002F1239 /* VectorDB */ = {
 			isa = PBXGroup;
 			children = (
 				9ECCB0B92A0445B6002F1239 /* PineconeService.swift */,
 			);
 			path = VectorDB;
+			sourceTree = "<group>";
+		};
+		9ECCB0ED2A1B9E51002F1239 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				9ECCB0EE2A1B9E51002F1239 /* Endpoints */,
+				9ECCB0F32A1B9E51002F1239 /* Responses */,
+				9ECCB1012A1B9E51002F1239 /* Base */,
+				9ECCB1062A1B9E51002F1239 /* Services */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		9ECCB0EE2A1B9E51002F1239 /* Endpoints */ = {
+			isa = PBXGroup;
+			children = (
+				9ECCB0F02A1B9E51002F1239 /* EmbeddingsEndpoint.swift */,
+			);
+			path = Endpoints;
+			sourceTree = "<group>";
+		};
+		9ECCB0F32A1B9E51002F1239 /* Responses */ = {
+			isa = PBXGroup;
+			children = (
+				9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */,
+			);
+			path = Responses;
+			sourceTree = "<group>";
+		};
+		9ECCB1012A1B9E51002F1239 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				9ECCB1022A1B9E51002F1239 /* HttpClient.swift */,
+				9ECCB1032A1B9E51002F1239 /* RequestMethod.swift */,
+				9ECCB1042A1B9E51002F1239 /* RequestError.swift */,
+				9ECCB1052A1B9E51002F1239 /* Endpoint.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		9ECCB1062A1B9E51002F1239 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9ECCB1072A1B9E51002F1239 /* EmbeddingsService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,15 +230,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9ECCB11A2A1B9E51002F1239 /* Endpoint.swift in Sources */,
 				9ECCB0E02A1B8727002F1239 /* PIndexer.swift in Sources */,
 				9ECCB0E62A1B9333002F1239 /* Data+Extensions.swift in Sources */,
+				9ECCB1182A1B9E51002F1239 /* RequestMethod.swift in Sources */,
 				9ECCB0DB2A1B856C002F1239 /* main.swift in Sources */,
 				9ECCB0DD2A1B85DA002F1239 /* OSLog+Extensions.swift in Sources */,
-				9ECCB0E92A1B943C002F1239 /* EmbeddingsServiceError.swift in Sources */,
-				9ECCB0E42A1B8FD4002F1239 /* EmbeddingsService.swift in Sources */,
+				9ECCB1172A1B9E51002F1239 /* HttpClient.swift in Sources */,
+				9ECCB11B2A1B9E51002F1239 /* EmbeddingsService.swift in Sources */,
 				9ECCB0EB2A1B945B002F1239 /* EmbeddingResponse.swift in Sources */,
 				9ECCB0E22A1B8CC3002F1239 /* TiktokenSwift.swift in Sources */,
+				9ECCB1192A1B9E51002F1239 /* RequestError.swift in Sources */,
 				9ECCB0BA2A0445B6002F1239 /* PineconeService.swift in Sources */,
+				9ECCB10A2A1B9E51002F1239 /* EmbeddingsEndpoint.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
