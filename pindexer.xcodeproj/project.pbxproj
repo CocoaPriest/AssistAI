@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9ECCB0BA2A0445B6002F1239 /* PineconeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0B92A0445B6002F1239 /* PineconeService.swift */; };
 		9ECCB0C22A045303002F1239 /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECCB0C12A045303002F1239 /* PythonKit */; };
 		9ECCB0DB2A1B856C002F1239 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DA2A1B856C002F1239 /* main.swift */; };
 		9ECCB0DD2A1B85DA002F1239 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
@@ -20,7 +19,9 @@
 		9ECCB1182A1B9E51002F1239 /* RequestMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1032A1B9E51002F1239 /* RequestMethod.swift */; };
 		9ECCB1192A1B9E51002F1239 /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1042A1B9E51002F1239 /* RequestError.swift */; };
 		9ECCB11A2A1B9E51002F1239 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1052A1B9E51002F1239 /* Endpoint.swift */; };
-		9ECCB11B2A1B9E51002F1239 /* EmbeddingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* EmbeddingsService.swift */; };
+		9ECCB11B2A1B9E51002F1239 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* NetworkService.swift */; };
+		9ECCB11E2A1BADEA002F1239 /* PineconeEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB11D2A1BADEA002F1239 /* PineconeEndpoint.swift */; };
+		9ECCB1202A1BFD42002F1239 /* PineconeUpsertResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB11F2A1BFD42002F1239 /* PineconeUpsertResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,7 +38,6 @@
 
 /* Begin PBXFileReference section */
 		9ECCB0B62A0445B6002F1239 /* pindexer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pindexer; sourceTree = BUILT_PRODUCTS_DIR; };
-		9ECCB0B92A0445B6002F1239 /* PineconeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeService.swift; sourceTree = "<group>"; };
 		9ECCB0C32A0455DA002F1239 /* pindexer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = pindexer.entitlements; sourceTree = "<group>"; };
 		9ECCB0DA2A1B856C002F1239 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
@@ -50,7 +50,9 @@
 		9ECCB1032A1B9E51002F1239 /* RequestMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestMethod.swift; sourceTree = "<group>"; };
 		9ECCB1042A1B9E51002F1239 /* RequestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestError.swift; sourceTree = "<group>"; };
 		9ECCB1052A1B9E51002F1239 /* Endpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
-		9ECCB1072A1B9E51002F1239 /* EmbeddingsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbeddingsService.swift; sourceTree = "<group>"; };
+		9ECCB1072A1B9E51002F1239 /* NetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		9ECCB11D2A1BADEA002F1239 /* PineconeEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeEndpoint.swift; sourceTree = "<group>"; };
+		9ECCB11F2A1BFD42002F1239 /* PineconeUpsertResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeUpsertResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +92,6 @@
 				9ECCB0DF2A1B8727002F1239 /* PIndexer.swift */,
 				9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */,
 				9ECCB0ED2A1B9E51002F1239 /* Network */,
-				9ECCB0EC2A1B9982002F1239 /* VectorDB */,
 				9ECCB0DE2A1B85DD002F1239 /* Extensions */,
 			);
 			path = pindexer;
@@ -112,14 +113,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		9ECCB0EC2A1B9982002F1239 /* VectorDB */ = {
-			isa = PBXGroup;
-			children = (
-				9ECCB0B92A0445B6002F1239 /* PineconeService.swift */,
-			);
-			path = VectorDB;
-			sourceTree = "<group>";
-		};
 		9ECCB0ED2A1B9E51002F1239 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				9ECCB0F02A1B9E51002F1239 /* EmbeddingsEndpoint.swift */,
+				9ECCB11D2A1BADEA002F1239 /* PineconeEndpoint.swift */,
 			);
 			path = Endpoints;
 			sourceTree = "<group>";
@@ -143,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */,
+				9ECCB11F2A1BFD42002F1239 /* PineconeUpsertResponse.swift */,
 			);
 			path = Responses;
 			sourceTree = "<group>";
@@ -161,7 +156,7 @@
 		9ECCB1062A1B9E51002F1239 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				9ECCB1072A1B9E51002F1239 /* EmbeddingsService.swift */,
+				9ECCB1072A1B9E51002F1239 /* NetworkService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -236,13 +231,14 @@
 				9ECCB1182A1B9E51002F1239 /* RequestMethod.swift in Sources */,
 				9ECCB0DB2A1B856C002F1239 /* main.swift in Sources */,
 				9ECCB0DD2A1B85DA002F1239 /* OSLog+Extensions.swift in Sources */,
+				9ECCB1202A1BFD42002F1239 /* PineconeUpsertResponse.swift in Sources */,
 				9ECCB1172A1B9E51002F1239 /* HttpClient.swift in Sources */,
-				9ECCB11B2A1B9E51002F1239 /* EmbeddingsService.swift in Sources */,
+				9ECCB11B2A1B9E51002F1239 /* NetworkService.swift in Sources */,
 				9ECCB0EB2A1B945B002F1239 /* EmbeddingResponse.swift in Sources */,
 				9ECCB0E22A1B8CC3002F1239 /* TiktokenSwift.swift in Sources */,
 				9ECCB1192A1B9E51002F1239 /* RequestError.swift in Sources */,
-				9ECCB0BA2A0445B6002F1239 /* PineconeService.swift in Sources */,
 				9ECCB10A2A1B9E51002F1239 /* EmbeddingsEndpoint.swift in Sources */,
+				9ECCB11E2A1BADEA002F1239 /* PineconeEndpoint.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,58 @@
+//
+//  PineconeEndpoint.swift
+//  pindexer
+//
+//  Created by Konstantin Gonikman on 22.05.23.
+//
+
+import Foundation
+import os.log
+
+enum PineconeEndpoint {
+    case insertEmbedding(id: UUID, embedding: [Double], filePath: String)
+}
+
+extension PineconeEndpoint: Endpoint {
+    var baseUrl: URL {
+        return URL(string: "https://idx-78b11f8.svc.us-west4-gcp.pinecone.io/vectors")!
+    }
+
+    var path: String {
+        return "/upsert"
+    }
+
+    var method: RequestMethod {
+        return .post
+    }
+
+    var header: [String: String]? {
+        return [
+            "Content-Type": "application/json",
+            "Api-Key": "33d36e33-0cb0-4e91-8f5d-0c23ae5ff698"
+        ]
+    }
+
+    // TODO: remove this mess
+    var body: [String: Any]? {
+        switch self {
+        case .insertEmbedding(let id, let embedding, let filePath):
+            let metadata: [String: Any] = [
+                "link" : filePath
+            ]
+
+            let vectors: [String: Any] = [
+                "id": id.uuidString,
+                "metadata" : metadata,
+                "values": embedding
+            ]
+
+            // Create the JSON data.
+            let jsonData: [String: Any] = [
+                "vectors": vectors,
+                "namespace": ""
+            ]
+
+            return jsonData
+        }
+    }
+}

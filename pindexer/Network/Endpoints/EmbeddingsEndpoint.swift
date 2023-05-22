@@ -8,11 +8,11 @@
 import Foundation
 import os.log
 
-enum EmbeddingsEndpoint {
+enum OpenAIEndpoint {
     case getEmbedding(text: String)
 }
 
-extension EmbeddingsEndpoint: Endpoint {
+extension OpenAIEndpoint: Endpoint {
     var baseUrl: URL {
         return URL(string: "https://api.openai.com/v1")!
     }

@@ -11,11 +11,11 @@ import os.log
 final class PIndexer {
     private let rootDirectory: String
     private let tiktoken = TiktokenSwift()
-    private let embeddingsService: EmbeddingsServiceable
+    private let networkService: NetworkServiceable
 
     init(rootDirectory: String) {
         self.rootDirectory = rootDirectory
-        self.embeddingsService = EmbeddingsService()
+        self.networkService = NetworkService()
     }
 
     func run() async {
@@ -30,10 +30,11 @@ final class PIndexer {
 
         OSLog.general.log("Found \(files.count) md files:")
         for file in files {
+            let filePath = file.path(percentEncoded: false)
             do {
-                let content = try loadContent(atPath: file.path(percentEncoded: false))
+                let content = try loadContent(atPath: filePath)
 
-                OSLog.general.log("\(file.path, privacy: .public)")
+                OSLog.general.log("\(filePath, privacy: .public)")
                 OSLog.general.log("\(content, privacy: .sensitive)")
 
                 let tokens = tiktoken.numOfTokens(fileContent: content)
@@ -41,6 +42,8 @@ final class PIndexer {
 
                 let embedding = try await self.getEmbedding(text: content)
                 OSLog.general.log("\(embedding, privacy: .public)")
+                let id = try await self.upsertEmbedding(embedding, filePath: filePath)
+                OSLog.general.log("Embedding upserted into the vector store: \(id, privacy: .public)")
             } catch {
                 OSLog.general.error("Can't process file: \(error.localizedDescription)")
             }
@@ -48,7 +51,7 @@ final class PIndexer {
     }
 
     private func getEmbedding(text: String) async throws -> [Double] {
-        let result = await embeddingsService.getEmbedding(text: text)
+        let result = await networkService.getEmbedding(text: text)
         switch result {
         case .success(let embedding):
             return embedding
@@ -56,6 +59,16 @@ final class PIndexer {
             OSLog.general.error("Service error: \(error.localizedDescription)")
             throw error
         }
+    }
+
+    private func upsertEmbedding(_ embedding: [Double], filePath: String) async throws -> UUID {
+        let id = UUID()
+        let result = await networkService.upsertEmbedding(id: id, embedding: embedding, filePath: filePath)
+        if case let .failure(error) = result {
+            OSLog.general.error("Service error: \(error.localizedDescription)")
+            throw error
+        }
+        return id
     }
 
     private func filesInDirectory(withExtension fileExtension: String) -> [URL]? {
