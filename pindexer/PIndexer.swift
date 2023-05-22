@@ -11,11 +11,10 @@ import os.log
 final class PIndexer {
     private let rootDirectory: String
     private let tiktoken = TiktokenSwift()
-    private let networkService: NetworkServiceable
+    private let embeddingManager = EmbeddingManager()
 
     init(rootDirectory: String) {
         self.rootDirectory = rootDirectory
-        self.networkService = NetworkService()
     }
 
     func run() async {
@@ -41,35 +40,14 @@ final class PIndexer {
                 OSLog.general.log("\(tokens, privacy: .public) tokens (local calc)")
 
                 // TODO: split into chunks of 1000 tokens
-                let embedding = try await self.createEmbedding(text: content)
+                let embedding = try await embeddingManager.createEmbedding(text: content)
                 OSLog.general.log("\(embedding, privacy: .public)")
-                let id = try await self.upsertEmbedding(embedding, filePath: filePath)
+                let id = try await embeddingManager.upsertEmbedding(embedding, filePath: filePath)
                 OSLog.general.log("Embedding upserted into the vector store: \(id, privacy: .public)")
             } catch {
                 OSLog.general.error("Can't process file: \(error.localizedDescription)")
             }
         }
-    }
-
-    private func createEmbedding(text: String) async throws -> [Double] {
-        let result = await networkService.createEmbedding(text: text)
-        switch result {
-        case .success(let embedding):
-            return embedding
-        case .failure(let error):
-            OSLog.general.error("Service error: \(error.localizedDescription)")
-            throw error
-        }
-    }
-
-    private func upsertEmbedding(_ embedding: [Double], filePath: String) async throws -> UUID {
-        let id = UUID()
-        let result = await networkService.upsertEmbedding(id: id, embedding: embedding, filePath: filePath)
-        if case let .failure(error) = result {
-            OSLog.general.error("Service error: \(error.localizedDescription)")
-            throw error
-        }
-        return id
     }
 
     private func filesInDirectory(withExtension fileExtension: String) -> [URL]? {
