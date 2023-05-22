@@ -40,7 +40,8 @@ final class PIndexer {
                 let tokens = tiktoken.numOfTokens(fileContent: content)
                 OSLog.general.log("\(tokens, privacy: .public) tokens (local calc)")
 
-                let embedding = try await self.getEmbedding(text: content)
+                // TODO: split into chunks of 1000 tokens
+                let embedding = try await self.createEmbedding(text: content)
                 OSLog.general.log("\(embedding, privacy: .public)")
                 let id = try await self.upsertEmbedding(embedding, filePath: filePath)
                 OSLog.general.log("Embedding upserted into the vector store: \(id, privacy: .public)")
@@ -50,8 +51,8 @@ final class PIndexer {
         }
     }
 
-    private func getEmbedding(text: String) async throws -> [Double] {
-        let result = await networkService.getEmbedding(text: text)
+    private func createEmbedding(text: String) async throws -> [Double] {
+        let result = await networkService.createEmbedding(text: text)
         switch result {
         case .success(let embedding):
             return embedding

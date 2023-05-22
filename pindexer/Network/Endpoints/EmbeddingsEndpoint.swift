@@ -9,7 +9,7 @@ import Foundation
 import os.log
 
 enum OpenAIEndpoint {
-    case getEmbedding(text: String)
+    case createEmbedding(text: String)
 }
 
 extension OpenAIEndpoint: Endpoint {
@@ -19,14 +19,14 @@ extension OpenAIEndpoint: Endpoint {
 
     var path: String {
         switch self {
-        case .getEmbedding:
+        case .createEmbedding:
             return "/embeddings"
         }
     }
 
     var method: RequestMethod {
         switch self {
-        case .getEmbedding:
+        case .createEmbedding:
             return .post
         }
     }
@@ -40,7 +40,7 @@ extension OpenAIEndpoint: Endpoint {
 
     var body: [String: Any]? {
         switch self {
-        case .getEmbedding(let text):
+        case .createEmbedding(let text):
             return ["input": text,
                     "model": "text-embedding-ada-002"]
         }

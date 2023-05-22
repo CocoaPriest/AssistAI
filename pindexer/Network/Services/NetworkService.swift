@@ -8,13 +8,13 @@
 import Foundation
 
 protocol NetworkServiceable {
-    func getEmbedding(text: String) async -> Result<[Double], RequestError>
+    func createEmbedding(text: String) async -> Result<[Double], RequestError>
     func upsertEmbedding(id: UUID, embedding: [Double], filePath: String) async -> Result<Void, RequestError>
 }
 
 struct NetworkService: HTTPClient, NetworkServiceable {
-    func getEmbedding(text: String) async -> Result<[Double], RequestError> {
-        let response = await sendRequest(endpoint: OpenAIEndpoint.getEmbedding(text: text),
+    func createEmbedding(text: String) async -> Result<[Double], RequestError> {
+        let response = await sendRequest(endpoint: OpenAIEndpoint.createEmbedding(text: text),
                                          responseModel: EmbeddingResponse.self)
         return response.flatMap { resp in
             guard let firstEmbedding = resp.data.first else {
