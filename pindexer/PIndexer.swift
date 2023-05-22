@@ -30,19 +30,19 @@ final class PIndexer {
 
         OSLog.general.log("Found \(files.count) md files:")
         for file in files {
-            let content = loadContent(atPath: file.path(percentEncoded: false))
-
-            OSLog.general.log("\(file.path, privacy: .public)")
-            OSLog.general.log("\(content, privacy: .sensitive)")
-
-            let tokens = tiktoken.numOfTokens(fileContent: content)
-            OSLog.general.log("\(tokens, privacy: .public) tokens (local calc)")
-
             do {
+                let content = try loadContent(atPath: file.path(percentEncoded: false))
+
+                OSLog.general.log("\(file.path, privacy: .public)")
+                OSLog.general.log("\(content, privacy: .sensitive)")
+
+                let tokens = tiktoken.numOfTokens(fileContent: content)
+                OSLog.general.log("\(tokens, privacy: .public) tokens (local calc)")
+
                 let embedding = try await self.getEmbedding(text: content)
                 OSLog.general.log("\(embedding, privacy: .public)")
             } catch {
-                OSLog.general.error("Can't get embedding")
+                OSLog.general.error("Can't process file: \(error.localizedDescription)")
             }
         }
     }
@@ -72,14 +72,8 @@ final class PIndexer {
         }
     }
 
-    private func loadContent(atPath filePath: String) -> String {
+    private func loadContent(atPath filePath: String) throws -> String {
         let fileURL = URL(fileURLWithPath: filePath)
-
-        do {
-            return try String(contentsOf: fileURL, encoding: .utf8)
-        } catch {
-            OSLog.general.error("Error reading file: \(error)")
-        }
-        return ""
+        return try String(contentsOf: fileURL, encoding: .utf8)
     }
 }
