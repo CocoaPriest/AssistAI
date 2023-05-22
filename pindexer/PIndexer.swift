@@ -19,7 +19,7 @@ final class PIndexer {
     }
 
     func run() async {
-        OSLog.general.log("PIndexer started")
+        OSLog.general.log("pindexer started")
         OSLog.general.log("Root directory: \(self.rootDirectory)")
 //        sleep(2)
 

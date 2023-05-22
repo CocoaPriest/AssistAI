@@ -39,7 +39,7 @@ extension HTTPClient {
 
         do {
             let (data, response) = try await URLSession.shared.data(for: request, delegate: nil)
-            OSLog.networking.log("URLResponse: \(response)")
+//            OSLog.networking.debug("URLResponse: \(response)")
 
             guard let response = response as? HTTPURLResponse else {
                 return .failure(.noResponse)

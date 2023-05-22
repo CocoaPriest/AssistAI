@@ -13,19 +13,28 @@ final class ConsoleApp {
 
     func setup() {
         // Your app setup code here
-        OSLog.general.log("App started")
+        OSLog.general.log("pindexer agent started")
 
         Task {
             let pindexer = PIndexer(rootDirectory: "/Users/kostik/Library/Mobile Documents/iCloud~md~obsidian/Documents/Ideas")
             await pindexer.run()
         }
 
-        let signalSource = DispatchSource.makeSignalSource(signal: SIGINT, queue: DispatchQueue.main)
-        signalSource.setEventHandler {
+        // INT for console
+        let signalINTSource = DispatchSource.makeSignalSource(signal: SIGINT, queue: DispatchQueue.main)
+        signalINTSource.setEventHandler {
             self.quit()
-            signalSource.cancel()
+            signalINTSource.cancel()
         }
-        signalSource.resume()
+        signalINTSource.resume()
+
+        // TERM for `launchctl unload`
+        let signalTERMSource = DispatchSource.makeSignalSource(signal: SIGTERM, queue: DispatchQueue.main)
+        signalTERMSource.setEventHandler {
+            self.quit()
+            signalTERMSource.cancel()
+        }
+        signalTERMSource.resume()
 
         signal(SIGINT, SIG_IGN)
         signal(SIGTERM, SIG_IGN)
@@ -35,7 +44,7 @@ final class ConsoleApp {
     }
 
     private func quit() {
-        OSLog.general.log("Console app quits, cleaning up...")
+        OSLog.general.log("pindexer agent quits, cleaning up...")
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.shouldKeepRunning = false
