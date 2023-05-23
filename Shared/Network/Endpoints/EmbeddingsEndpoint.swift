@@ -10,6 +10,7 @@ import os.log
 
 enum OpenAIEndpoint {
     case createEmbedding(text: String)
+    case ask(prompt: String, systemPrompt: String?)
 }
 
 extension OpenAIEndpoint: Endpoint {
@@ -21,12 +22,14 @@ extension OpenAIEndpoint: Endpoint {
         switch self {
         case .createEmbedding:
             return "/embeddings"
+        case .ask:
+            return "/chat/completions"
         }
     }
 
     var method: RequestMethod {
         switch self {
-        case .createEmbedding:
+        case .createEmbedding, .ask:
             return .post
         }
     }
@@ -43,6 +46,28 @@ extension OpenAIEndpoint: Endpoint {
         case .createEmbedding(let text):
             return ["input": text,
                     "model": "text-embedding-ada-002"]
+        case let .ask(prompt, systemPrompt):
+            var messages = [Any]()
+            if let systemPrompt {
+                let systemMessage = [
+                    "role": "assistant",
+                    "content": systemPrompt
+                ]
+                messages.append(systemMessage)
+            }
+
+            let userMessage = [
+                "role": "user",
+                "content": prompt
+            ]
+            messages.append(userMessage)
+
+            return [
+                "model": "gpt-4",
+                "temperature": 0,
+                "stream": false,
+                "messages": messages
+            ]
         }
     }
 }

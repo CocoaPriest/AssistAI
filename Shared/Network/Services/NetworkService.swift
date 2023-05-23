@@ -11,6 +11,7 @@ protocol NetworkServiceable {
     func createVector(text: String) async -> Result<[Double], RequestError>
     func upsertVector(userId: UUID, id: UUID, vector: [Double], filePath: String) async -> Result<Void, RequestError>
     func querySimilarities(userId: UUID, vector: [Double], maxCount: Int) async -> Result<[QueryMatch], RequestError>
+    func askGPT(prompt: String, systemPrompt: String?) async -> Result<String, RequestError>
 }
 
 struct NetworkService: HTTPClient, NetworkServiceable {
@@ -43,6 +44,17 @@ struct NetworkService: HTTPClient, NetworkServiceable {
                                          responseModel: PineconeQueryResponse.self)
         return response.map { resp in
             resp.matches
+        }
+    }
+
+    func askGPT(prompt: String, systemPrompt: String?) async -> Result<String, RequestError> {
+        let response = await sendRequest(endpoint: OpenAIEndpoint.ask(prompt: prompt, systemPrompt: systemPrompt),
+                                         responseModel: AskGPTResponse.self)
+        return response.flatMap { resp in
+            guard let firstChoice = resp.choices.first else {
+                return .failure(.emptyData)
+            }
+            return .success(firstChoice.message.content)
         }
     }
 }

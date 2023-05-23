@@ -11,6 +11,7 @@ import os.log
 final class ViewController: NSViewController {
 
     private let vectorManager = VectorManager()
+    private let gptManager = GPTManager()
 
     @IBOutlet weak var questionField: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
@@ -48,7 +49,7 @@ final class ViewController: NSViewController {
 
             // 3. Extract metadata: need filePath and text range
             let links = similarities.map { $0.metadata.link }
-            outputTextView.string = "Found results:\n\(links)"
+//            outputTextView.string = "Found results:\n\(links)"
 
             OSLog.general.log("Links found: \(links)")
 
@@ -59,13 +60,16 @@ final class ViewController: NSViewController {
             let template = self.loadTemplate()
             OSLog.general.log("Template:\n\(template)")
 
+            // 6. Create prompt
             let prompt = self.createPrompt(using: template, contentChunks: contentChunks)
             OSLog.general.log("Prompt:\n\(prompt)")
 
-//            let result = await self.postQuestion(prompt)
+            // 7. Get answer from GPT
+            let answer = try await gptManager.ask(prompt: prompt)
+            OSLog.general.log("Answer:\n\(answer, privacy: .public)")
 
-            // 6. Present answer
-//            outputTextView.string = result
+            // 8. Present answer
+            outputTextView.string = answer
 
             progressIndicator.stopAnimation(nil)
         }
