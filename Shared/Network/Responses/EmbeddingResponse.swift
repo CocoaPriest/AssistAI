@@ -14,11 +14,3 @@ struct EmbeddingResponse: Decodable {
         case data
     }
 }
-
-struct EmbeddingData: Decodable {
-    let embedding: [Double]
-
-    enum CodingKeys: String, CodingKey {
-        case embedding
-    }
-}

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.alstertouch.pindexer</string>
+	<string>com.alstertouch.ingester</string>
 	<key>Program</key>
 	<string>/Users/kostik/Library/Developer/Xcode/DerivedData/pindexer-gqwvtdfcbiqgwkbkmaldznkgqggo/Build/Products/Debug/pindexer</string>
 	<key>RunAtLoad</key>
