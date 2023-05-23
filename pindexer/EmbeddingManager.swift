@@ -11,6 +11,7 @@ import os.log
 final class EmbeddingManager {
     // TODO: depend. injection
     private let networkService: NetworkServiceable
+    private let userId = UUID(uuidString: "00000000-0000-0000-0000-000000000000")! // TODO: from user manager
 
     init() {
         self.networkService = NetworkService()
@@ -29,7 +30,6 @@ final class EmbeddingManager {
 
     func upsertEmbedding(_ embedding: [Double], filePath: String) async throws -> UUID {
         let id = UUID()
-        let userId = UUID(uuidString: "660641f8-5272-44ff-ae38-c12277fb694d")! // TODO: from user manager
         let result = await networkService.upsertEmbedding(userId: userId,
                                                           id: id,
                                                           embedding: embedding,
@@ -41,8 +41,7 @@ final class EmbeddingManager {
         return id
     }
 
-    // TODO: query using metadata -> need to return data for this user only!
-    // Not relevant later, in case of using local vector store
+    // TODO: always query using namespaces; not relevant later, in case of using local vector store
     func queryEmbeddings(using embedding: [Double], maxCount: Int) async throws -> [Embedding] {
         return []
     }
