@@ -38,6 +38,15 @@ extension HTTPClient {
         OSLog.networking.log("URLRequest: \(request.httpMethod ?? "???") \(request)")
 
         do {
+            // This will return an object that streams back the response as data-only server-sent events.
+            // Extract chunks from the delta field rather than the message field.
+//            if url.absoluteString == "https://api.openai.com/v1/chat/completions" {
+//                let (asyncBytes, response2) = try await URLSession.shared.bytes(for: request)
+//                for try await line in asyncBytes.lines {
+//                    OSLog.networking.log("\(line)")
+//                }
+//            }
+
             let (data, response) = try await URLSession.shared.data(for: request, delegate: nil)
 //            OSLog.networking.debug("URLResponse: \(response)")
 
