@@ -15,6 +15,7 @@ enum RequestError: Error {
     case unexpectedStatusCode
     case unknown
     case emptyData
+    case noResults
 
     var localizedDescription: String {
         switch self {

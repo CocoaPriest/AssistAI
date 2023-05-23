@@ -10,7 +10,7 @@ import os.log
 
 final class ViewController: NSViewController {
 
-    private let embeddingManager = EmbeddingManager()
+    private let vectorManager = VectorManager()
 
     @IBOutlet weak var questionField: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
@@ -31,15 +31,15 @@ final class ViewController: NSViewController {
         progressIndicator.startAnimation(nil)
 
         Task {
-            // 1. Convert question into embedding
-            let questionEmbedding = try await embeddingManager.createEmbedding(text: questionField.stringValue)
-            OSLog.general.log("\(questionEmbedding, privacy: .public)")
+            // 1. Convert question into embedding vector
+            let questionVector = try await vectorManager.createVector(text: questionField.stringValue)
+            OSLog.general.log("\(questionVector, privacy: .public)")
 
-            // 2. Get top 3 most similar embeddings from pinecone
-            let bestEmbeddings = try await embeddingManager.queryEmbeddings(using: questionEmbedding, maxCount: 3)
-            OSLog.general.log("\(bestEmbeddings, privacy: .public)")
+            // 2. Get top 3 most similar vectors from pinecone
+            let similarities = try await vectorManager.querySimilarities(using: questionVector, maxCount: 3)
+            OSLog.general.log("\(similarities, privacy: .public)")
 
-            guard !bestEmbeddings.isEmpty else {
+            guard !similarities.isEmpty else {
                 OSLog.general.warning("No results.")
                 outputTextView.string = "No results."
                 progressIndicator.stopAnimation(nil)
@@ -47,7 +47,10 @@ final class ViewController: NSViewController {
             }
 
             // 3. Extract metadata: need filePath and text range
-//            let metadata = self.extractMetadata(from: bestEmbeddings)
+            let links = similarities.map { $0.metadata.link }
+            outputTextView.string = "Found results:\n\(links)"
+
+            OSLog.general.log("Links found: \(links)")
 
             // 4. Read text from this file in selected range
 //            let contentChunks = self.loadContentChunks(from: metadata)
@@ -59,6 +62,8 @@ final class ViewController: NSViewController {
 
             // 6. Present answer
 //            outputTextView.string = result
+
+            progressIndicator.stopAnimation(nil)
         }
     }
 }

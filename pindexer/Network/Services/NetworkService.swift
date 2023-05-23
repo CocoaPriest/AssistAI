@@ -10,6 +10,7 @@ import Foundation
 protocol NetworkServiceable {
     func createVector(text: String) async -> Result<[Double], RequestError>
     func upsertVector(userId: UUID, id: UUID, vector: [Double], filePath: String) async -> Result<Void, RequestError>
+    func querySimilarities(userId: UUID, vector: [Double], maxCount: Int) async -> Result<[QueryMatch], RequestError>
 }
 
 struct NetworkService: HTTPClient, NetworkServiceable {
@@ -33,5 +34,15 @@ struct NetworkService: HTTPClient, NetworkServiceable {
         return response.flatMap({ resp in
             resp.upsertedCount == 1 ? .success(()) : .failure(.unknown)
         })
+    }
+
+    func querySimilarities(userId: UUID, vector: [Double], maxCount: Int) async -> Result<[QueryMatch], RequestError> {
+        let response = await sendRequest(endpoint: PineconeEndpoint.query(userId: userId,
+                                                                          vector: vector,
+                                                                          maxCount: maxCount),
+                                         responseModel: PineconeQueryResponse.self)
+        return response.map { resp in
+            resp.matches
+        }
     }
 }

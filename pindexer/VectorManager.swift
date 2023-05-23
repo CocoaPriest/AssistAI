@@ -42,9 +42,16 @@ final class VectorManager {
     }
 
     // TODO: always query using namespaces; not relevant later, in case of using local vector store
-    func querySimilarities(using vector: [Double], maxCount: Int) async throws -> [PineconeVector] {
-//        let result = await networkService.querySimilarities(userId: userId,
-//                                                            vectors: vectors)
-        return []
+    func querySimilarities(using vector: [Double], maxCount: Int) async throws -> [QueryMatch] {
+        let result = await networkService.querySimilarities(userId: userId,
+                                                            vector: vector,
+                                                            maxCount: maxCount)
+        switch result {
+        case .success(let matches):
+            return matches
+        case .failure(let error):
+            OSLog.general.error("Service error: \(error.localizedDescription)")
+            throw error
+        }
     }
 }

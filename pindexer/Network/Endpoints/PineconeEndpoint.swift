@@ -10,23 +10,26 @@ import os.log
 
 enum PineconeEndpoint {
     case insertVector(userId: UUID, id: UUID, vector: [Double], filePath: String)
+    case query(userId: UUID, vector: [Double], maxCount: Int) 
 }
 
 extension PineconeEndpoint: Endpoint {
     var baseUrl: URL {
-        return URL(string: "https://idx-78b11f8.svc.us-west4-gcp.pinecone.io/vectors")!
+        return URL(string: "https://idx-78b11f8.svc.us-west4-gcp.pinecone.io")!
     }
 
     var path: String {
         switch self {
         case .insertVector:
-            return "/upsert"
+            return "/vectors/upsert"
+        case .query:
+            return "/query"
         }
     }
 
     var method: RequestMethod {
         switch self {
-        case .insertVector:
+        case .insertVector, .query:
             return .post
         }
     }
@@ -40,7 +43,7 @@ extension PineconeEndpoint: Endpoint {
 
     var body: [String: Any]? {
         switch self {
-        case .insertVector(let userId, let id, let vector, let filePath):
+        case let .insertVector(userId, id, vector, filePath):
             let metadata: [String: Any] = [
                 "link" : filePath
             ]
@@ -57,6 +60,14 @@ extension PineconeEndpoint: Endpoint {
             ]
 
             return jsonData
+        case let .query(userId, vector, maxCount):
+            return [
+                "namespace": userId.uuidString,
+                "vector": vector,
+                "topK": maxCount,
+                "includeValues": false,
+                "includeMetadata": true
+            ]
         }
     }
 }
