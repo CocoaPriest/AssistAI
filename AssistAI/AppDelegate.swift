@@ -20,4 +20,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }
+
+    @IBAction func didSelectGrantAccess(_ sender: Any) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseFiles = false
+        openPanel.canChooseDirectories = true
+
+        openPanel.begin { (result) in
+            if result == NSApplication.ModalResponse.OK {
+                if let url = openPanel.url {
+                    print("OK!")
+                }
+            }
+        }
+    }
 }

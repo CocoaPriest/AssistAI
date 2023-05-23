@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9ECCB0B52A0445B6002F1239"
-               BuildableName = "pindexer"
-               BlueprintName = "pindexer"
+               BuildableName = "Ingester"
+               BlueprintName = "Ingester"
                ReferencedContainer = "container:pindexer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9ECCB0B52A0445B6002F1239"
-            BuildableName = "pindexer"
-            BlueprintName = "pindexer"
+            BuildableName = "Ingester"
+            BlueprintName = "Ingester"
             ReferencedContainer = "container:pindexer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -69,8 +69,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9ECCB0B52A0445B6002F1239"
-            BuildableName = "pindexer"
-            BlueprintName = "pindexer"
+            BuildableName = "Ingester"
+            BlueprintName = "Ingester"
             ReferencedContainer = "container:pindexer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

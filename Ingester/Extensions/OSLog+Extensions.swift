@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  pindexer
+//  OSLog.swift
+//  OSLog
 //
 //  Created by Konstantin Gonikman on 22.01.23.
 //
@@ -9,7 +9,7 @@ import Foundation
 import os.log
 
 public extension OSLog {
-    private static let subsystem: String = "com.alstertouch.pindexer"
+    private static let subsystem: String = "com.alstertouch.assistai"
 
     static let general = Logger(subsystem: subsystem, category: "general")
 

@@ -53,11 +53,15 @@ final class ViewController: NSViewController {
             OSLog.general.log("Links found: \(links)")
 
             // 4. Read text from this file in selected range
-//            let contentChunks = self.loadContentChunks(from: metadata)
+            let contentChunks = self.loadContentChunks(from: links)
 
             // 5. Send using a template this question and the 3 top texts to GPT
-//            let template = self.loadTemplate()
-//            let prompt = self.createPrompt(template, contentChunks: contentChunks)
+            let template = self.loadTemplate()
+            OSLog.general.log("Template:\n\(template)")
+
+            let prompt = self.createPrompt(using: template, contentChunks: contentChunks)
+            OSLog.general.log("Prompt:\n\(prompt)")
+
 //            let result = await self.postQuestion(prompt)
 
             // 6. Present answer
@@ -66,4 +70,44 @@ final class ViewController: NSViewController {
             progressIndicator.stopAnimation(nil)
         }
     }
+
+    // TODO: ****** following very dirty code ********
+
+    func loadContentChunks(from links: [String]) -> [ContentChunk] {
+        var contentChunks = [ContentChunk]()
+        do {
+            for filePath in links {
+                let fileURL = URL(fileURLWithPath: filePath)
+                let content = try String(contentsOf: fileURL, encoding: .utf8)
+                let chunk = ContentChunk(filePath: filePath, content: content)
+                contentChunks.append(chunk)
+            }
+        } catch {
+            OSLog.general.error("Can't access files: \(error.localizedDescription)")
+        }
+        return contentChunks
+    }
+
+    func loadTemplate() -> String {
+        do {
+            let templateUrl = URL(fileURLWithPath: Bundle.main.path(forResource: "template", ofType: "txt")!, isDirectory: false)
+            return try String(contentsOf: templateUrl, encoding: .utf8)
+        } catch {}
+        return ""
+    }
+
+    func createPrompt(using template: String, contentChunks: [ContentChunk]) -> String {
+        let content = contentChunks.map { chunk in
+            return "Content:\n\(chunk.content)\nSource: \(chunk.filePath)\n"
+        }.joined()
+        let prompt = template.replacingOccurrences(of: "{QUESTION}",
+                                                   with: questionField.stringValue)
+            .replacingOccurrences(of: "{CONTENT}", with: content)
+        return prompt
+    }
+}
+
+struct ContentChunk {
+    let filePath: String
+    let content: String
 }

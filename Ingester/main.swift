@@ -13,11 +13,11 @@ final class ConsoleApp {
 
     func setup() {
         // Your app setup code here
-        OSLog.general.log("pindexer agent started")
+        OSLog.general.log("Ingestion agent started")
 
         Task {
-            let pindexer = PIndexer(rootDirectory: "/Users/kostik/Library/Mobile Documents/iCloud~md~obsidian/Documents/Ideas")
-            await pindexer.run()
+            let ingester = Ingester(rootDirectory: "/Users/kostik/Library/Mobile Documents/iCloud~md~obsidian/Documents/Ideas")
+            await ingester.run()
         }
 
         // INT for console
@@ -44,7 +44,7 @@ final class ConsoleApp {
     }
 
     private func quit() {
-        OSLog.general.log("pindexer agent quits, cleaning up...")
+        OSLog.general.log("Ingestion agent quits, cleaning up...")
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.shouldKeepRunning = false

@@ -24,10 +24,11 @@
 		9EBE4B402A1C33B50014975D /* PineconeVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B3E2A1C33B50014975D /* PineconeVector.swift */; };
 		9EBE4B422A1CE6F20014975D /* PineconeQueryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B412A1CE6F20014975D /* PineconeQueryResponse.swift */; };
 		9EBE4B432A1CE6F20014975D /* PineconeQueryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B412A1CE6F20014975D /* PineconeQueryResponse.swift */; };
+		9EBE4B452A1CF5910014975D /* template.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9EBE4B442A1CF5910014975D /* template.txt */; };
 		9ECCB0C22A045303002F1239 /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECCB0C12A045303002F1239 /* PythonKit */; };
 		9ECCB0DB2A1B856C002F1239 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DA2A1B856C002F1239 /* main.swift */; };
 		9ECCB0DD2A1B85DA002F1239 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
-		9ECCB0E02A1B8727002F1239 /* PIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DF2A1B8727002F1239 /* PIndexer.swift */; };
+		9ECCB0E02A1B8727002F1239 /* Ingester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DF2A1B8727002F1239 /* Ingester.swift */; };
 		9ECCB0E22A1B8CC3002F1239 /* TiktokenSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */; };
 		9ECCB0E62A1B9333002F1239 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E52A1B9333002F1239 /* Data+Extensions.swift */; };
 		9ECCB0EB2A1B945B002F1239 /* EmbeddingResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */; };
@@ -61,11 +62,12 @@
 		9EBE4B302A1C30960014975D /* VectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorManager.swift; sourceTree = "<group>"; };
 		9EBE4B3E2A1C33B50014975D /* PineconeVector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeVector.swift; sourceTree = "<group>"; };
 		9EBE4B412A1CE6F20014975D /* PineconeQueryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeQueryResponse.swift; sourceTree = "<group>"; };
-		9ECCB0B62A0445B6002F1239 /* pindexer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pindexer; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EBE4B442A1CF5910014975D /* template.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = template.txt; sourceTree = "<group>"; };
+		9ECCB0B62A0445B6002F1239 /* Ingester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Ingester; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ECCB0C32A0455DA002F1239 /* pindexer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = pindexer.entitlements; sourceTree = "<group>"; };
 		9ECCB0DA2A1B856C002F1239 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
-		9ECCB0DF2A1B8727002F1239 /* PIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PIndexer.swift; sourceTree = "<group>"; };
+		9ECCB0DF2A1B8727002F1239 /* Ingester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingester.swift; sourceTree = "<group>"; };
 		9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiktokenSwift.swift; sourceTree = "<group>"; };
 		9ECCB0E52A1B9333002F1239 /* Data+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbeddingResponse.swift; sourceTree = "<group>"; };
@@ -116,7 +118,7 @@
 		9ECCB0AD2A0445B6002F1239 = {
 			isa = PBXGroup;
 			children = (
-				9ECCB0B82A0445B6002F1239 /* pindexer */,
+				9ECCB0B82A0445B6002F1239 /* Ingester */,
 				9ECCB1282A1C2727002F1239 /* AssistAI */,
 				9ECCB0B72A0445B6002F1239 /* Products */,
 				9ECCB0C42A06C763002F1239 /* Frameworks */,
@@ -126,17 +128,17 @@
 		9ECCB0B72A0445B6002F1239 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9ECCB0B62A0445B6002F1239 /* pindexer */,
+				9ECCB0B62A0445B6002F1239 /* Ingester */,
 				9ECCB1272A1C2727002F1239 /* AssistAI.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9ECCB0B82A0445B6002F1239 /* pindexer */ = {
+		9ECCB0B82A0445B6002F1239 /* Ingester */ = {
 			isa = PBXGroup;
 			children = (
 				9ECCB0DA2A1B856C002F1239 /* main.swift */,
-				9ECCB0DF2A1B8727002F1239 /* PIndexer.swift */,
+				9ECCB0DF2A1B8727002F1239 /* Ingester.swift */,
 				9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */,
 				9EBE4B302A1C30960014975D /* VectorManager.swift */,
 				9EBE4B3D2A1C33B00014975D /* Models */,
@@ -144,7 +146,7 @@
 				9ECCB0DE2A1B85DD002F1239 /* Extensions */,
 				9ECCB1212A1C0863002F1239 /* Resources */,
 			);
-			path = pindexer;
+			path = Ingester;
 			sourceTree = "<group>";
 		};
 		9ECCB0C42A06C763002F1239 /* Frameworks */ = {
@@ -217,6 +219,7 @@
 			children = (
 				9ECCB0C32A0455DA002F1239 /* pindexer.entitlements */,
 				9ECCB1222A1C089D002F1239 /* com.alstertouch.pindexer.agent.plist */,
+				9EBE4B442A1CF5910014975D /* template.txt */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -236,9 +239,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9ECCB0B52A0445B6002F1239 /* pindexer */ = {
+		9ECCB0B52A0445B6002F1239 /* Ingester */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9ECCB0BD2A0445B6002F1239 /* Build configuration list for PBXNativeTarget "pindexer" */;
+			buildConfigurationList = 9ECCB0BD2A0445B6002F1239 /* Build configuration list for PBXNativeTarget "Ingester" */;
 			buildPhases = (
 				9ECCB0B22A0445B6002F1239 /* Sources */,
 				9ECCB0B32A0445B6002F1239 /* Frameworks */,
@@ -248,12 +251,12 @@
 			);
 			dependencies = (
 			);
-			name = pindexer;
+			name = Ingester;
 			packageProductDependencies = (
 				9ECCB0C12A045303002F1239 /* PythonKit */,
 			);
 			productName = pindexer;
-			productReference = 9ECCB0B62A0445B6002F1239 /* pindexer */;
+			productReference = 9ECCB0B62A0445B6002F1239 /* Ingester */;
 			productType = "com.apple.product-type.tool";
 		};
 		9ECCB1262A1C2727002F1239 /* AssistAI */ = {
@@ -307,7 +310,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9ECCB0B52A0445B6002F1239 /* pindexer */,
+				9ECCB0B52A0445B6002F1239 /* Ingester */,
 				9ECCB1262A1C2727002F1239 /* AssistAI */,
 			);
 		};
@@ -319,6 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9ECCB12E2A1C2728002F1239 /* Assets.xcassets in Resources */,
+				9EBE4B452A1CF5910014975D /* template.txt in Resources */,
 				9ECCB1312A1C2728002F1239 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,7 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9ECCB11A2A1B9E51002F1239 /* Endpoint.swift in Sources */,
-				9ECCB0E02A1B8727002F1239 /* PIndexer.swift in Sources */,
+				9ECCB0E02A1B8727002F1239 /* Ingester.swift in Sources */,
 				9ECCB0E62A1B9333002F1239 /* Data+Extensions.swift in Sources */,
 				9ECCB1182A1B9E51002F1239 /* RequestMethod.swift in Sources */,
 				9EBE4B312A1C30960014975D /* VectorManager.swift in Sources */,
@@ -503,7 +507,7 @@
 		9ECCB0BE2A0445B6002F1239 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = pindexer/Resources/pindexer.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Ingester/Resources/pindexer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PYNP4H8XK8;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -519,7 +523,7 @@
 		9ECCB0BF2A0445B6002F1239 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = pindexer/Resources/pindexer.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Ingester/Resources/pindexer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PYNP4H8XK8;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -545,6 +549,9 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSDesktopFolderUsageDescription = TODO;
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = TODO;
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = TODO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -573,6 +580,9 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSDesktopFolderUsageDescription = TODO;
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = TODO;
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = TODO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -600,7 +610,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9ECCB0BD2A0445B6002F1239 /* Build configuration list for PBXNativeTarget "pindexer" */ = {
+		9ECCB0BD2A0445B6002F1239 /* Build configuration list for PBXNativeTarget "Ingester" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9ECCB0BE2A0445B6002F1239 /* Debug */,

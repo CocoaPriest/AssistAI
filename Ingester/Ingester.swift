@@ -1,6 +1,6 @@
 //
-//  PIndexer.swift
-//  PIndexer
+//  Ingester.swift
+//  Ingester
 //
 //  Created by Konstantin Gonikman on 22.05.23.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import os.log
 
-final class PIndexer {
+final class Ingester {
     private let rootDirectory: String
     private let tiktoken = TiktokenSwift()
     private let vectorManager = VectorManager()
@@ -18,7 +18,7 @@ final class PIndexer {
     }
 
     func run() async {
-        OSLog.general.log("pindexer started")
+        OSLog.general.log("Ingester started")
         OSLog.general.log("Root directory: \(self.rootDirectory)")
         //        sleep(2)
 
