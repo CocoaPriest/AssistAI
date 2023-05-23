@@ -549,9 +549,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSDesktopFolderUsageDescription = TODO;
-				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = TODO;
-				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = TODO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -580,9 +577,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSDesktopFolderUsageDescription = TODO;
-				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = TODO;
-				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = TODO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
