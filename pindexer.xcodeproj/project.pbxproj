@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
-		9EBE4B312A1C30960014975D /* EmbeddingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* EmbeddingManager.swift */; };
-		9EBE4B322A1C30960014975D /* EmbeddingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* EmbeddingManager.swift */; };
+		9EBE4B312A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
+		9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
 		9EBE4B332A1C30F50014975D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* NetworkService.swift */; };
 		9EBE4B342A1C30FD0014975D /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1042A1B9E51002F1239 /* RequestError.swift */; };
 		9EBE4B352A1C30FD0014975D /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1052A1B9E51002F1239 /* Endpoint.swift */; };
@@ -20,8 +20,8 @@
 		9EBE4B3A2A1C31070014975D /* EmbeddingsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0F02A1B9E51002F1239 /* EmbeddingsEndpoint.swift */; };
 		9EBE4B3B2A1C31070014975D /* PineconeEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB11D2A1BADEA002F1239 /* PineconeEndpoint.swift */; };
 		9EBE4B3C2A1C316C0014975D /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E52A1B9333002F1239 /* Data+Extensions.swift */; };
-		9EBE4B3F2A1C33B50014975D /* Embedding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B3E2A1C33B50014975D /* Embedding.swift */; };
-		9EBE4B402A1C33B50014975D /* Embedding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B3E2A1C33B50014975D /* Embedding.swift */; };
+		9EBE4B3F2A1C33B50014975D /* PineconeVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B3E2A1C33B50014975D /* PineconeVector.swift */; };
+		9EBE4B402A1C33B50014975D /* PineconeVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B3E2A1C33B50014975D /* PineconeVector.swift */; };
 		9ECCB0C22A045303002F1239 /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECCB0C12A045303002F1239 /* PythonKit */; };
 		9ECCB0DB2A1B856C002F1239 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DA2A1B856C002F1239 /* main.swift */; };
 		9ECCB0DD2A1B85DA002F1239 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
@@ -56,8 +56,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9EBE4B302A1C30960014975D /* EmbeddingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddingManager.swift; sourceTree = "<group>"; };
-		9EBE4B3E2A1C33B50014975D /* Embedding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Embedding.swift; sourceTree = "<group>"; };
+		9EBE4B302A1C30960014975D /* VectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorManager.swift; sourceTree = "<group>"; };
+		9EBE4B3E2A1C33B50014975D /* PineconeVector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeVector.swift; sourceTree = "<group>"; };
 		9ECCB0B62A0445B6002F1239 /* pindexer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pindexer; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ECCB0C32A0455DA002F1239 /* pindexer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = pindexer.entitlements; sourceTree = "<group>"; };
 		9ECCB0DA2A1B856C002F1239 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -105,7 +105,7 @@
 		9EBE4B3D2A1C33B00014975D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9EBE4B3E2A1C33B50014975D /* Embedding.swift */,
+				9EBE4B3E2A1C33B50014975D /* PineconeVector.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -135,7 +135,7 @@
 				9ECCB0DA2A1B856C002F1239 /* main.swift */,
 				9ECCB0DF2A1B8727002F1239 /* PIndexer.swift */,
 				9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */,
-				9EBE4B302A1C30960014975D /* EmbeddingManager.swift */,
+				9EBE4B302A1C30960014975D /* VectorManager.swift */,
 				9EBE4B3D2A1C33B00014975D /* Models */,
 				9ECCB0ED2A1B9E51002F1239 /* Network */,
 				9ECCB0DE2A1B85DD002F1239 /* Extensions */,
@@ -330,8 +330,8 @@
 				9ECCB0E02A1B8727002F1239 /* PIndexer.swift in Sources */,
 				9ECCB0E62A1B9333002F1239 /* Data+Extensions.swift in Sources */,
 				9ECCB1182A1B9E51002F1239 /* RequestMethod.swift in Sources */,
-				9EBE4B312A1C30960014975D /* EmbeddingManager.swift in Sources */,
-				9EBE4B3F2A1C33B50014975D /* Embedding.swift in Sources */,
+				9EBE4B312A1C30960014975D /* VectorManager.swift in Sources */,
+				9EBE4B3F2A1C33B50014975D /* PineconeVector.swift in Sources */,
 				9ECCB0DB2A1B856C002F1239 /* main.swift in Sources */,
 				9ECCB0DD2A1B85DA002F1239 /* OSLog+Extensions.swift in Sources */,
 				9ECCB1202A1BFD42002F1239 /* PineconeUpsertResponse.swift in Sources */,
@@ -359,11 +359,11 @@
 				9EBE4B3B2A1C31070014975D /* PineconeEndpoint.swift in Sources */,
 				9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */,
 				9EBE4B392A1C31040014975D /* EmbeddingResponse.swift in Sources */,
-				9EBE4B402A1C33B50014975D /* Embedding.swift in Sources */,
+				9EBE4B402A1C33B50014975D /* PineconeVector.swift in Sources */,
 				9ECCB12A2A1C2727002F1239 /* AppDelegate.swift in Sources */,
 				9EBE4B372A1C30FD0014975D /* RequestMethod.swift in Sources */,
 				9EBE4B3A2A1C31070014975D /* EmbeddingsEndpoint.swift in Sources */,
-				9EBE4B322A1C30960014975D /* EmbeddingManager.swift in Sources */,
+				9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

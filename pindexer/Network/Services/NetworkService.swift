@@ -8,12 +8,12 @@
 import Foundation
 
 protocol NetworkServiceable {
-    func createEmbedding(text: String) async -> Result<[Double], RequestError>
-    func upsertEmbedding(userId: UUID, id: UUID, embedding: [Double], filePath: String) async -> Result<Void, RequestError>
+    func createVector(text: String) async -> Result<[Double], RequestError>
+    func upsertVector(userId: UUID, id: UUID, vector: [Double], filePath: String) async -> Result<Void, RequestError>
 }
 
 struct NetworkService: HTTPClient, NetworkServiceable {
-    func createEmbedding(text: String) async -> Result<[Double], RequestError> {
+    func createVector(text: String) async -> Result<[Double], RequestError> {
         let response = await sendRequest(endpoint: OpenAIEndpoint.createEmbedding(text: text),
                                          responseModel: EmbeddingResponse.self)
         return response.flatMap { resp in
@@ -24,11 +24,11 @@ struct NetworkService: HTTPClient, NetworkServiceable {
         }
     }
 
-    func upsertEmbedding(userId: UUID, id: UUID, embedding: [Double], filePath: String) async -> Result<Void, RequestError> {
-        let response = await sendRequest(endpoint: PineconeEndpoint.insertEmbedding(userId:userId,
-                                                                                    id: id,
-                                                                                    embedding: embedding,
-                                                                                    filePath: filePath),
+    func upsertVector(userId: UUID, id: UUID, vector: [Double], filePath: String) async -> Result<Void, RequestError> {
+        let response = await sendRequest(endpoint: PineconeEndpoint.insertVector(userId: userId,
+                                                                                 id: id,
+                                                                                 vector: vector,
+                                                                                 filePath: filePath),
                                          responseModel: PineconeUpsertResponse.self)
         return response.flatMap({ resp in
             resp.upsertedCount == 1 ? .success(()) : .failure(.unknown)

@@ -11,7 +11,7 @@ import os.log
 final class PIndexer {
     private let rootDirectory: String
     private let tiktoken = TiktokenSwift()
-    private let embeddingManager = EmbeddingManager()
+    private let vectorManager = VectorManager()
 
     init(rootDirectory: String) {
         self.rootDirectory = rootDirectory
@@ -20,7 +20,7 @@ final class PIndexer {
     func run() async {
         OSLog.general.log("pindexer started")
         OSLog.general.log("Root directory: \(self.rootDirectory)")
-//        sleep(2)
+        //        sleep(2)
 
         guard let files = filesInDirectory(withExtension: "md") else {
             OSLog.general.error("Failed to find any MD files")
@@ -40,9 +40,9 @@ final class PIndexer {
                 OSLog.general.log("\(tokens, privacy: .public) tokens (local calc)")
 
                 // TODO: split into chunks of 1000 tokens
-                let embedding = try await embeddingManager.createEmbedding(text: content)
+                let embedding = try await vectorManager.createVector(text: content)
                 OSLog.general.log("\(embedding, privacy: .public)")
-                let id = try await embeddingManager.upsertEmbedding(embedding, filePath: filePath)
+                let id = try await vectorManager.upsertVector(embedding, filePath: filePath)
                 OSLog.general.log("Embedding upserted into the vector store: \(id, privacy: .public)")
             } catch {
                 OSLog.general.error("Can't process file: \(error.localizedDescription)")
