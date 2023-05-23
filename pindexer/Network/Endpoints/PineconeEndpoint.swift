@@ -9,7 +9,7 @@ import Foundation
 import os.log
 
 enum PineconeEndpoint {
-    case insertEmbedding(id: UUID, embedding: [Double], filePath: String)
+    case insertEmbedding(userId: UUID, id: UUID, embedding: [Double], filePath: String)
 }
 
 extension PineconeEndpoint: Endpoint {
@@ -40,7 +40,7 @@ extension PineconeEndpoint: Endpoint {
 
     var body: [String: Any]? {
         switch self {
-        case .insertEmbedding(let id, let embedding, let filePath):
+        case .insertEmbedding(let userId, let id, let embedding, let filePath):
             let metadata: [String: Any] = [
                 "link" : filePath
             ]
@@ -53,7 +53,7 @@ extension PineconeEndpoint: Endpoint {
 
             let jsonData: [String: Any] = [
                 "vectors": vectors,
-                "namespace": ""
+                "namespace": userId.uuidString
             ]
 
             return jsonData

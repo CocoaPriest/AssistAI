@@ -29,7 +29,11 @@ final class EmbeddingManager {
 
     func upsertEmbedding(_ embedding: [Double], filePath: String) async throws -> UUID {
         let id = UUID()
-        let result = await networkService.upsertEmbedding(id: id, embedding: embedding, filePath: filePath)
+        let userId = UUID(uuidString: "660641f8-5272-44ff-ae38-c12277fb694d")! // TODO: from user manager
+        let result = await networkService.upsertEmbedding(userId: userId,
+                                                          id: id,
+                                                          embedding: embedding,
+                                                          filePath: filePath)
         if case let .failure(error) = result {
             OSLog.general.error("Service error: \(error.localizedDescription)")
             throw error
@@ -37,7 +41,8 @@ final class EmbeddingManager {
         return id
     }
 
-    // TODO:
+    // TODO: query using metadata -> need to return data for this user only!
+    // Not relevant later, in case of using local vector store
     func queryEmbeddings(using embedding: [Double], maxCount: Int) async throws -> [Embedding] {
         return []
     }

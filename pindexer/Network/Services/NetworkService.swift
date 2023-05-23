@@ -9,7 +9,7 @@ import Foundation
 
 protocol NetworkServiceable {
     func createEmbedding(text: String) async -> Result<[Double], RequestError>
-    func upsertEmbedding(id: UUID, embedding: [Double], filePath: String) async -> Result<Void, RequestError>
+    func upsertEmbedding(userId: UUID, id: UUID, embedding: [Double], filePath: String) async -> Result<Void, RequestError>
 }
 
 struct NetworkService: HTTPClient, NetworkServiceable {
@@ -24,8 +24,9 @@ struct NetworkService: HTTPClient, NetworkServiceable {
         }
     }
 
-    func upsertEmbedding(id: UUID, embedding: [Double], filePath: String) async -> Result<Void, RequestError> {
-        let response = await sendRequest(endpoint: PineconeEndpoint.insertEmbedding(id: id,
+    func upsertEmbedding(userId: UUID, id: UUID, embedding: [Double], filePath: String) async -> Result<Void, RequestError> {
+        let response = await sendRequest(endpoint: PineconeEndpoint.insertEmbedding(userId:userId,
+                                                                                    id: id,
                                                                                     embedding: embedding,
                                                                                     filePath: filePath),
                                          responseModel: PineconeUpsertResponse.self)
