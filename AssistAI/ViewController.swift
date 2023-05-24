@@ -7,6 +7,7 @@
 
 import Cocoa
 import os.log
+import PDFKit
 
 final class ViewController: NSViewController {
 
@@ -82,7 +83,7 @@ final class ViewController: NSViewController {
         do {
             for filePath in links {
                 let fileURL = URL(fileURLWithPath: filePath)
-                let content = try String(contentsOf: fileURL, encoding: .utf8)
+                let content = try self.loadContent(at: fileURL)
                 let chunk = ContentChunk(filePath: filePath, content: content)
                 contentChunks.append(chunk)
             }
@@ -90,6 +91,30 @@ final class ViewController: NSViewController {
             OSLog.general.error("Can't access files: \(error.localizedDescription)")
         }
         return contentChunks
+    }
+
+    func loadContent(at fileURL: URL) throws -> String {
+        switch fileURL.pathExtension {
+        case "pdf":
+            return try self.readPDF(at: fileURL)
+        default:
+            return try String(contentsOf: fileURL, encoding: .utf8)
+        }
+    }
+
+    // same func is in Ingester. Move to shared...
+    private func readPDF(at fileURL: URL) throws -> String {
+        guard let pdf = PDFDocument(url: fileURL) else {
+            OSLog.general.error("Can't open PDF file at: \(fileURL)")
+            throw PDFError.fileOpenError
+        }
+
+        guard let content = pdf.string else {
+            OSLog.general.error("Can't read PDF file at: \(fileURL)")
+            throw PDFError.fileReadError
+        }
+
+        return content
     }
 
     func loadTemplate() -> String {
@@ -114,4 +139,9 @@ final class ViewController: NSViewController {
 struct ContentChunk {
     let filePath: String
     let content: String
+}
+
+enum PDFError: Error {
+    case fileReadError
+    case fileOpenError
 }

@@ -16,7 +16,7 @@ final class ConsoleApp {
         OSLog.general.log("Ingestion agent started")
 
         Task {
-            let ingester = Ingester(rootDirectory: "/Users/kostik/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vincent/GPT")
+            let ingester = Ingester(rootDirectory: "/Users/kostik/Library/Mobile Documents/iCloud~md~obsidian/Documents/Coffee")
             await ingester.run()
         }
 
