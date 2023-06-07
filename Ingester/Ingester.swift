@@ -29,6 +29,7 @@ final class Ingester {
         }
 
         OSLog.general.log("Found \(files.count) files:")
+        var tokensSum: Int = 0
         for file in files {
             let filePath = file.path(percentEncoded: false)
             do {
@@ -37,10 +38,12 @@ final class Ingester {
                 OSLog.general.log("\(filePath, privacy: .public)")
                 OSLog.general.log("\(content, privacy: .sensitive)")
 
+                // TODO: ignore docs with 1 or 2 tokens
                 let tokens = tiktoken.numOfTokens(fileContent: content)
                 OSLog.general.log("\(tokens, privacy: .public) tokens (local calc)")
+                tokensSum += tokens
 
-                // TODO: split into chunks of 1000 tokens
+//                // TODO: split into chunks of 1000 tokens
                 let embedding = try await vectorManager.createVector(text: content)
                 OSLog.general.log("\(embedding, privacy: .public)")
                 let id = try await vectorManager.upsertVector(embedding, filePath: filePath)
@@ -49,6 +52,10 @@ final class Ingester {
                 OSLog.general.error("Can't process file: \(error.localizedDescription)")
             }
         }
+
+        // $0.0004 / 1k
+        let usd = (Double(tokensSum) / 1000.0) * 0.0004
+        OSLog.general.log("Tokens sum: \(tokensSum, privacy: .public) = $\(usd)")
     }
 
     private func filesInDirectory(withExtensions fileExtensions: [String]) -> [URL]? {
@@ -56,6 +63,7 @@ final class Ingester {
         let url = URL(fileURLWithPath: self.rootDirectory)
 
         do {
+            // TODO: Use `enumerator(at:includingPropertiesForKeys:options:errorHandler:)` for deep enumeration.
             let files = try fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [])
             let filteredFiles = files.filter { file in
                 fileExtensions.contains(where: { ext in
