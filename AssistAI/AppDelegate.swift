@@ -6,6 +6,8 @@
 //
 
 import Cocoa
+import ServiceManagement
+import os.log
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -19,21 +21,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let menu = NSMenu()
 
-        let mStatus = NSMenuItem(title: "Lumistic is running", action: nil, keyEquivalent: "")
-        mStatus.isEnabled = false
-
-        var statusConfig = NSImage.SymbolConfiguration(textStyle: .body,
-                                                       scale: .large)
-        statusConfig = statusConfig.applying(.init(hierarchicalColor: .systemGreen))
-        mStatus.image = NSImage(systemSymbolName: "circlebadge.fill", accessibilityDescription: nil)?
-            .withSymbolConfiguration(statusConfig)
+        let mStatus = NSMenuItem(title: "Ask Lumistic...", action: #selector(AppDelegate.didTapOpenMainWindow(_:)), keyEquivalent: "")
+        mStatus.image = NSImage(systemSymbolName: "questionmark.bubble", accessibilityDescription: nil)
         menu.addItem(mStatus)
         menu.addItem(NSMenuItem.separator())
-
-        menu.addItem(NSMenuItem(title: "Open Lumistic", action: #selector(AppDelegate.didTapOpenMainWindow(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "View Session Logs...", action: #selector(AppDelegate.didTapViewSessionLogs(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Settings...", action: nil, keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit Indexer", action: #selector(AppDelegate.didTapQuit(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Quit", action: #selector(AppDelegate.didTapQuit(_:)), keyEquivalent: ""))
 
         statusItem.menu = menu
     }
@@ -58,7 +53,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func didTapViewSessionLogs(_ sender: Any?) {
-        print("View logs...")
+        OSLog.general.debug("View logs...")
     }
 
     @objc func didTapQuit(_ sender: Any?) {
@@ -72,7 +67,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         switch modalResult {
         case .alertFirstButtonReturn:
-            print("Cancel button clicked")
+            OSLog.general.debug("Cancel button clicked")
         case .alertSecondButtonReturn:
             NSApplication.shared.terminate(self)
         default:
@@ -81,8 +76,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        registerAsAutoLoginApp()
         constructMenu()
+    }
+
+    private func registerAsAutoLoginApp() {
+        OSLog.general.log("SMAppService: registering...")
+        let loginItem = SMAppService.mainApp
+        do {
+            switch loginItem.status {
+            case .notFound:
+                try loginItem.register()
+                OSLog.general.log("SMAppService: done")
+            case .requiresApproval:
+                OSLog.general.log("SMAppService: requires approval")
+            default:
+                OSLog.general.log("SMAppService: no action required")
+            }
+        } catch {
+            OSLog.general.error("SMAppService error: \(error.localizedDescription)")
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
