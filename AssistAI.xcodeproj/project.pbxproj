@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E2DAC212A44C2EA00E5CF06 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2DAC202A44C2EA00E5CF06 /* main.swift */; };
 		9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9EBE4B312A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
 		9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
@@ -64,6 +65,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9E2DAC202A44C2EA00E5CF06 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		9EBE4B302A1C30960014975D /* VectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorManager.swift; sourceTree = "<group>"; };
 		9EBE4B3E2A1C33B50014975D /* QueryMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryMatch.swift; sourceTree = "<group>"; };
 		9EBE4B412A1CE6F20014975D /* PineconeQueryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeQueryResponse.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 		9ECCB1282A1C2727002F1239 /* AssistAI */ = {
 			isa = PBXGroup;
 			children = (
+				9E2DAC202A44C2EA00E5CF06 /* main.swift */,
 				9ECCB1292A1C2727002F1239 /* AppDelegate.swift */,
 				9ECCB12B2A1C2727002F1239 /* ViewController.swift */,
 				9EBE4B4B2A1D6E1D0014975D /* GPTManager.swift */,
@@ -399,6 +402,7 @@
 				9EBE4B332A1C30F50014975D /* NetworkService.swift in Sources */,
 				9EBE4B362A1C30FD0014975D /* HttpClient.swift in Sources */,
 				9EBE4B4F2A1D75B40014975D /* AskGPTResponse.swift in Sources */,
+				9E2DAC212A44C2EA00E5CF06 /* main.swift in Sources */,
 				9ECCB12C2A1C2727002F1239 /* ViewController.swift in Sources */,
 				9EBE4B342A1C30FD0014975D /* RequestError.swift in Sources */,
 				9EBE4B4C2A1D6E1D0014975D /* GPTManager.swift in Sources */,
@@ -586,8 +590,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -613,8 +617,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
