@@ -14,6 +14,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
     var window: NSWindow!
 
+    private var isWindowEffectivelyVisible: Bool {
+        return NSApplication.shared.isActive && window.isVisible
+    }
+
     private func constructMenu() {
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "mountain.2.fill", accessibilityDescription: nil)
@@ -34,7 +38,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func didTapOpenMainWindow(_ sender: Any?) {
-        if let window = window, window.isVisible {
+        if window != nil {
+            if !self.isWindowEffectivelyVisible {
+                NSApp.activate(ignoringOtherApps: true)
+                return
+            }
             return
         }
 
@@ -47,9 +55,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         self.window = window
-
-        NSApp.activate(ignoringOtherApps: true)
+        
         window.makeKeyAndOrderFront(self)
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     @objc func didTapViewSessionLogs(_ sender: Any?) {
