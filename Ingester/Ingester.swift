@@ -30,7 +30,7 @@ final class Ingester {
 
         OSLog.general.log("Found \(filePaths.count) files:")
         filePaths.forEach { OSLog.general.log("=> \($0)") }
-        
+
         for filePath in filePaths {
             do {
 //                OSLog.general.log("=> \(filePath)")

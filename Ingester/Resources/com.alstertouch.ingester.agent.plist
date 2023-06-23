@@ -4,11 +4,12 @@
 <dict>
 	<key>Label</key>
 	<string>com.alstertouch.ingester</string>
-	<key>Program</key>
-	<string>/Users/kostik/Library/Developer/Xcode/DerivedData/pindexer-gqwvtdfcbiqgwkbkmaldznkgqggo/Build/Products/Debug/pindexer</string>
-	<key>RunAtLoad</key>
-	<true/>
-	<key>KeepAlive</key>
-	<true/>
+	<key>BundleProgram</key>
+	<string>Contents/Resources/Ingester</string>
+	<key>MachServices</key>
+	<dict>
+		<key>com.xpc.example.agent.hello</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

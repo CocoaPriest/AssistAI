@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		9E2DAC212A44C2EA00E5CF06 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2DAC202A44C2EA00E5CF06 /* main.swift */; };
 		9E3850F32A44FD7600B6A56F /* AssistWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3850F22A44FD7600B6A56F /* AssistWindow.swift */; };
+		9E61CFD12A45239E0040EC29 /* Ingester in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCB0B62A0445B6002F1239 /* Ingester */; };
+		9E61CFD32A4523BE0040EC29 /* com.alstertouch.ingester.agent.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9ECCB1222A1C089D002F1239 /* com.alstertouch.ingester.agent.plist */; };
 		9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9EBE4B312A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
 		9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
@@ -51,7 +53,27 @@
 		9ECCB1312A1C2728002F1239 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCB12F2A1C2728002F1239 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9E61CFD42A4529450040EC29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9ECCB0AE2A0445B6002F1239 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9ECCB0B52A0445B6002F1239;
+			remoteInfo = Ingester;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		9E61CFD22A4523A80040EC29 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchAgents;
+			dstSubfolderSpec = 1;
+			files = (
+				9E61CFD32A4523BE0040EC29 /* com.alstertouch.ingester.agent.plist in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9ECCB0B42A0445B6002F1239 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -299,10 +321,12 @@
 				9ECCB1232A1C2727002F1239 /* Sources */,
 				9ECCB1242A1C2727002F1239 /* Frameworks */,
 				9ECCB1252A1C2727002F1239 /* Resources */,
+				9E61CFD22A4523A80040EC29 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				9E61CFD52A4529450040EC29 /* PBXTargetDependency */,
 			);
 			name = AssistAI;
 			productName = AssistAI;
@@ -353,6 +377,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E61CFD12A45239E0040EC29 /* Ingester in Resources */,
 				9ECCB12E2A1C2728002F1239 /* Assets.xcassets in Resources */,
 				9EBE4B452A1CF5910014975D /* template.txt in Resources */,
 				9ECCB1312A1C2728002F1239 /* Main.storyboard in Resources */,
@@ -416,6 +441,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9E61CFD52A4529450040EC29 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9ECCB0B52A0445B6002F1239 /* Ingester */;
+			targetProxy = 9E61CFD42A4529450040EC29 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9ECCB12F2A1C2728002F1239 /* Main.storyboard */ = {
