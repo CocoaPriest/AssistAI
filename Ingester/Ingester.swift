@@ -7,11 +7,9 @@
 
 import Foundation
 import os.log
-import PDFKit
 
 final class Ingester {
     private let rootDirectory: String
-    private let tiktoken = TiktokenSwift()
     private let vectorManager = VectorManager()
 
     init(rootDirectory: String) {
@@ -23,39 +21,23 @@ final class Ingester {
         OSLog.general.log("Root directory: \(self.rootDirectory)")
         //        sleep(2)
 
-        guard let files = filesInDirectory(withExtensions: ["md", "pdf"]) else {
-            OSLog.general.error("Failed to find any MD files")
+        guard let files = filesInDirectory(withExtensions: ["pdf"]) else {
+            OSLog.general.error("Failed to find any acceptable files")
             return
         }
 
-        OSLog.general.log("Found \(files.count) files:")
-        var tokensSum: Int = 0
-        for file in files {
-            let filePath = file.path(percentEncoded: false)
+        let filePaths = files.map { $0.path(percentEncoded: false) }
+
+        OSLog.general.log("Found \(filePaths.count) files:")
+        filePaths.forEach { OSLog.general.log("=> \($0)") }
+        
+        for filePath in filePaths {
             do {
-                let content = try loadContent(at: filePath)
-
-                OSLog.general.log("\(filePath, privacy: .public)")
-                OSLog.general.log("\(content, privacy: .sensitive)")
-
-                // TODO: ignore docs with 1 or 2 tokens
-                let tokens = tiktoken.numOfTokens(fileContent: content)
-                OSLog.general.log("\(tokens, privacy: .public) tokens (local calc)")
-                tokensSum += tokens
-
-//                // TODO: split into chunks of 1000 tokens
-                let embedding = try await vectorManager.createVector(text: content)
-                OSLog.general.log("\(embedding, privacy: .public)")
-                let id = try await vectorManager.upsertVector(embedding, filePath: filePath)
-                OSLog.general.log("Embedding upserted into the vector store: \(id, privacy: .public)")
+//                OSLog.general.log("=> \(filePath)")
             } catch {
                 OSLog.general.error("Can't process file: \(error.localizedDescription)")
             }
         }
-
-        // $0.0004 / 1k
-        let usd = (Double(tokensSum) / 1000.0) * 0.0004
-        OSLog.general.log("Tokens sum: \(tokensSum, privacy: .public) = $\(usd)")
     }
 
     private func filesInDirectory(withExtensions fileExtensions: [String]) -> [URL]? {
@@ -75,30 +57,6 @@ final class Ingester {
             OSLog.general.error("Error getting contents of directory: \(error.localizedDescription)")
             return nil
         }
-    }
-
-    private func loadContent(at filePath: String) throws -> String {
-        let fileURL = URL(fileURLWithPath: filePath)
-        switch fileURL.pathExtension {
-        case "pdf":
-            return try self.readPDF(at: fileURL)
-        default:
-            return try String(contentsOf: fileURL, encoding: .utf8)
-        }
-    }
-
-    private func readPDF(at fileURL: URL) throws -> String {
-        guard let pdf = PDFDocument(url: fileURL) else {
-            OSLog.general.error("Can't open PDF file at: \(fileURL)")
-            throw IngesterError.fileOpenError
-        }
-
-        guard let content = pdf.string else {
-            OSLog.general.error("Can't read PDF file at: \(fileURL)")
-            throw IngesterError.fileReadError
-        }
-
-        return content
     }
 }
 

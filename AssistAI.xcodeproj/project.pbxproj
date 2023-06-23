@@ -32,11 +32,9 @@
 		9EBE4B4C2A1D6E1D0014975D /* GPTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B4B2A1D6E1D0014975D /* GPTManager.swift */; };
 		9EBE4B4F2A1D75B40014975D /* AskGPTResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B4E2A1D75B40014975D /* AskGPTResponse.swift */; };
 		9EBE4B502A1D7A430014975D /* AskGPTResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B4E2A1D75B40014975D /* AskGPTResponse.swift */; };
-		9ECCB0C22A045303002F1239 /* PythonKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECCB0C12A045303002F1239 /* PythonKit */; };
 		9ECCB0DB2A1B856C002F1239 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DA2A1B856C002F1239 /* main.swift */; };
 		9ECCB0DD2A1B85DA002F1239 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9ECCB0E02A1B8727002F1239 /* Ingester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DF2A1B8727002F1239 /* Ingester.swift */; };
-		9ECCB0E22A1B8CC3002F1239 /* TiktokenSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */; };
 		9ECCB0E62A1B9333002F1239 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0E52A1B9333002F1239 /* Data+Extensions.swift */; };
 		9ECCB0EB2A1B945B002F1239 /* EmbeddingResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */; };
 		9ECCB10A2A1B9E51002F1239 /* EmbeddingsEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0F02A1B9E51002F1239 /* EmbeddingsEndpoint.swift */; };
@@ -80,7 +78,6 @@
 		9ECCB0DA2A1B856C002F1239 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
 		9ECCB0DF2A1B8727002F1239 /* Ingester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingester.swift; sourceTree = "<group>"; };
-		9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiktokenSwift.swift; sourceTree = "<group>"; };
 		9ECCB0E52A1B9333002F1239 /* Data+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbeddingResponse.swift; sourceTree = "<group>"; };
 		9ECCB0F02A1B9E51002F1239 /* EmbeddingsEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbeddingsEndpoint.swift; sourceTree = "<group>"; };
@@ -104,7 +101,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9ECCB0C22A045303002F1239 /* PythonKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,7 +176,6 @@
 			children = (
 				9ECCB0DA2A1B856C002F1239 /* main.swift */,
 				9ECCB0DF2A1B8727002F1239 /* Ingester.swift */,
-				9ECCB0E12A1B8CC3002F1239 /* TiktokenSwift.swift */,
 				9ECCB1212A1C0863002F1239 /* Resources */,
 			);
 			path = Ingester;
@@ -292,7 +287,6 @@
 			);
 			name = Ingester;
 			packageProductDependencies = (
-				9ECCB0C12A045303002F1239 /* PythonKit */,
 			);
 			productName = pindexer;
 			productReference = 9ECCB0B62A0445B6002F1239 /* Ingester */;
@@ -343,7 +337,6 @@
 			);
 			mainGroup = 9ECCB0AD2A0445B6002F1239;
 			packageReferences = (
-				9ECCB0C02A045303002F1239 /* XCRemoteSwiftPackageReference "PythonKit" */,
 			);
 			productRefGroup = 9ECCB0B72A0445B6002F1239 /* Products */;
 			projectDirPath = "";
@@ -388,7 +381,6 @@
 				9ECCB11B2A1B9E51002F1239 /* NetworkService.swift in Sources */,
 				9ECCB0EB2A1B945B002F1239 /* EmbeddingResponse.swift in Sources */,
 				9EBE4B492A1D6D6C0014975D /* EmbeddingData.swift in Sources */,
-				9ECCB0E22A1B8CC3002F1239 /* TiktokenSwift.swift in Sources */,
 				9ECCB1192A1B9E51002F1239 /* RequestError.swift in Sources */,
 				9ECCB10A2A1B9E51002F1239 /* EmbeddingsEndpoint.swift in Sources */,
 				9ECCB11E2A1BADEA002F1239 /* PineconeEndpoint.swift in Sources */,
@@ -667,25 +659,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		9ECCB0C02A045303002F1239 /* XCRemoteSwiftPackageReference "PythonKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pvieito/PythonKit.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		9ECCB0C12A045303002F1239 /* PythonKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9ECCB0C02A045303002F1239 /* XCRemoteSwiftPackageReference "PythonKit" */;
-			productName = PythonKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9ECCB0AE2A0445B6002F1239 /* Project object */;
 }
