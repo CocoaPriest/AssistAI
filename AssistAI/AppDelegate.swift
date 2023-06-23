@@ -25,7 +25,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let menu = NSMenu()
 
-        let mStatus = NSMenuItem(title: "Ask Lumistic...", action: #selector(AppDelegate.didTapOpenMainWindow(_:)), keyEquivalent: "")
+        let mStatus = NSMenuItem(title: "Ask Lumira...", action: #selector(AppDelegate.didTapOpenMainWindow(_:)), keyEquivalent: "")
         mStatus.image = NSImage(systemSymbolName: "questionmark.bubble", accessibilityDescription: nil)
         menu.addItem(mStatus)
         menu.addItem(NSMenuItem.separator())
@@ -62,12 +62,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func didTapViewSessionLogs(_ sender: Any?) {
         OSLog.general.debug("View logs...")
+
+        Task {
+            let ingester = Ingester(rootDirectory: "/Users/kostik/Library/Mobile Documents/iCloud~md~obsidian/Documents/Coffee")
+            await ingester.run()
+        }
     }
 
     @objc func didTapQuit(_ sender: Any?) {
         let alert = NSAlert()
         alert.messageText = "Stop indexing?"
-        alert.informativeText = "Lumistic is the background process that indexes your files. Quitting it means all indexing activity will stop."
+        alert.informativeText = "Lumira is the background process that indexes your files. Quitting it means all indexing activity will stop."
         alert.addButton(withTitle: "Don't Quit")
         alert.addButton(withTitle: "Quit")
 
@@ -84,10 +89,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        registerAsAutoLoginApp()
         constructMenu()
     }
 
+    // TODO: do it in onboarding
     private func registerAsAutoLoginApp() {
         OSLog.general.log("SMAppService: registering...")
         let loginItem = SMAppService.mainApp
