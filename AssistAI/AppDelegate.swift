@@ -10,9 +10,9 @@ import ServiceManagement
 import os.log
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
     var window: NSWindow!
+    private let ingester = Ingester()
 
     private var isWindowEffectivelyVisible: Bool {
         return NSApplication.shared.isActive && window.isVisible
@@ -62,11 +62,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func didTapViewSessionLogs(_ sender: Any?) {
         OSLog.general.debug("View logs...")
-
-        Task {
-            let ingester = Ingester(rootDirectory: "/Users/kostik/Library/Mobile Documents/iCloud~md~obsidian/Documents/Coffee")
-            await ingester.run()
-        }
     }
 
     @objc func didTapQuit(_ sender: Any?) {
@@ -90,26 +85,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         constructMenu()
+
+        self.ingester.start()
     }
 
     // TODO: do it in onboarding
-    private func registerAsAutoLoginApp() {
-        OSLog.general.log("SMAppService: registering...")
-        let loginItem = SMAppService.mainApp
-        do {
-            switch loginItem.status {
-            case .notFound:
-                try loginItem.register()
-                OSLog.general.log("SMAppService: done")
-            case .requiresApproval:
-                OSLog.general.log("SMAppService: requires approval")
-            default:
-                OSLog.general.log("SMAppService: no action required")
-            }
-        } catch {
-            OSLog.general.error("SMAppService error: \(error.localizedDescription)")
-        }
-    }
+//    private func registerAsAutoLoginApp() {
+//        OSLog.general.log("SMAppService: registering...")
+//        let loginItem = SMAppService.mainApp
+//        do {
+//            switch loginItem.status {
+//            case .notFound:
+//                try loginItem.register()
+//                OSLog.general.log("SMAppService: done")
+//            case .requiresApproval:
+//                OSLog.general.log("SMAppService: requires approval")
+//            default:
+//                OSLog.general.log("SMAppService: no action required")
+//            }
+//        } catch {
+//            OSLog.general.error("SMAppService error: \(error.localizedDescription)")
+//        }
+//    }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application

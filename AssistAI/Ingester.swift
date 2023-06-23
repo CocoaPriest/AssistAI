@@ -7,60 +7,114 @@
 
 import Foundation
 import os.log
+import FileWatcher
+
+// TODO:
+// use this local plist to know which files need to be updated:
+//        [
+//            {
+//                "file_path": "/dewdew/dew/dew/d/ew",
+//                "sha": "dewdbewyudghewiud"
+//            },
+//        ]
 
 final class Ingester {
-    private let rootDirectory: String
     private let vectorManager = VectorManager()
+    private var filewatcher: FileWatcher?
+    private var directories = ["/Users/kostik/Desktop/XX"]
+    private let validExtensions = ["pdf"]
 
-    init(rootDirectory: String) {
-        self.rootDirectory = rootDirectory
+    func start() {
+        OSLog.general.log("Start Ingester...")
+
+        let allFiles = filesInAllDirectories()
+        setupFileWatcher()
     }
 
-    func run() async {
-        OSLog.general.log("Ingester started")
-        OSLog.general.log("Root directory: \(self.rootDirectory)")
-        //        sleep(2)
+    private func setupFileWatcher() {
+        OSLog.general.log("Setup FileWatcher...")
 
-        guard let files = filesInDirectory(withExtensions: ["pdf"]) else {
-            OSLog.general.error("Failed to find any acceptable files")
-            return
+        if filewatcher != nil {
+            filewatcher?.stop()
         }
 
-        let filePaths = files.map { $0.path(percentEncoded: false) }
+        filewatcher = FileWatcher(directories)
+        filewatcher?.queue = DispatchQueue.global(qos: .utility)
 
-        OSLog.general.log("Found \(filePaths.count) files:")
-        filePaths.forEach { OSLog.general.log("=> \($0)") }
-        
-        for filePath in filePaths {
-            do {
-//                OSLog.general.log("=> \(filePath)")
-            } catch {
-                OSLog.general.error("Can't process file: \(error.localizedDescription)")
-            }
+        filewatcher?.callback = { event in
+            OSLog.general.log("=>: \(event.path); EVENT: \(event.description)")
         }
+
+        filewatcher?.start()
     }
 
-    private func filesInDirectory(withExtensions fileExtensions: [String]) -> [URL]? {
-        let fileManager = FileManager.default
-        let url = URL(fileURLWithPath: self.rootDirectory)
-
-        do {
-            // TODO: Use `enumerator(at:includingPropertiesForKeys:options:errorHandler:)` for deep enumeration.
-            let files = try fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [])
-            let filteredFiles = files.filter { file in
-                fileExtensions.contains(where: { ext in
-                    ext == file.pathExtension
-                })
-            }
-            return filteredFiles
-        } catch {
-            OSLog.general.error("Error getting contents of directory: \(error.localizedDescription)")
-            return nil
+    private func filesInAllDirectories() -> [String] {
+        var allPaths: [String] = []
+        for directory in directories {
+            let filePaths = filesInDirectory(atPath: directory)
+            //        let filePaths = files.map { $0.path(percentEncoded: false) }
+            allPaths.append(contentsOf: filePaths)
         }
+
+        return allPaths
+    }
+
+    private func filesInDirectory(atPath path: String) -> [String] {
+        guard let enumerator = FileManager.default.enumerator(atPath: path) else {
+            OSLog.general.error("Failed to create enumerator.")
+            return []
+        }
+
+        var paths: [String] = []
+        while let file = enumerator.nextObject() as? String {
+            let isValidExtension = validExtensions.contains(where: { ext in
+                file.hasSuffix(ext)
+            })
+
+            if isValidExtension {
+                let fullPath = path.appending("/\(file)")
+                paths.append(fullPath)
+            }
+        }
+
+        if paths.isEmpty {
+            OSLog.general.warning("Failed to find any acceptable files at \(path)")
+        } else {
+            OSLog.general.log("Found \(paths.count) files at \(path):")
+            paths.forEach { OSLog.general.log("=> \($0)") }
+        }
+
+        return paths
     }
 }
 
-enum IngesterError: Error {
-    case fileReadError
-    case fileOpenError
-}
+//private func uploadFile(url: URL, data: Data) async throws {
+//    var request = URLRequest(url: url)
+//    request.httpMethod = "POST"
+//    //        let (data, response) = try await URLSession.shared.upload(for: request, from: data)
+//    // handle response data
+//    print(request)
+//}
+//
+//private func test() {
+//    // Create an async sequence from your array of file URLs
+//    let files: [URL] = [] // Your array of file URLs
+//    let fileSequence = AsyncStream<Data> { continuation in
+//        for url in files {
+//            guard let data = try? Data(contentsOf: url) else { continue }
+//            continuation.yield(data)
+//        }
+//        continuation.finish()
+//    }
+//
+//    // Iterate over the async sequence
+//    Task {
+//        do {
+//            for await data in fileSequence {
+//                try await uploadFile(url: URL(fileURLWithPath: "yourAPIUrl"), data: data)
+//            }
+//        } catch {
+//            // Handle error
+//        }
+//    }
+//    }

@@ -10,6 +10,7 @@
 		9E2DAC212A44C2EA00E5CF06 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2DAC202A44C2EA00E5CF06 /* main.swift */; };
 		9E3850F32A44FD7600B6A56F /* AssistWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3850F22A44FD7600B6A56F /* AssistWindow.swift */; };
 		9E61CFD62A45A7470040EC29 /* Ingester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DF2A1B8727002F1239 /* Ingester.swift */; };
+		9E61CFE12A4642410040EC29 /* FileWatcher in Frameworks */ = {isa = PBXBuildFile; productRef = 9E61CFE02A4642410040EC29 /* FileWatcher */; };
 		9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
 		9EBE4B332A1C30F50014975D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* NetworkService.swift */; };
@@ -68,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E61CFE12A4642410040EC29 /* FileWatcher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +228,9 @@
 			dependencies = (
 			);
 			name = AssistAI;
+			packageProductDependencies = (
+				9E61CFE02A4642410040EC29 /* FileWatcher */,
+			);
 			productName = AssistAI;
 			productReference = 9ECCB1272A1C2727002F1239 /* AssistAI.app */;
 			productType = "com.apple.product-type.application";
@@ -255,6 +260,7 @@
 			);
 			mainGroup = 9ECCB0AD2A0445B6002F1239;
 			packageReferences = (
+				9E61CFDF2A4642410040EC29 /* XCRemoteSwiftPackageReference "FileWatcher" */,
 			);
 			productRefGroup = 9ECCB0B72A0445B6002F1239 /* Products */;
 			projectDirPath = "";
@@ -513,6 +519,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9E61CFDF2A4642410040EC29 /* XCRemoteSwiftPackageReference "FileWatcher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/eonist/FileWatcher.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9E61CFE02A4642410040EC29 /* FileWatcher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9E61CFDF2A4642410040EC29 /* XCRemoteSwiftPackageReference "FileWatcher" */;
+			productName = FileWatcher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9ECCB0AE2A0445B6002F1239 /* Project object */;
 }

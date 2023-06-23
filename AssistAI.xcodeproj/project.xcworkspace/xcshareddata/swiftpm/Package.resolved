@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "filewatcher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/eonist/FileWatcher.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "c13de4677956176c12df423e8579f7a14728ca6f"
+      }
+    }
+  ],
+  "version" : 2
+}
