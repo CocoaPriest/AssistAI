@@ -8,26 +8,25 @@
 import Foundation
 import os.log
 import FileWatcher
-
-// TODO:
-// use this local plist to know which files need to be updated:
-//        [
-//            {
-//                "file_path": "/dewdew/dew/dew/d/ew",
-//                "sha": "dewdbewyudghewiud"
-//            },
-//        ]
+import ExtendedAttributes
 
 final class Ingester {
     private let vectorManager = VectorManager()
     private var filewatcher: FileWatcher?
-    private var directories = ["/Users/kostik/Desktop/XX"]
+    private var directories = ["/Users/kostik/Desktop/XX", "/Users/kostik/Desktop/Tesla"]
     private let validExtensions = ["pdf"]
+    private let fileAttributeIndexedDateKey = "com.alstertouch.AssistAI.indexedDate"
 
     func start() {
         OSLog.general.log("Start Ingester...")
 
         let allFiles = filesInAllDirectories()
+        let filesToIndex = filesToBeIndexed(files: allFiles)
+
+        OSLog.general.log("Files To Be Indexed:")
+        filesToIndex.forEach { OSLog.general.log("=> \($0)") }
+        // TODO: create a queue of filesToIndex items, then upload
+
         setupFileWatcher()
     }
 
@@ -41,18 +40,67 @@ final class Ingester {
         filewatcher = FileWatcher(directories)
         filewatcher?.queue = DispatchQueue.global(qos: .utility)
 
-        filewatcher?.callback = { event in
-            OSLog.general.log("=>: \(event.path); EVENT: \(event.description)")
+        filewatcher?.callback = { [weak self] event in
+            guard let self else { return }
+
+            OSLog.general.log("=> \(event.path); EVENT: \(event.description)")
+            OSLog.general.log("==> fileCreated: \(event.fileCreated)")
+            OSLog.general.log("==> fileRemoved: \(event.fileRemoved)")
+            OSLog.general.log("==> fileRenamed: \(event.fileRenamed)")
+            OSLog.general.log("==> fileModified: \(event.fileModified)")
+
+            OSLog.general.log("==> attribute...")
+            let shouldBeIndexed = fileShouldBeIndexed(atPath: event.path)
+            OSLog.general.log("==> shouldBeIndexed: \(shouldBeIndexed)")
         }
 
         filewatcher?.start()
+    }
+
+    private func fileShouldBeIndexed(atPath path: String) -> Bool {
+        let url = URL(filePath: path)
+        do {
+            guard let indexedDate: Date = try url.extendedAttributeValue(forName: fileAttributeIndexedDateKey) else {
+                OSLog.general.log("Can't read file attribute => needs to be indexed")
+                return true
+            }
+
+            OSLog.general.log("indexedDate: \(indexedDate) for \(path)")
+            let modificationDate = fileModificationDate(atPath: path)
+            return modificationDate > indexedDate
+        } catch {
+            OSLog.general.error("Extended attributes could not be read: \(error) for \(path)")
+            return true
+        }
+    }
+
+    private func fileModificationDate(atPath path: String) -> Date {
+        do {
+            let attributes = try FileManager.default.attributesOfItem(atPath: path)
+            guard let modificationDate = attributes[FileAttributeKey.modificationDate] as? Date else {
+                OSLog.general.error("No `modificationDate` attribute found for \(path)")
+                return Date.distantPast
+            }
+
+            OSLog.general.log("modificationDate: \(modificationDate) for \(path)")
+            return modificationDate
+        } catch {
+            OSLog.general.error("Standard attributes could not be read: \(error) for \(path)")
+        }
+
+        return Date.distantPast
+    }
+
+    private func filesToBeIndexed(files: [String]) -> [String] {
+        return files.compactMap { filePath in
+            fileShouldBeIndexed(atPath: filePath) ? filePath : nil
+        }
     }
 
     private func filesInAllDirectories() -> [String] {
         var allPaths: [String] = []
         for directory in directories {
             let filePaths = filesInDirectory(atPath: directory)
-            //        let filePaths = files.map { $0.path(percentEncoded: false) }
             allPaths.append(contentsOf: filePaths)
         }
 

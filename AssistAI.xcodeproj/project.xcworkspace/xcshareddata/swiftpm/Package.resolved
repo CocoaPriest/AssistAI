@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "extendedattributes",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/amosavian/ExtendedAttributes.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "1f8c0fe3c9f46249fa4bb46e00c1f808ea607ca0"
+      }
+    },
+    {
       "identity" : "filewatcher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/eonist/FileWatcher.git",
