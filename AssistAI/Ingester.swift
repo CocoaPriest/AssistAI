@@ -13,8 +13,13 @@ import ExtendedAttributes
 final class Ingester {
     private let vectorManager = VectorManager()
     private var filewatcher: FileWatcher?
-    private var directories = ["/Users/kostik/Desktop/XX", "/Users/kostik/Desktop/Tesla"]
-    private let validExtensions = ["pdf"]
+    private var directories = [
+        "/Users/kostik/Desktop/XX",
+        "/Users/kostik/Desktop/Tesla"
+    ]
+    private let validExtensions = [
+        "pdf"
+    ]
     private let fileAttributeIndexedDateKey = "com.alstertouch.AssistAI.indexedDate"
 
     func start() {
@@ -27,8 +32,24 @@ final class Ingester {
         filesToIndex.forEach { OSLog.general.log("=> \($0)") }
         // TODO: create a queue of filesToIndex items, then upload
 
+//        filesToIndex.forEach { continuation?.yield($0) }
+
         setupFileWatcher()
     }
+
+//    private func upload(file atPath: String) async {
+//        guard FileManager.default.fileExists(atPath: atPath) else {
+//            OSLog.general.log("File doesn't exist, not uploading: \(atPath)")
+//            return
+//        }
+//
+//        guard await uploadQueue?.contains(atPath) == false else {
+//            OSLog.general.log("This file path is already in the upload queue, not uploading: \(atPath)")
+//            return
+//        }
+//
+//        OSLog.general.log("--> Uploading: \(atPath)")
+//    }
 
     private func setupFileWatcher() {
         OSLog.general.log("Setup FileWatcher...")
@@ -52,9 +73,18 @@ final class Ingester {
             OSLog.general.log("==> attribute...")
             let shouldBeIndexed = fileShouldBeIndexed(atPath: event.path)
             OSLog.general.log("==> shouldBeIndexed: \(shouldBeIndexed)")
+            if shouldBeIndexed {
+//                continuation?.yield(event.path)
+            }
         }
 
         filewatcher?.start()
+    }
+
+    private func filesToBeIndexed(files: [String]) -> [String] {
+        return files.compactMap { filePath in
+            fileShouldBeIndexed(atPath: filePath) ? filePath : nil
+        }
     }
 
     private func fileShouldBeIndexed(atPath path: String) -> Bool {
@@ -89,12 +119,6 @@ final class Ingester {
         }
 
         return Date.distantPast
-    }
-
-    private func filesToBeIndexed(files: [String]) -> [String] {
-        return files.compactMap { filePath in
-            fileShouldBeIndexed(atPath: filePath) ? filePath : nil
-        }
     }
 
     private func filesInAllDirectories() -> [String] {
@@ -135,34 +159,3 @@ final class Ingester {
         return paths
     }
 }
-
-//private func uploadFile(url: URL, data: Data) async throws {
-//    var request = URLRequest(url: url)
-//    request.httpMethod = "POST"
-//    //        let (data, response) = try await URLSession.shared.upload(for: request, from: data)
-//    // handle response data
-//    print(request)
-//}
-//
-//private func test() {
-//    // Create an async sequence from your array of file URLs
-//    let files: [URL] = [] // Your array of file URLs
-//    let fileSequence = AsyncStream<Data> { continuation in
-//        for url in files {
-//            guard let data = try? Data(contentsOf: url) else { continue }
-//            continuation.yield(data)
-//        }
-//        continuation.finish()
-//    }
-//
-//    // Iterate over the async sequence
-//    Task {
-//        do {
-//            for await data in fileSequence {
-//                try await uploadFile(url: URL(fileURLWithPath: "yourAPIUrl"), data: data)
-//            }
-//        } catch {
-//            // Handle error
-//        }
-//    }
-//    }
