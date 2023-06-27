@@ -9,6 +9,7 @@ import Foundation
 import os.log
 import FileWatcher
 import ExtendedAttributes
+import CryptoKit
 
 final class Ingester {
     private let vectorManager = VectorManager()
@@ -20,7 +21,8 @@ final class Ingester {
     private let validExtensions = [
         "pdf"
     ]
-    private let fileAttributeIndexedDateKey = "com.alstertouch.AssistAI.indexedDate"
+    private let fileAttributeIndexedSha256Key = "com.alstertouch.AssistAI.sha256"
+    private let requestQueue = APIRequestQueue()
 
     func start() {
         OSLog.general.log("Start Ingester...")
@@ -32,24 +34,10 @@ final class Ingester {
         filesToIndex.forEach { OSLog.general.log("=> \($0)") }
         // TODO: create a queue of filesToIndex items, then upload
 
-//        filesToIndex.forEach { continuation?.yield($0) }
+        filesToIndex.forEach { requestQueue.addRequest(filePath: $0) }
 
         setupFileWatcher()
     }
-
-//    private func upload(file atPath: String) async {
-//        guard FileManager.default.fileExists(atPath: atPath) else {
-//            OSLog.general.log("File doesn't exist, not uploading: \(atPath)")
-//            return
-//        }
-//
-//        guard await uploadQueue?.contains(atPath) == false else {
-//            OSLog.general.log("This file path is already in the upload queue, not uploading: \(atPath)")
-//            return
-//        }
-//
-//        OSLog.general.log("--> Uploading: \(atPath)")
-//    }
 
     private func setupFileWatcher() {
         OSLog.general.log("Setup FileWatcher...")
@@ -74,7 +62,7 @@ final class Ingester {
             let shouldBeIndexed = fileShouldBeIndexed(atPath: event.path)
             OSLog.general.log("==> shouldBeIndexed: \(shouldBeIndexed)")
             if shouldBeIndexed {
-//                continuation?.yield(event.path)
+                requestQueue.addRequest(filePath: event.path)
             }
         }
 
@@ -90,35 +78,49 @@ final class Ingester {
     private func fileShouldBeIndexed(atPath path: String) -> Bool {
         let url = URL(filePath: path)
         do {
-            guard let indexedDate: Date = try url.extendedAttributeValue(forName: fileAttributeIndexedDateKey) else {
-                OSLog.general.log("Can't read file attribute => needs to be indexed")
-                return true
-            }
 
-            OSLog.general.log("indexedDate: \(indexedDate) for \(path)")
-            let modificationDate = fileModificationDate(atPath: path)
-            return modificationDate > indexedDate
+            let data = try FileManager.default.extendedAttribute(fileAttributeIndexedSha256Key, on: url)
+            let lastSavedSha256 = String(decoding: data, as: UTF8.self)
+            OSLog.general.log("Last saved sha256 for \(path): \(lastSavedSha256)")
+
+            guard let currentSha256 = fileSha256(atPath: path) else {
+                OSLog.general.error("Can't read file sha256, not indexing")
+                return false
+            }
+            return currentSha256 != lastSavedSha256
         } catch {
             OSLog.general.error("Extended attributes could not be read: \(error) for \(path)")
             return true
         }
     }
 
-    private func fileModificationDate(atPath path: String) -> Date {
+    // TODO: make sure it runs on a background thread
+    // TODO: if too slow, use `CryptoSwift`
+    func fileSha256(atPath path: String) -> String? {
+        let url = URL(filePath: path)
         do {
-            let attributes = try FileManager.default.attributesOfItem(atPath: path)
-            guard let modificationDate = attributes[FileAttributeKey.modificationDate] as? Date else {
-                OSLog.general.error("No `modificationDate` attribute found for \(path)")
-                return Date.distantPast
-            }
+            let file = try FileHandle(forReadingFrom: url)
+            var context = SHA256()
 
-            OSLog.general.log("modificationDate: \(modificationDate) for \(path)")
-            return modificationDate
+            let bufferSize = 1_024 * 1_024 // 1 MB
+            var done = false
+
+            repeat {
+                let buffer = file.readData(ofLength: bufferSize)
+                if buffer.isEmpty {
+                    done = true
+                } else {
+                    context.update(data: buffer)
+                }
+            } while !done
+
+            let digest = context.finalize()
+            return digest.map { String(format: "%02x", $0) }.joined()
+
         } catch {
-            OSLog.general.error("Standard attributes could not be read: \(error) for \(path)")
+            OSLog.general.error("No file found at \(url): \(error)")
+            return nil
         }
-
-        return Date.distantPast
     }
 
     private func filesInAllDirectories() -> [String] {
