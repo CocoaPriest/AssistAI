@@ -20,6 +20,7 @@ final class Ingester {
         "pdf"
     ]
     private let fileAttributeIndexedSha256Key = "com.alstertouch.AssistAI.sha256"
+    private let fileAttributeIndexedFilenameKey = "com.alstertouch.AssistAI.filename"
     private let requestQueue = APIRequestQueue()
 
     func start() async {
@@ -29,7 +30,7 @@ final class Ingester {
         let filesToIndex = filesToBeIndexed(at: allFiles)
 
         OSLog.general.log("Files to be indexed:")
-        filesToIndex.forEach { OSLog.general.log("=> \($0)") }
+        filesToIndex.forEach { OSLog.general.log("=> \($0.path(percentEncoded: false))") }
 
         filesToIndex.forEach { requestQueue.addRequest(url: $0) }
 
@@ -56,7 +57,7 @@ final class Ingester {
 
             let url = URL(filePath: event.path)
             let shouldBeIndexed = fileShouldBeIndexed(at: url)
-            if shouldBeIndexed || (!shouldBeIndexed && event.fileRenamed) {
+            if shouldBeIndexed {
                 OSLog.general.log("==> File at `\(event.path)` should be indexed.")
                 requestQueue.addRequest(url: url)
             } else {
@@ -83,14 +84,21 @@ final class Ingester {
         }
 
         do {
-            let data = try FileManager.default.extendedAttribute(fileAttributeIndexedSha256Key, on: url)
-            let lastSavedSha256 = String(decoding: data, as: UTF8.self)
+            let dataFilename = try FileManager.default.extendedAttribute(fileAttributeIndexedFilenameKey, on: url)
+            let lastSavedFilename = String(decoding: dataFilename, as: UTF8.self)
+            OSLog.general.log("Filename for `\(url.path(percentEncoded: false))` from xattr: `\(lastSavedFilename)`")
+
+            let currentFilename = sha256(from: url.lastPathComponent)
+            OSLog.general.log("Calculated filename for `\(url.path(percentEncoded: false))`: `\(currentFilename)`")
+
+            let dataSha256 = try FileManager.default.extendedAttribute(fileAttributeIndexedSha256Key, on: url)
+            let lastSavedSha256 = String(decoding: dataSha256, as: UTF8.self)
             OSLog.general.log("sha256 for `\(url.path(percentEncoded: false))` from xattr: `\(lastSavedSha256)`")
 
             let currentSha256 = try fileSha256(at: url)
             OSLog.general.log("Calculated sha256 for `\(url.path(percentEncoded: false))`: `\(currentSha256)`")
 
-            return currentSha256 != lastSavedSha256
+            return (currentSha256 != lastSavedSha256 || lastSavedFilename != currentFilename)
         } catch let error as ExtendedAttributeError {
             OSLog.general.error("Can't read extended attribute for `\(url.path(percentEncoded: false))`: \(error)")
             return true
@@ -98,6 +106,12 @@ final class Ingester {
             OSLog.general.error("Generic error (probably can't calculate sha256) while detecting whenever `\(url)` should be indexed: \(error)")
             return false
         }
+    }
+
+    private func sha256(from string: String) -> String {
+        let inputData = Data(string.utf8)
+        let hashed = SHA256.hash(data: inputData)
+        return hashed.compactMap { String(format: "%02x", $0) }.joined()
     }
 
     private func fileSha256(at url: URL) throws -> String {
