@@ -14,9 +14,9 @@ import CryptoKit
 final class Ingester {
     private let vectorManager = VectorManager()
     private var filewatcher: FileWatcher?
-    private var directories = [
-        "/Users/kostik/Desktop/XX",
-        "/Users/kostik/Desktop/Tesla"
+    private var directories: [URL] = [
+        URL(filePath: "/Users/kostik/Desktop/XX"),
+        URL(filePath: "/Users/kostik/Desktop/Tesla")
     ]
     private let validExtensions = [
         "pdf"
@@ -34,7 +34,7 @@ final class Ingester {
         filesToIndex.forEach { OSLog.general.log("=> \($0)") }
         // TODO: create a queue of filesToIndex items, then upload
 
-        filesToIndex.forEach { requestQueue.addRequest(filePath: $0) }
+        filesToIndex.forEach { requestQueue.addRequest(url: $0) }
 
         setupFileWatcher()
     }
@@ -46,7 +46,8 @@ final class Ingester {
             filewatcher?.stop()
         }
 
-        filewatcher = FileWatcher(directories)
+        let pathDirectories = directories.map { $0.path }
+        filewatcher = FileWatcher(pathDirectories)
         filewatcher?.queue = DispatchQueue.global(qos: .utility)
 
         filewatcher?.callback = { [weak self] event in
@@ -59,45 +60,43 @@ final class Ingester {
             OSLog.general.log("==> fileModified: \(event.fileModified)")
 
             OSLog.general.log("==> attribute...")
-            let shouldBeIndexed = fileShouldBeIndexed(atPath: event.path)
+            let url = URL(filePath: event.path)
+            let shouldBeIndexed = fileShouldBeIndexed(at: url)
             OSLog.general.log("==> shouldBeIndexed: \(shouldBeIndexed)")
             if shouldBeIndexed {
-                requestQueue.addRequest(filePath: event.path)
+                requestQueue.addRequest(url: url)
             }
         }
 
         filewatcher?.start()
     }
 
-    private func filesToBeIndexed(files: [String]) -> [String] {
+    private func filesToBeIndexed(files: [URL]) -> [URL] {
         return files.compactMap { filePath in
-            fileShouldBeIndexed(atPath: filePath) ? filePath : nil
+            fileShouldBeIndexed(at: filePath) ? filePath : nil
         }
     }
 
-    private func fileShouldBeIndexed(atPath path: String) -> Bool {
-        let url = URL(filePath: path)
+    private func fileShouldBeIndexed(at url: URL) -> Bool {
         do {
-
             let data = try FileManager.default.extendedAttribute(fileAttributeIndexedSha256Key, on: url)
             let lastSavedSha256 = String(decoding: data, as: UTF8.self)
-            OSLog.general.log("Last saved sha256 for \(path): \(lastSavedSha256)")
+            OSLog.general.log("Last saved sha256 for \(url): \(lastSavedSha256)")
 
-            guard let currentSha256 = fileSha256(atPath: path) else {
+            guard let currentSha256 = fileSha256(at: url) else {
                 OSLog.general.error("Can't read file sha256, not indexing")
                 return false
             }
             return currentSha256 != lastSavedSha256
         } catch {
-            OSLog.general.error("Extended attributes could not be read: \(error) for \(path)")
+            OSLog.general.error("Extended attributes could not be read: \(error) for \(url)")
             return true
         }
     }
 
     // TODO: make sure it runs on a background thread
     // TODO: if too slow, use `CryptoSwift`
-    func fileSha256(atPath path: String) -> String? {
-        let url = URL(filePath: path)
+    func fileSha256(at url: URL) -> String? {
         do {
             let file = try FileHandle(forReadingFrom: url)
             var context = SHA256()
@@ -123,38 +122,37 @@ final class Ingester {
         }
     }
 
-    private func filesInAllDirectories() -> [String] {
-        var allPaths: [String] = []
+    private func filesInAllDirectories() -> [URL] {
+        var allPaths: [URL] = []
         for directory in directories {
-            let filePaths = filesInDirectory(atPath: directory)
+            let filePaths = filesInDirectory(at: directory)
             allPaths.append(contentsOf: filePaths)
         }
 
         return allPaths
     }
 
-    private func filesInDirectory(atPath path: String) -> [String] {
-        guard let enumerator = FileManager.default.enumerator(atPath: path) else {
+    private func filesInDirectory(at url: URL) -> [URL] {
+        guard let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: nil) else {
             OSLog.general.error("Failed to create enumerator.")
             return []
         }
 
-        var paths: [String] = []
-        while let file = enumerator.nextObject() as? String {
+        var paths: [URL] = []
+        while let file = enumerator.nextObject() as? URL {
             let isValidExtension = validExtensions.contains(where: { ext in
-                file.hasSuffix(ext)
+                file.pathExtension == ext
             })
 
             if isValidExtension {
-                let fullPath = path.appending("/\(file)")
-                paths.append(fullPath)
+                paths.append(file)
             }
         }
 
         if paths.isEmpty {
-            OSLog.general.warning("Failed to find any acceptable files at \(path)")
+            OSLog.general.warning("Failed to find any acceptable files at \(url)")
         } else {
-            OSLog.general.log("Found \(paths.count) files at \(path):")
+            OSLog.general.log("Found \(paths.count) files at \(url):")
             paths.forEach { OSLog.general.log("=> \($0)") }
         }
 

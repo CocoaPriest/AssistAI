@@ -9,7 +9,7 @@ import Foundation
 import os.log
 
 struct APIRequest {
-    let filePath: String
+    let url: URL
     let task: () -> Void
 }
 
@@ -35,12 +35,12 @@ class APIRequestQueue {
         }
     }
 
-    func addRequest(filePath: String) {
+    func addRequest(url: URL) {
         queue.async(flags: .barrier) { [weak self] in
             guard let self = self else { return }
-            if !self.taskQueue.contains(where: { $0.filePath == filePath }) {
-                let request = APIRequest(filePath: filePath) { [weak self] in
-                    self?.upload(file: filePath)
+            if !self.taskQueue.contains(where: { $0.url == url }) {
+                let request = APIRequest(url: url) { [weak self] in
+                    self?.upload(fileAt: url)
                 }
                 self.taskQueue.append(request)
                 self.queueSemaphore.signal()
@@ -57,12 +57,11 @@ class APIRequestQueue {
         return item
     }
 
-    private func upload(file atPath: String) {
-        if FileManager.default.fileExists(atPath: atPath) {
-            OSLog.general.log("--> Uploading: \(atPath)")
-
+    private func upload(fileAt url: URL) {
+        if FileManager.default.fileExists(atPath: url.path) {
+            OSLog.general.log("--> Uploading: \(url)")
         } else {
-            OSLog.general.log("--> File doesn't exist, removing from index: \(atPath)")
+            OSLog.general.log("--> File doesn't exist, removing from index: \(url)")
         }
     }
 }
