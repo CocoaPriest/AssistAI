@@ -63,5 +63,7 @@ class APIRequestQueue {
         } else {
             OSLog.general.log("--> File doesn't exist, removing from index: \(url.path(percentEncoded: false))")
         }
+
+        // TODO: after successfull upload, update both ext. attributes
     }
 }

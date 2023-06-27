@@ -20,7 +20,7 @@ final class Ingester {
         "pdf"
     ]
     private let fileAttributeIndexedSha256Key = "com.alstertouch.AssistAI.sha256"
-    private let fileAttributeIndexedFilenameKey = "com.alstertouch.AssistAI.filename"
+    private let fileAttributeIndexedFilenameKey = "com.alstertouch.AssistAI.filepath"
     private let requestQueue = APIRequestQueue()
 
     func start() async {
@@ -85,11 +85,11 @@ final class Ingester {
 
         do {
             let dataFilename = try FileManager.default.extendedAttribute(fileAttributeIndexedFilenameKey, on: url)
-            let lastSavedFilename = String(decoding: dataFilename, as: UTF8.self)
-            OSLog.general.log("Filename for `\(url.path(percentEncoded: false))` from xattr: `\(lastSavedFilename)`")
+            let lastSavedFullPath = String(decoding: dataFilename, as: UTF8.self)
+            OSLog.general.log("Full path for `\(url.path(percentEncoded: false))` from xattr: `\(lastSavedFullPath)`")
 
-            let currentFilename = sha256(from: url.lastPathComponent)
-            OSLog.general.log("Calculated filename for `\(url.path(percentEncoded: false))`: `\(currentFilename)`")
+            let currentFullPath = sha256(from: url.path)
+            OSLog.general.log("Calculated full path for `\(url.path(percentEncoded: false))`: `\(currentFullPath)`")
 
             let dataSha256 = try FileManager.default.extendedAttribute(fileAttributeIndexedSha256Key, on: url)
             let lastSavedSha256 = String(decoding: dataSha256, as: UTF8.self)
@@ -98,7 +98,7 @@ final class Ingester {
             let currentSha256 = try fileSha256(at: url)
             OSLog.general.log("Calculated sha256 for `\(url.path(percentEncoded: false))`: `\(currentSha256)`")
 
-            return (currentSha256 != lastSavedSha256 || lastSavedFilename != currentFilename)
+            return (currentSha256 != lastSavedSha256 || lastSavedFullPath != currentFullPath)
         } catch let error as ExtendedAttributeError {
             OSLog.general.error("Can't read extended attribute for `\(url.path(percentEncoded: false))`: \(error)")
             return true
