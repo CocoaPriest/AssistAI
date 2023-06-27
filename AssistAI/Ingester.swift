@@ -8,11 +8,9 @@
 import Foundation
 import os.log
 import FileWatcher
-import ExtendedAttributes
 import CryptoKit
 
 final class Ingester {
-    private let vectorManager = VectorManager()
     private var filewatcher: FileWatcher?
     private var directoryURLs: [URL] = [
         URL(filePath: "/Users/kostik/Desktop/XX")
@@ -32,7 +30,6 @@ final class Ingester {
 
         OSLog.general.log("Files to be indexed:")
         filesToIndex.forEach { OSLog.general.log("=> \($0)") }
-        // TODO: create a queue of filesToIndex items, then upload
 
         filesToIndex.forEach { requestQueue.addRequest(url: $0) }
 
@@ -81,21 +78,21 @@ final class Ingester {
             url.pathExtension == ext
         })
         guard isValidExtension else {
-            OSLog.general.warning("File `\(url)` hasn't a supported extension")
+            OSLog.general.warning("File `\(url.path(percentEncoded: false))` hasn't a supported extension")
             return false
         }
 
         do {
             let data = try FileManager.default.extendedAttribute(fileAttributeIndexedSha256Key, on: url)
             let lastSavedSha256 = String(decoding: data, as: UTF8.self)
-            OSLog.general.log("sha256 for `\(url)` from xattr: `\(lastSavedSha256)`")
+            OSLog.general.log("sha256 for `\(url.path(percentEncoded: false))` from xattr: `\(lastSavedSha256)`")
 
             let currentSha256 = try fileSha256(at: url)
-            OSLog.general.log("Calculated sha256 for `\(url)`: `\(currentSha256)`")
+            OSLog.general.log("Calculated sha256 for `\(url.path(percentEncoded: false))`: `\(currentSha256)`")
 
             return currentSha256 != lastSavedSha256
         } catch let error as ExtendedAttributeError {
-            OSLog.general.error("Can't read extended attribute for `\(url)`: \(error)")
+            OSLog.general.error("Can't read extended attribute for `\(url.path(percentEncoded: false))`: \(error)")
             return true
         } catch {
             OSLog.general.error("Generic error (probably can't calculate sha256) while detecting whenever `\(url)` should be indexed: \(error)")
@@ -142,10 +139,10 @@ final class Ingester {
         let urls = enumerator.compactMap { $0 as? URL }
 
         if urls.isEmpty {
-            OSLog.general.warning("Failed to find any acceptable files at \(url)")
+            OSLog.general.warning("Failed to find any files at \(url)")
         } else {
             OSLog.general.log("Found \(urls.count) files at \(url):")
-            urls.forEach { OSLog.general.log("=> \($0)") }
+            urls.forEach { OSLog.general.log("=> \($0.path(percentEncoded: false))") }
         }
 
         return urls

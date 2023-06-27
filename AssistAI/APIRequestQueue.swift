@@ -59,9 +59,9 @@ class APIRequestQueue {
 
     private func upload(fileAt url: URL) {
         if FileManager.default.fileExists(atPath: url.path) {
-            OSLog.general.log("--> Uploading: \(url)")
+            OSLog.general.log("--> Uploading: \(url.path(percentEncoded: false))")
         } else {
-            OSLog.general.log("--> File doesn't exist, removing from index: \(url)")
+            OSLog.general.log("--> File doesn't exist, removing from index: \(url.path(percentEncoded: false))")
         }
     }
 }
