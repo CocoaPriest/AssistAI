@@ -86,7 +86,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         constructMenu()
 
-        self.ingester.start()
+        Task(priority: .utility) {
+            await self.ingester.start()
+        }
     }
 
     // TODO: do it in onboarding

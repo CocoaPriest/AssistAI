@@ -16,7 +16,7 @@ struct APIRequest {
 class APIRequestQueue {
     private let queueSemaphore = DispatchSemaphore(value: 0)
     private let taskExecutionSemaphore = DispatchSemaphore(value: 0)
-    private let queue = DispatchQueue(label: "APIRequestQueue", attributes: .concurrent)
+    private let queue = DispatchQueue(label: "APIRequestQueue", qos: .utility, attributes: .concurrent)
     private var taskQueue: [APIRequest] = []
 
     init() {
@@ -24,7 +24,7 @@ class APIRequestQueue {
     }
 
     private func setupQueueListener() {
-        DispatchQueue.global().async { [weak self] in
+        DispatchQueue.global(qos: .utility).async { [weak self] in
             while true {
                 self?.queueSemaphore.wait() // This will block until signal() is called.
                 if let apiRequest = self?.getAPIRequest() {
