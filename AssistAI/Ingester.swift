@@ -22,6 +22,11 @@ final class Ingester {
     private let fileAttributeIndexedSha256Key = "com.alstertouch.AssistAI.sha256"
     private let fileAttributeIndexedFilenameKey = "com.alstertouch.AssistAI.filepath"
     private let uploadCallQueue = APICallQueueActor()
+    private let networkService: NetworkServiceable
+
+    init() {
+        self.networkService = NetworkService()
+    }
 
     func start() async {
         OSLog.general.log("Start Ingester...")
@@ -73,24 +78,44 @@ final class Ingester {
     }
 
     private func enqueueCall(filePath: URL) {
-        let action: String
-
-        if FileManager.default.fileExists(atPath: filePath.path) {
-            OSLog.general.log("--> Uploading: \(filePath.path(percentEncoded: false))")
-            action = "ADD"
-        } else {
-            OSLog.general.log("--> File doesn't exist, removing from index: \(filePath.path(percentEncoded: false))")
-            action = "DELETE"
-        }
-
-        let call = APICall(action: action,
-                           filePath: filePath) { [weak self] in
-            OSLog.general.log("* CALL *")
-//            await self?.TMP()
-            // TODO: after successful upload, update both ext. attributes
-        }
-
         Task {
+            let action: APICallAction
+
+            if FileManager.default.fileExists(atPath: filePath.path(percentEncoded: false)) {
+                do {
+                    let (fileData, _) = try await URLSession.shared.data(from: filePath)
+                    OSLog.general.log("--> File exists, adding to index: \(filePath.path(percentEncoded: false))")
+                    action = .uploadFile(fileData: fileData)
+                } catch {
+                    OSLog.general.error("Failed to read file at \(filePath): \(error.localizedDescription)")
+                    return
+                }
+            } else {
+                OSLog.general.log("--> File doesn't exist, removing from index: \(filePath.path(percentEncoded: false))")
+                action = .removeFromIndex
+            }
+
+            let call = APICall(action: action,
+                               filePath: filePath) { [weak self] in
+                guard let self else { return }
+
+                let result: Result<Void, RequestError>
+                switch action {
+                case let .uploadFile(fileData):
+                    result = await self.networkService.upload(data: fileData, filePath: filePath)
+                case .removeFromIndex:
+                    result = await self.networkService.removeFromIndex(filePath)
+                }
+
+                switch result {
+                case .success(let answer):
+                    OSLog.general.log("=====> Upload complete")
+                    // TODO: after successful upload, update both ext. attributes
+                case .failure(let error):
+                    OSLog.general.error("Service error: \(error.localizedDescription)")
+                }
+            }
+
             await self.uploadCallQueue.addCall(call)
         }
     }

@@ -7,8 +7,26 @@
 
 import Foundation
 
+enum APICallAction {
+    case uploadFile(fileData: Data)
+    case removeFromIndex
+}
+
+extension APICallAction: Equatable {
+    static func == (lhs: APICallAction, rhs: APICallAction) -> Bool {
+        switch (lhs, rhs) {
+        case let (.uploadFile(lFileData), .uploadFile(rFileData)):
+            return lFileData == rFileData
+        case (.removeFromIndex, .removeFromIndex):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 struct APICall {
-    let action: String
+    let action: APICallAction
     let filePath: URL
     let task: () async -> Void
 }

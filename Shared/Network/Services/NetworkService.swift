@@ -12,6 +12,9 @@ protocol NetworkServiceable {
     func upsertVector(userId: UUID, id: UUID, vector: [Double], filePath: String) async -> Result<Void, RequestError>
     func querySimilarities(userId: UUID, vector: [Double], maxCount: Int) async -> Result<[QueryMatch], RequestError>
     func askGPT(prompt: String, systemPrompt: String?) async -> Result<String, RequestError>
+
+    func upload(data: Data, filePath: URL) async -> Result<Void, RequestError>
+    func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError>
 }
 
 struct NetworkService: HTTPClient, NetworkServiceable {
@@ -56,5 +59,13 @@ struct NetworkService: HTTPClient, NetworkServiceable {
             }
             return .success(firstChoice.message.content)
         }
+    }
+
+    func upload(data: Data, filePath: URL) async -> Result<Void, RequestError> {
+        return .success(())
+    }
+
+    func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError> {
+        return .success(())
     }
 }
