@@ -83,9 +83,10 @@ final class Ingester {
 
             if FileManager.default.fileExists(atPath: filePath.path(percentEncoded: false)) {
                 do {
-                    let (fileData, _) = try await URLSession.shared.data(from: filePath)
-                    OSLog.general.log("--> File exists, adding to index: \(filePath.path(percentEncoded: false))")
-                    action = .uploadFile(fileData: fileData)
+                    let (fileData, response) = try await URLSession.shared.data(from: filePath)
+                    let mimeType = response.mimeType ?? "UNKNOWN" // TODO: get from ext if needed
+                    OSLog.general.log("--> File of type `\(mimeType)` exists, adding to index: \(filePath.path(percentEncoded: false))")
+                    action = .uploadFile(fileData: fileData, mimeType: mimeType)
                 } catch {
                     OSLog.general.error("Failed to read file at \(filePath): \(error.localizedDescription)")
                     return
@@ -101,14 +102,14 @@ final class Ingester {
 
                 let result: Result<Void, RequestError>
                 switch action {
-                case let .uploadFile(fileData):
-                    result = await self.networkService.upload(data: fileData, filePath: filePath)
+                case let .uploadFile(fileData, mimeType):
+                    result = await self.networkService.upload(data: fileData, filePath: filePath, mimeType: mimeType)
                 case .removeFromIndex:
                     result = await self.networkService.removeFromIndex(filePath)
                 }
 
                 switch result {
-                case .success(let answer):
+                case .success:
                     OSLog.general.log("=====> Upload complete")
                     // TODO: after successful upload, update both ext. attributes
                 case .failure(let error):

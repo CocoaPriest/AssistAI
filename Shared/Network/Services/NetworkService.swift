@@ -13,11 +13,15 @@ protocol NetworkServiceable {
     func querySimilarities(userId: UUID, vector: [Double], maxCount: Int) async -> Result<[QueryMatch], RequestError>
     func askGPT(prompt: String, systemPrompt: String?) async -> Result<String, RequestError>
 
-    func upload(data: Data, filePath: URL) async -> Result<Void, RequestError>
+    func upload(data: Data, filePath: URL, mimeType: String) async -> Result<Void, RequestError>
     func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError>
 }
 
 struct NetworkService: HTTPClient, NetworkServiceable {
+
+    // TODO:
+    private let machineId = "64050ff7-ff2e-0000-a102-ed4f2e716c62"
+
     func createVector(text: String) async -> Result<[Double], RequestError> {
         let response = await sendRequest(endpoint: OpenAIEndpoint.createEmbedding(text: text),
                                          responseModel: EmbeddingResponse.self)
@@ -61,8 +65,13 @@ struct NetworkService: HTTPClient, NetworkServiceable {
         }
     }
 
-    func upload(data: Data, filePath: URL) async -> Result<Void, RequestError> {
-        return .success(())
+    func upload(data: Data, filePath: URL, mimeType: String) async -> Result<Void, RequestError> {
+        // TODO: for other types of data (emails, bookmarks etc), create distinct URIs
+        let response = await sendRequest(endpoint: BubbleEndpoint.ingest(data: data, mimeType: mimeType, uri: filePath.path(percentEncoded: false), machineId: machineId),
+                                         responseModel: EmptyResponse.self)
+        return response.flatMap { _ in
+            return .success(())
+        }
     }
 
     func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError> {

@@ -8,15 +8,15 @@
 import Foundation
 
 enum APICallAction {
-    case uploadFile(fileData: Data)
+    case uploadFile(fileData: Data, mimeType: String)
     case removeFromIndex
 }
 
 extension APICallAction: Equatable {
     static func == (lhs: APICallAction, rhs: APICallAction) -> Bool {
         switch (lhs, rhs) {
-        case let (.uploadFile(lFileData), .uploadFile(rFileData)):
-            return lFileData == rFileData
+        case let (.uploadFile(lFileData, lMimeType), .uploadFile(rFileData, rMimeType)):
+            return lFileData == rFileData && lMimeType == rMimeType
         case (.removeFromIndex, .removeFromIndex):
             return true
         default:

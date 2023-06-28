@@ -28,13 +28,21 @@ extension HTTPClient {
         request.httpMethod = endpoint.method.rawValue
         request.allHTTPHeaderFields = endpoint.header
 
-        OSLog.networking.log("Headers: \(request.allHTTPHeaderFields ?? [:])")
+        if let multipartFormData = endpoint.multipartFormData {
+            request.httpBody = multipartFormData.body
+            request.allHTTPHeaderFields?["Content-Type"] = multipartFormData.contentType
 
-        if let body = endpoint.body {
+            if let bodyText = String(data: multipartFormData.body, encoding: .utf8) {
+                OSLog.networking.log("Body: \(bodyText.prefix(50))")
+            } else {
+                OSLog.networking.error("Can't get `multipart/form-data` body.")
+            }
+        } else if let body = endpoint.body {
             request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
             OSLog.networking.log("Body: \(body)")
         }
 
+        OSLog.networking.log("Headers: \(request.allHTTPHeaderFields ?? [:])")
         OSLog.networking.log("URLRequest: \(request.httpMethod ?? "???") \(request)")
 
         do {
@@ -60,6 +68,8 @@ extension HTTPClient {
             case 200...299:
                 let resp: T = try data.decoded()
                 return .success(resp)
+            case 400:
+                return .failure(.badRequest)
             case 401:
                 return .failure(.unauthorized)
             default:

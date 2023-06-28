@@ -16,6 +16,7 @@ enum RequestError: Error {
     case unknown
     case emptyData
     case noResults
+    case badRequest
 
     var localizedDescription: String {
         switch self {
@@ -23,6 +24,8 @@ enum RequestError: Error {
             return "Decode error"
         case .unauthorized:
             return "Session expired"
+        case .badRequest:
+            return "Bad request"
         default:
             return "Unknown error"
         }

@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "multipartformdatakit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Kuniwak/MultipartFormDataKit",
+      "state" : {
+        "branch" : "master",
+        "revision" : "666c1715f6e70f4589d11ae2936eb16bf018ccd4"
+      }
+    },
+    {
       "identity" : "swift-collections",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",

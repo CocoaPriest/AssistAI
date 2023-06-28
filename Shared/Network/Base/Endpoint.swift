@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MultipartFormDataKit
 
 protocol Endpoint {
     var baseUrl: URL { get }
@@ -14,11 +15,20 @@ protocol Endpoint {
     var method: RequestMethod { get }
     var header: [String: String]? { get }
     var body: [String: Any]? { get }
+    var multipartFormData: MultipartFormData.BuildResult? { get }
     func validate(data: Data) throws
 }
 
 extension Endpoint {
     var queryItems: [URLQueryItem]? {
+        return nil
+    }
+
+    var body: [String: Any]? {
+        return nil
+    }
+
+    var multipartFormData: MultipartFormData.BuildResult? {
         return nil
     }
 
