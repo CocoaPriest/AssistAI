@@ -21,10 +21,14 @@ final class Ingester {
     ]
     private let fileAttributeIndexedSha256Key = "com.alstertouch.AssistAI.sha256"
     private let fileAttributeIndexedFilenameKey = "com.alstertouch.AssistAI.filepath"
-    private let requestQueue = APIRequestQueue()
+    private let uploadCallQueue = APICallQueueActor()
 
     func start() async {
         OSLog.general.log("Start Ingester...")
+
+        Task {
+            await uploadCallQueue.run()
+        }
 
         let allFiles = filesInAllDirectories()
         let filesToIndex = filesToBeIndexed(at: allFiles)
@@ -32,7 +36,7 @@ final class Ingester {
         OSLog.general.log("Files to be indexed:")
         filesToIndex.forEach { OSLog.general.log("=> \($0.path(percentEncoded: false))") }
 
-        filesToIndex.forEach { requestQueue.addRequest(url: $0) }
+        filesToIndex.forEach { enqueueCall(filePath: $0) }
 
         setupFileWatcher()
     }
@@ -59,13 +63,36 @@ final class Ingester {
             let shouldBeIndexed = fileShouldBeIndexed(at: url)
             if shouldBeIndexed {
                 OSLog.general.log("==> File at `\(event.path)` should be indexed.")
-                requestQueue.addRequest(url: url)
+                self.enqueueCall(filePath: url)
             } else {
                 OSLog.general.log("==> File at `\(event.path)` should NOT be indexed.")
             }
         }
 
         filewatcher?.start()
+    }
+
+    private func enqueueCall(filePath: URL) {
+        let action: String
+
+        if FileManager.default.fileExists(atPath: filePath.path) {
+            OSLog.general.log("--> Uploading: \(filePath.path(percentEncoded: false))")
+            action = "ADD"
+        } else {
+            OSLog.general.log("--> File doesn't exist, removing from index: \(filePath.path(percentEncoded: false))")
+            action = "DELETE"
+        }
+
+        let call = APICall(action: action,
+                           filePath: filePath) { [weak self] in
+            OSLog.general.log("* CALL *")
+//            await self?.TMP()
+            // TODO: after successful upload, update both ext. attributes
+        }
+
+        Task {
+            await self.uploadCallQueue.addCall(call)
+        }
     }
 
     private func filesToBeIndexed(at urls: [URL]) -> [URL] {

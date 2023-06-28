@@ -12,8 +12,9 @@
 		9E61CFD62A45A7470040EC29 /* Ingester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DF2A1B8727002F1239 /* Ingester.swift */; };
 		9E61CFE12A4642410040EC29 /* FileWatcher in Frameworks */ = {isa = PBXBuildFile; productRef = 9E61CFE02A4642410040EC29 /* FileWatcher */; };
 		9E61CFEA2A4B0F5C0040EC29 /* FileManager+xattr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61CFE92A4B0F5C0040EC29 /* FileManager+xattr.swift */; };
-		9E61CFEC2A4BA4520040EC29 /* APIRequestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61CFEB2A4BA4520040EC29 /* APIRequestQueue.swift */; };
 		9E61CFF22A4BAEAC0040EC29 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 9E61CFF12A4BAEAC0040EC29 /* DequeModule */; };
+		9E61D0122A4C61900040EC29 /* APICall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D0112A4C61900040EC29 /* APICall.swift */; };
+		9E61D0142A4C61A70040EC29 /* APICallQueueActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D0132A4C61A70040EC29 /* APICallQueueActor.swift */; };
 		9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
 		9EBE4B332A1C30F50014975D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* NetworkService.swift */; };
@@ -41,9 +42,9 @@
 /* Begin PBXFileReference section */
 		9E2DAC202A44C2EA00E5CF06 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		9E3850F22A44FD7600B6A56F /* AssistWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistWindow.swift; sourceTree = "<group>"; };
-		9E61CFE72A4A54FB0040EC29 /* __APIRequestQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __APIRequestQueue.swift; sourceTree = "<group>"; };
 		9E61CFE92A4B0F5C0040EC29 /* FileManager+xattr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+xattr.swift"; sourceTree = "<group>"; };
-		9E61CFEB2A4BA4520040EC29 /* APIRequestQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequestQueue.swift; sourceTree = "<group>"; };
+		9E61D0112A4C61900040EC29 /* APICall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICall.swift; sourceTree = "<group>"; };
+		9E61D0132A4C61A70040EC29 /* APICallQueueActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICallQueueActor.swift; sourceTree = "<group>"; };
 		9EBE4B302A1C30960014975D /* VectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorManager.swift; sourceTree = "<group>"; };
 		9EBE4B3E2A1C33B50014975D /* QueryMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryMatch.swift; sourceTree = "<group>"; };
 		9EBE4B412A1CE6F20014975D /* PineconeQueryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeQueryResponse.swift; sourceTree = "<group>"; };
@@ -212,8 +213,8 @@
 				9ECCB12B2A1C2727002F1239 /* ViewController.swift */,
 				9EBE4B4B2A1D6E1D0014975D /* GPTManager.swift */,
 				9ECCB0DF2A1B8727002F1239 /* Ingester.swift */,
-				9E61CFE72A4A54FB0040EC29 /* __APIRequestQueue.swift */,
-				9E61CFEB2A4BA4520040EC29 /* APIRequestQueue.swift */,
+				9E61D0112A4C61900040EC29 /* APICall.swift */,
+				9E61D0132A4C61A70040EC29 /* APICallQueueActor.swift */,
 				9ECCB12F2A1C2728002F1239 /* Main.storyboard */,
 				9E3850F22A44FD7600B6A56F /* AssistWindow.swift */,
 				9E61CFE92A4B0F5C0040EC29 /* FileManager+xattr.swift */,
@@ -315,14 +316,15 @@
 				9EBE4B4C2A1D6E1D0014975D /* GPTManager.swift in Sources */,
 				9EBE4B3B2A1C31070014975D /* PineconeEndpoint.swift in Sources */,
 				9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */,
+				9E61D0122A4C61900040EC29 /* APICall.swift in Sources */,
 				9EBE4B392A1C31040014975D /* EmbeddingResponse.swift in Sources */,
 				9EBE4B4A2A1D6D6C0014975D /* EmbeddingData.swift in Sources */,
 				9EBE4B402A1C33B50014975D /* QueryMatch.swift in Sources */,
 				9E61CFD62A45A7470040EC29 /* Ingester.swift in Sources */,
+				9E61D0142A4C61A70040EC29 /* APICallQueueActor.swift in Sources */,
 				9ECCB12A2A1C2727002F1239 /* AppDelegate.swift in Sources */,
 				9EBE4B432A1CE6F20014975D /* PineconeQueryResponse.swift in Sources */,
 				9EBE4B372A1C30FD0014975D /* RequestMethod.swift in Sources */,
-				9E61CFEC2A4BA4520040EC29 /* APIRequestQueue.swift in Sources */,
 				9EBE4B3A2A1C31070014975D /* EmbeddingsEndpoint.swift in Sources */,
 				9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */,
 			);
