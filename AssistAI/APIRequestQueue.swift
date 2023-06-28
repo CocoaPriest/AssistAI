@@ -2,68 +2,61 @@
 //  APIRequestQueue.swift
 //  AssistAI
 //
-//  Created by Konstantin Gonikman on 27.06.23.
+//  Created by Konstantin Gonikman on 28.06.23.
 //
 
 import Foundation
 import os.log
+import DequeModule
 
 struct APIRequest {
-    let url: URL
-    let task: () -> Void
+    let action: String
+    let filePath: URL
+    let task: () async -> Void
 }
 
-class APIRequestQueue {
-    private let queueSemaphore = DispatchSemaphore(value: 0)
-    private let taskExecutionSemaphore = DispatchSemaphore(value: 0)
-    private let queue = DispatchQueue(label: "APIRequestQueue", qos: .utility, attributes: .concurrent)
-    private var taskQueue: [APIRequest] = []
-
-    init() {
-        setupQueueListener()
+extension APIRequest: Hashable {
+    static func == (lhs: APIRequest, rhs: APIRequest) -> Bool {
+        return lhs.action == rhs.action && lhs.filePath == rhs.filePath
     }
 
-    private func setupQueueListener() {
-        DispatchQueue.global(qos: .utility).async { [weak self] in
-            while true {
-                self?.queueSemaphore.wait() // This will block until signal() is called.
-                if let apiRequest = self?.getAPIRequest() {
-                    apiRequest.task()
-                    self?.taskExecutionSemaphore.signal()
-                }
-            }
-        }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(action)
+        hasher.combine(filePath)
     }
+}
+
+final class APIRequestQueue {
+    private var requestQueue: Deque<APIRequest> = []
 
     func addRequest(url: URL) {
-        queue.async(flags: .barrier) { [weak self] in
-            guard let self = self else { return }
-            if !self.taskQueue.contains(where: { $0.url == url }) {
-                let request = APIRequest(url: url) { [weak self] in
-                    self?.upload(fileAt: url)
-                }
-                self.taskQueue.append(request)
-                self.queueSemaphore.signal()
+//        if !self.taskQueue.contains(where: { $0.url == url }) { // TODO: compare url and action (add/delete)
+        let request = APIRequest(action: "", filePath: url) { [weak self] in
+            await self?.upload(fileAt: url)
+        }
+
+        requestQueue.append(request)
+        processQueue()
+    }
+
+    private func processQueue() {
+        while let task = requestQueue.popFirst() {
+            Task {
+                await task.task()
             }
         }
     }
 
-    private func getAPIRequest() -> APIRequest? {
-        var item: APIRequest?
-        queue.sync {
-            guard !taskQueue.isEmpty else { return }
-            item = taskQueue.removeFirst()
-        }
-        return item
-    }
+    private func upload(fileAt url: URL) async {
+        // Simulated delay to mimic the upload process.
+        try? await Task.sleep(for: .seconds(2))
 
-    private func upload(fileAt url: URL) {
         if FileManager.default.fileExists(atPath: url.path) {
             OSLog.general.log("--> Uploading: \(url.path(percentEncoded: false))")
         } else {
             OSLog.general.log("--> File doesn't exist, removing from index: \(url.path(percentEncoded: false))")
         }
 
-        // TODO: after successfull upload, update both ext. attributes
+        // TODO: after successful upload, update both ext. attributes
     }
 }
