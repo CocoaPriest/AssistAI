@@ -64,6 +64,11 @@ final class Ingester {
 
             OSLog.general.log("=> \(event.path); \(event.description)")
 
+            guard event.fileCreated || event.fileRemoved || event.fileRenamed || event.fileModified else {
+                OSLog.general.log("==> Insignificant event at `\(event.path)`, ignoring.")
+                return
+            }
+
             let url = URL(filePath: event.path)
             let shouldBeIndexed = fileShouldBeIndexed(at: url)
             if shouldBeIndexed {

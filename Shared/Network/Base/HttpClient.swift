@@ -32,11 +32,9 @@ extension HTTPClient {
             request.httpBody = multipartFormData.body
             request.allHTTPHeaderFields?["Content-Type"] = multipartFormData.contentType
 
-            if let bodyText = String(data: multipartFormData.body, encoding: .utf8) {
-                OSLog.networking.log("Body: \(bodyText.prefix(50))")
-            } else {
-                OSLog.networking.error("Can't get `multipart/form-data` body.")
-            }
+            let base64 = multipartFormData.body.base64EncodedString()
+            OSLog.networking.log("`multipart/form-data` body base64: \(base64.prefix(64))...")
+            
         } else if let body = endpoint.body {
             request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
             OSLog.networking.log("Body: \(body)")
