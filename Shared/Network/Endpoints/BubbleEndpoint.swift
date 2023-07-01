@@ -58,7 +58,7 @@ extension BubbleEndpoint: Endpoint {
         case let .removeFromIndex(uri, machineId):
             return [
                 "uri": uri,
-                "machineId": machineId
+                "machine_id": machineId
             ]
         }
     }
