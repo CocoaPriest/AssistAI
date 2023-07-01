@@ -89,7 +89,7 @@ final class Ingester {
             if FileManager.default.fileExists(atPath: filePath.path(percentEncoded: false)) {
                 do {
                     let (fileData, response) = try await URLSession.shared.data(from: filePath)
-                    let mimeType = response.mimeType ?? "UNKNOWN" // TODO: get from ext if needed
+                    let mimeType = response.mimeType ?? "UNKNOWN" // LATER: check if works for other file types
                     OSLog.general.log("--> File of type `\(mimeType)` exists, adding to index: \(filePath.path(percentEncoded: false))")
                     action = .uploadFile(fileData: fileData, mimeType: mimeType)
                 } catch {

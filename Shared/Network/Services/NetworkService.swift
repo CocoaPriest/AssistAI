@@ -67,7 +67,8 @@ struct NetworkService: HTTPClient, NetworkServiceable {
 
     func upload(data: Data, filePath: URL, mimeType: String) async -> Result<Void, RequestError> {
         // TODO: for other types of data (emails, bookmarks etc), create distinct URIs
-        let response = await sendRequest(endpoint: BubbleEndpoint.ingest(data: data, mimeType: mimeType, uri: filePath.path(percentEncoded: false), machineId: machineId),
+        let response = await sendRequest(endpoint: BubbleEndpoint.ingest(data: data, mimeType: mimeType, uri: filePath.path(percentEncoded: false),
+                                                                         machineId: machineId),
                                          responseModel: EmptyResponse.self)
         return response.flatMap { _ in
             return .success(())
@@ -75,6 +76,11 @@ struct NetworkService: HTTPClient, NetworkServiceable {
     }
 
     func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError> {
-        return .success(())
+        let response = await sendRequest(endpoint: BubbleEndpoint.removeFromIndex(uri: filePath.path(percentEncoded: false),
+                                                                                  machineId: machineId),
+                                         responseModel: EmptyResponse.self)
+        return response.flatMap { _ in
+            return .success(())
+        }
     }
 }
