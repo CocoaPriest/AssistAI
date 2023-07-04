@@ -10,9 +10,7 @@ import os.log
 import PDFKit
 
 final class ViewController: NSViewController {
-
-    private let vectorManager = VectorManager()
-    private let gptManager = GPTManager()
+//    private let gptManager = GPTManager()
     private let networkService = NetworkService()
 
     @IBOutlet weak var questionField: NSTextField!
@@ -29,7 +27,8 @@ final class ViewController: NSViewController {
         }
     }
 
-    @IBAction func didTapAsk(_ sender: Any) {
+    @IBAction
+    func didTapAsk(_ sender: Any) {
         OSLog.general.log("Question: \(self.questionField.stringValue, privacy: .public)")
         progressIndicator.startAnimation(nil)
 
@@ -47,113 +46,4 @@ final class ViewController: NSViewController {
             progressIndicator.stopAnimation(nil)
         }
     }
-
-    // OLD:
-//    // 1. Convert question into embedding vector
-//    let questionVector = try await vectorManager.createVector(text: questionField.stringValue)
-//    OSLog.general.log("\(questionVector, privacy: .public)")
-//
-//    // 2. Get top 3 most similar vectors from pinecone
-//    let similarities = try await vectorManager.querySimilarities(using: questionVector, maxCount: 3)
-//    OSLog.general.log("\(similarities, privacy: .public)")
-//
-//    guard !similarities.isEmpty else {
-//        OSLog.general.warning("No results.")
-//        outputTextView.string = "No results."
-//        progressIndicator.stopAnimation(nil)
-//        return
-//    }
-//
-//    // 3. Extract metadata: need filePath and text range
-//    let links = similarities.map { $0.metadata.link }
-//    //            outputTextView.string = "Found results:\n\(links)"
-//
-//    OSLog.general.log("Links found: \(links)")
-//
-//    // 4. Read text from this file in selected range
-//    let contentChunks = self.loadContentChunks(from: links)
-//
-//    // 5. Send using a template this question and the 3 top texts to GPT
-//    let template = self.loadTemplate()
-//    OSLog.general.log("Template:\n\(template)")
-//
-//    // 6. Create prompt
-//    let prompt = self.createPrompt(using: template, contentChunks: contentChunks)
-//    OSLog.general.log("Prompt:\n\(prompt)")
-//
-//    // 7. Get answer from GPT
-//    let answer = try await gptManager.ask(prompt: prompt)
-//    OSLog.general.log("Answer:\n\(answer, privacy: .public)")
-//
-//    // 8. Present answer
-//    outputTextView.string = answer
-
-    // TODO: ****** following very dirty code ********
-
-    func loadContentChunks(from links: [String]) -> [ContentChunk] {
-        var contentChunks = [ContentChunk]()
-        do {
-            for filePath in links {
-                let fileURL = URL(fileURLWithPath: filePath)
-                let content = try self.loadContent(at: fileURL)
-                let chunk = ContentChunk(filePath: filePath, content: content)
-                contentChunks.append(chunk)
-            }
-        } catch {
-            OSLog.general.error("Can't access files: \(error.localizedDescription)")
-        }
-        return contentChunks
-    }
-
-    func loadContent(at fileURL: URL) throws -> String {
-        switch fileURL.pathExtension {
-        case "pdf":
-            return try self.readPDF(at: fileURL)
-        default:
-            return try String(contentsOf: fileURL, encoding: .utf8)
-        }
-    }
-
-    // same func is in Ingester. Move to shared...
-    private func readPDF(at fileURL: URL) throws -> String {
-        guard let pdf = PDFDocument(url: fileURL) else {
-            OSLog.general.error("Can't open PDF file at: \(fileURL)")
-            throw PDFError.fileOpenError
-        }
-
-        guard let content = pdf.string else {
-            OSLog.general.error("Can't read PDF file at: \(fileURL)")
-            throw PDFError.fileReadError
-        }
-
-        return content
-    }
-
-    func loadTemplate() -> String {
-        do {
-            let templateUrl = URL(fileURLWithPath: Bundle.main.path(forResource: "template", ofType: "txt")!, isDirectory: false)
-            return try String(contentsOf: templateUrl, encoding: .utf8)
-        } catch {}
-        return ""
-    }
-
-    func createPrompt(using template: String, contentChunks: [ContentChunk]) -> String {
-        let content = contentChunks.map { chunk in
-            return "Content:\n\(chunk.content)\nSource: \(chunk.filePath)\n"
-        }.joined()
-        let prompt = template.replacingOccurrences(of: "{QUESTION}",
-                                                   with: questionField.stringValue)
-            .replacingOccurrences(of: "{CONTENT}", with: content)
-        return prompt
-    }
-}
-
-struct ContentChunk {
-    let filePath: String
-    let content: String
-}
-
-enum PDFError: Error {
-    case fileReadError
-    case fileOpenError
 }

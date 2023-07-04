@@ -9,6 +9,7 @@ import Foundation
 import os.log
 import FileWatcher
 import CryptoKit
+import Combine
 
 final class Ingester {
     private var filewatcher: FileWatcher?
@@ -28,11 +29,11 @@ final class Ingester {
         self.networkService = NetworkService()
     }
 
-    func start() async {
+    func start(isRunningSubject: CurrentValueSubject<Bool, Never>) async {
         OSLog.general.log("Start Ingester...")
 
         Task {
-            await uploadCallQueue.run()
+            await uploadCallQueue.run(isRunningSubject: isRunningSubject)
         }
 
         let allFiles = filesInAllDirectories()

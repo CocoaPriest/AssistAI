@@ -19,6 +19,7 @@
 		9E61D0182A4CCE5B0040EC29 /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D0172A4CCE5B0040EC29 /* EmptyResponse.swift */; };
 		9E61D01B2A4CD31E0040EC29 /* MultipartFormDataKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E61D01A2A4CD31E0040EC29 /* MultipartFormDataKit */; };
 		9E61D01E2A536A900040EC29 /* AskResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D01D2A536A900040EC29 /* AskResponse.swift */; };
+		9E61D0202A54B17A0040EC29 /* BoolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D01F2A54B17A0040EC29 /* BoolResponse.swift */; };
 		9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
 		9EBE4B332A1C30F50014975D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* NetworkService.swift */; };
@@ -53,6 +54,7 @@
 		9E61D0172A4CCE5B0040EC29 /* EmptyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyResponse.swift; sourceTree = "<group>"; };
 		9E61D01C2A4CE5BA0040EC29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9E61D01D2A536A900040EC29 /* AskResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskResponse.swift; sourceTree = "<group>"; };
+		9E61D01F2A54B17A0040EC29 /* BoolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolResponse.swift; sourceTree = "<group>"; };
 		9EBE4B302A1C30960014975D /* VectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorManager.swift; sourceTree = "<group>"; };
 		9EBE4B3E2A1C33B50014975D /* QueryMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryMatch.swift; sourceTree = "<group>"; };
 		9EBE4B412A1CE6F20014975D /* PineconeQueryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeQueryResponse.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 			children = (
 				9ECCB0EA2A1B945B002F1239 /* EmbeddingResponse.swift */,
 				9E61D0172A4CCE5B0040EC29 /* EmptyResponse.swift */,
+				9E61D01F2A54B17A0040EC29 /* BoolResponse.swift */,
 				9EBE4B4E2A1D75B40014975D /* AskGPTResponse.swift */,
 				9E61D01D2A536A900040EC29 /* AskResponse.swift */,
 				9ECCB11F2A1BFD42002F1239 /* PineconeUpsertResponse.swift */,
@@ -332,6 +335,7 @@
 				9EBE4B342A1C30FD0014975D /* RequestError.swift in Sources */,
 				9EBE4B4C2A1D6E1D0014975D /* GPTManager.swift in Sources */,
 				9EBE4B3B2A1C31070014975D /* PineconeEndpoint.swift in Sources */,
+				9E61D0202A54B17A0040EC29 /* BoolResponse.swift in Sources */,
 				9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */,
 				9E61D0122A4C61900040EC29 /* APICall.swift in Sources */,
 				9EBE4B392A1C31040014975D /* EmbeddingResponse.swift in Sources */,

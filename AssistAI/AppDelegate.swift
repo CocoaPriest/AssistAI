@@ -8,11 +8,19 @@
 import Cocoa
 import ServiceManagement
 import os.log
+import Combine
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
     var window: NSWindow!
     private let ingester = Ingester()
+    private let paletteColors1: [NSColor] = [.lightGray, .white]
+    private let paletteColors2: [NSColor] = [.white, .lightGray]
+    private var colorAnimationSwitch = false
+    private var timer: Timer?
+    private let isRunningSubject: CurrentValueSubject<Bool, Never> = .init(false)
+    private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
+    private let networkService = NetworkService()
 
     private var isWindowEffectivelyVisible: Bool {
         return NSApplication.shared.isActive && window.isVisible
@@ -83,12 +91,85 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    var lastIsIngesterRunningState = false
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         constructMenu()
 
+        isRunningSubject
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLocalIngesterRunning in
+                guard let self else { return }
+                if lastIsIngesterRunningState != isLocalIngesterRunning {
+                    OSLog.general.debug("==> Is local ingester running: \(isLocalIngesterRunning)")
+                    lastIsIngesterRunningState = isLocalIngesterRunning
+
+                    if isLocalIngesterRunning {
+                        startCheckingForRemoteIngester()
+                    }
+                }
+            }
+            .store(in: &cancellables)
+
         Task(priority: .utility) {
-            await self.ingester.start()
+            await self.ingester.start(isRunningSubject: isRunningSubject)
         }
+    }
+
+    private func startCheckingForRemoteIngester() {
+        startTimer()
+
+        Task {
+            while true {
+                try? await Task.sleep(for: .seconds(5)) // TODO: initial 5 secs might be too little!
+
+                let isRemoteIngesterRunning = await networkService.isRemoteIngesterRunning()
+                switch isRemoteIngesterRunning {
+                case .success(let value):
+                    OSLog.general.debug("==> Is remote ingester running: \(value)")
+                    if !value {
+                        await self.stopTimer()
+                        return
+                    }
+                case .failure:
+                    await self.stopTimer()
+                    return
+                }
+            }
+        }
+
+        // also show a menuitem with "Indexing in progress..."
+    }
+
+    private func startTimer() {
+        self.timer = Timer.scheduledTimer(timeInterval: 0.37, target: self, selector: #selector(updateStatusItemConfig), userInfo: nil, repeats: true)
+
+        if let timer = self.timer {
+            RunLoop.current.add(timer, forMode: .common)
+        }
+    }
+
+    @MainActor
+    private func stopTimer() {
+        self.timer?.invalidate()
+        self.timer = nil
+
+        if let button = statusItem.button {
+            button.image = NSImage(systemSymbolName: "mountain.2.fill", accessibilityDescription: nil)
+        }
+    }
+
+    @objc func updateStatusItemConfig() {
+        let colors: [NSColor] = colorAnimationSwitch ? paletteColors1 : paletteColors2
+        var statusConfig = NSImage.SymbolConfiguration(textStyle: .body,
+                                                       scale: .medium)
+        statusConfig = statusConfig.applying(.init(paletteColors: colors))
+
+        if let button = statusItem.button {
+            button.image = NSImage(systemSymbolName: "mountain.2.fill", accessibilityDescription: nil)?
+                .withSymbolConfiguration(statusConfig)
+        }
+
+        self.colorAnimationSwitch.toggle()
     }
 
     // TODO: do it in onboarding

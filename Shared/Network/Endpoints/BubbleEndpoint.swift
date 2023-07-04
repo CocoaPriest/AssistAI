@@ -13,6 +13,7 @@ enum BubbleEndpoint {
     case ask(question: String)
     case ingest(data: Data, mimeType: String, uri: String, machineId: String)
     case removeFromIndex(uri: String, machineId: String)
+    case isRemoteIngesterRunning
 }
 
 extension BubbleEndpoint: Endpoint {
@@ -28,6 +29,8 @@ extension BubbleEndpoint: Endpoint {
             return "/ingest"
         case .removeFromIndex:
             return "/resource"
+        case .isRemoteIngesterRunning:
+            return "/is_ingester_running"
         }
     }
 
@@ -39,6 +42,8 @@ extension BubbleEndpoint: Endpoint {
             return .put
         case .removeFromIndex:
             return .delete
+        case .isRemoteIngesterRunning:
+            return .get
         }
     }
 
@@ -58,7 +63,7 @@ extension BubbleEndpoint: Endpoint {
 
     var body: [String: Any]? {
         switch self {
-        case .ingest:
+        case .ingest, .isRemoteIngesterRunning:
             return nil
         case let .removeFromIndex(uri, machineId):
             return [
@@ -74,7 +79,7 @@ extension BubbleEndpoint: Endpoint {
         switch self {
         case let .ingest(data, mimeType, uri, machineId):
             return multipartData(data: data, mimeType: mimeType, uri: uri, machineId: machineId)
-        case .removeFromIndex, .ask:
+        default:
             return nil
         }
     }

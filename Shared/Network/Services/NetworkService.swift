@@ -16,6 +16,7 @@ protocol NetworkServiceable {
     func ask(question: String) async -> Result<RawResponse, RequestError>
     func upload(data: Data, filePath: URL, mimeType: String) async -> Result<Void, RequestError>
     func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError>
+    func isRemoteIngesterRunning() async -> Result<Bool, RequestError>
 }
 
 struct NetworkService: HTTPClient, NetworkServiceable {
@@ -90,6 +91,14 @@ struct NetworkService: HTTPClient, NetworkServiceable {
                                          responseModel: EmptyResponse.self)
         return response.flatMap { _ in
             return .success(())
+        }
+    }
+
+    func isRemoteIngesterRunning() async -> Result<Bool, RequestError> {
+        let response = await sendRequest(endpoint: BubbleEndpoint.isRemoteIngesterRunning,
+                                         responseModel: BoolResponse.self)
+        return response.map { resp in
+            return resp.value
         }
     }
 }

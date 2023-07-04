@@ -8,6 +8,7 @@
 import Foundation
 import DequeModule
 import os.log
+import Combine
 
 actor APICallQueueActor {
     private var queue: Deque<APICall> = []
@@ -24,14 +25,16 @@ actor APICallQueueActor {
         OSLog.general.log("Added to the upload queue: \(call)")
     }
 
-    func run() async {
+    func run(isRunningSubject: CurrentValueSubject<Bool, Never>) async {
         OSLog.general.log("Start APICallQueueActor...")
 
         while true {
             if let call = queue.popFirst() {
                 OSLog.general.log("Processing: \(call)")
+                isRunningSubject.send(true)
                 await call.task()
             } else {
+                isRunningSubject.send(false)
                 try? await Task.sleep(for: .seconds(1))
             }
         }
