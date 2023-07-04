@@ -10,6 +10,7 @@ import os.log
 import MultipartFormDataKit
 
 enum BubbleEndpoint {
+    case ask(question: String)
     case ingest(data: Data, mimeType: String, uri: String, machineId: String)
     case removeFromIndex(uri: String, machineId: String)
 }
@@ -21,6 +22,8 @@ extension BubbleEndpoint: Endpoint {
 
     var path: String {
         switch self {
+        case .ask:
+            return "/ask"
         case .ingest:
             return "/ingest"
         case .removeFromIndex:
@@ -30,6 +33,8 @@ extension BubbleEndpoint: Endpoint {
 
     var method: RequestMethod {
         switch self {
+        case .ask:
+            return .post
         case .ingest:
             return .put
         case .removeFromIndex:
@@ -43,7 +48,7 @@ extension BubbleEndpoint: Endpoint {
         ]
 
         switch self {
-        case .removeFromIndex:
+        case .removeFromIndex, .ask:
             hdr["Content-Type"] = "application/json"
         default: break
         }
@@ -60,6 +65,8 @@ extension BubbleEndpoint: Endpoint {
                 "uri": uri,
                 "machine_id": machineId
             ]
+        case let .ask(question):
+            return ["question": question]
         }
     }
 
@@ -67,7 +74,7 @@ extension BubbleEndpoint: Endpoint {
         switch self {
         case let .ingest(data, mimeType, uri, machineId):
             return multipartData(data: data, mimeType: mimeType, uri: uri, machineId: machineId)
-        case .removeFromIndex:
+        case .removeFromIndex, .ask:
             return nil
         }
     }

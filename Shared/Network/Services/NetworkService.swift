@@ -13,6 +13,7 @@ protocol NetworkServiceable {
     func querySimilarities(userId: UUID, vector: [Double], maxCount: Int) async -> Result<[QueryMatch], RequestError>
     func askGPT(prompt: String, systemPrompt: String?) async -> Result<String, RequestError>
 
+    func ask(question: String) async -> Result<RawResponse, RequestError>
     func upload(data: Data, filePath: URL, mimeType: String) async -> Result<Void, RequestError>
     func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError>
 }
@@ -62,6 +63,14 @@ struct NetworkService: HTTPClient, NetworkServiceable {
                 return .failure(.emptyData)
             }
             return .success(firstChoice.message.content)
+        }
+    }
+
+    func ask(question: String) async -> Result<RawResponse, RequestError> {
+        let response = await sendRequest(endpoint: BubbleEndpoint.ask(question: question),
+                                         responseModel: AskResponse.self)
+        return response.map { resp in
+            return resp.response
         }
     }
 

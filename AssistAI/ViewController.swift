@@ -13,6 +13,7 @@ final class ViewController: NSViewController {
 
     private let vectorManager = VectorManager()
     private let gptManager = GPTManager()
+    private let networkService = NetworkService()
 
     @IBOutlet weak var questionField: NSTextField!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
@@ -33,48 +34,59 @@ final class ViewController: NSViewController {
         progressIndicator.startAnimation(nil)
 
         Task {
-            // 1. Convert question into embedding vector
-            let questionVector = try await vectorManager.createVector(text: questionField.stringValue)
-            OSLog.general.log("\(questionVector, privacy: .public)")
-
-            // 2. Get top 3 most similar vectors from pinecone
-            let similarities = try await vectorManager.querySimilarities(using: questionVector, maxCount: 3)
-            OSLog.general.log("\(similarities, privacy: .public)")
-
-            guard !similarities.isEmpty else {
-                OSLog.general.warning("No results.")
-                outputTextView.string = "No results."
-                progressIndicator.stopAnimation(nil)
-                return
+            let response = await networkService.ask(question: questionField.stringValue)
+            switch response {
+            case .success(let rawAnswer):
+                OSLog.general.log("=====> Answer: \(rawAnswer.answer)")
+                let txt = "\(rawAnswer.answer)\n\nSource(s): [File XXX](\(rawAnswer.sources.first ?? "-"))"
+                outputTextView.string = txt
+            case .failure(let error):
+                OSLog.general.error("Service error: \(error.localizedDescription)")
             }
-
-            // 3. Extract metadata: need filePath and text range
-            let links = similarities.map { $0.metadata.link }
-//            outputTextView.string = "Found results:\n\(links)"
-
-            OSLog.general.log("Links found: \(links)")
-
-            // 4. Read text from this file in selected range
-            let contentChunks = self.loadContentChunks(from: links)
-
-            // 5. Send using a template this question and the 3 top texts to GPT
-            let template = self.loadTemplate()
-            OSLog.general.log("Template:\n\(template)")
-
-            // 6. Create prompt
-            let prompt = self.createPrompt(using: template, contentChunks: contentChunks)
-            OSLog.general.log("Prompt:\n\(prompt)")
-
-            // 7. Get answer from GPT
-            let answer = try await gptManager.ask(prompt: prompt)
-            OSLog.general.log("Answer:\n\(answer, privacy: .public)")
-
-            // 8. Present answer
-            outputTextView.string = answer
 
             progressIndicator.stopAnimation(nil)
         }
     }
+
+    // OLD:
+//    // 1. Convert question into embedding vector
+//    let questionVector = try await vectorManager.createVector(text: questionField.stringValue)
+//    OSLog.general.log("\(questionVector, privacy: .public)")
+//
+//    // 2. Get top 3 most similar vectors from pinecone
+//    let similarities = try await vectorManager.querySimilarities(using: questionVector, maxCount: 3)
+//    OSLog.general.log("\(similarities, privacy: .public)")
+//
+//    guard !similarities.isEmpty else {
+//        OSLog.general.warning("No results.")
+//        outputTextView.string = "No results."
+//        progressIndicator.stopAnimation(nil)
+//        return
+//    }
+//
+//    // 3. Extract metadata: need filePath and text range
+//    let links = similarities.map { $0.metadata.link }
+//    //            outputTextView.string = "Found results:\n\(links)"
+//
+//    OSLog.general.log("Links found: \(links)")
+//
+//    // 4. Read text from this file in selected range
+//    let contentChunks = self.loadContentChunks(from: links)
+//
+//    // 5. Send using a template this question and the 3 top texts to GPT
+//    let template = self.loadTemplate()
+//    OSLog.general.log("Template:\n\(template)")
+//
+//    // 6. Create prompt
+//    let prompt = self.createPrompt(using: template, contentChunks: contentChunks)
+//    OSLog.general.log("Prompt:\n\(prompt)")
+//
+//    // 7. Get answer from GPT
+//    let answer = try await gptManager.ask(prompt: prompt)
+//    OSLog.general.log("Answer:\n\(answer, privacy: .public)")
+//
+//    // 8. Present answer
+//    outputTextView.string = answer
 
     // TODO: ****** following very dirty code ********
 
