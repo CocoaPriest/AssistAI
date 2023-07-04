@@ -11,7 +11,8 @@ import os.log
 import Combine
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
+    private let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
+    private let mStatus = NSMenuItem(title: "Index is up-to-date", action: nil, keyEquivalent: "")
     var window: NSWindow!
     private let ingester = Ingester()
     private let paletteColors1: [NSColor] = [.lightGray, .white]
@@ -26,6 +27,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return NSApplication.shared.isActive && window.isVisible
     }
 
+    @MainActor
+    private func updateStatusMenu(isIngestingRunning: Bool) {
+        if isIngestingRunning {
+            mStatus.title = "Lumira is indexing your files..."
+            let statusConfig = NSImage.SymbolConfiguration(hierarchicalColor: NSColor.systemYellow)
+            mStatus.image = NSImage(systemSymbolName: "circle.fill", accessibilityDescription: nil)?
+                .withSymbolConfiguration(statusConfig)
+        } else {
+            mStatus.title = "Index is up-to-date"
+            let statusConfig = NSImage.SymbolConfiguration(hierarchicalColor: NSColor.systemGreen)
+            mStatus.image = NSImage(systemSymbolName: "circle.fill", accessibilityDescription: nil)?
+                .withSymbolConfiguration(statusConfig)
+        }
+    }
+
     private func constructMenu() {
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "mountain.2.fill", accessibilityDescription: nil)
@@ -33,14 +49,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let menu = NSMenu()
 
-        let mStatus = NSMenuItem(title: "Ask Lumira...", action: #selector(AppDelegate.didTapOpenMainWindow(_:)), keyEquivalent: "")
-        mStatus.image = NSImage(systemSymbolName: "questionmark.bubble", accessibilityDescription: nil)
+        let statusConfig = NSImage.SymbolConfiguration(hierarchicalColor: NSColor.systemGreen)
+        mStatus.image = NSImage(systemSymbolName: "circle.fill", accessibilityDescription: nil)?
+            .withSymbolConfiguration(statusConfig)
         menu.addItem(mStatus)
+
         menu.addItem(NSMenuItem.separator())
+
+        let mAsk = NSMenuItem(title: "Ask Lumira...", action: #selector(AppDelegate.didTapOpenMainWindow(_:)), keyEquivalent: "")
+        mAsk.image = NSImage(systemSymbolName: "questionmark.bubble", accessibilityDescription: nil)
+        menu.addItem(mAsk)
+
+        menu.addItem(NSMenuItem.separator())
+
         menu.addItem(NSMenuItem(title: "View Session Logs...", action: #selector(AppDelegate.didTapViewSessionLogs(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Settings...", action: nil, keyEquivalent: ""))
+
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(AppDelegate.didTapQuit(_:)), keyEquivalent: ""))
+
+        let mQuit = NSMenuItem(title: "Quit", action: #selector(AppDelegate.didTapQuit(_:)), keyEquivalent: "")
+        mQuit.image = NSImage(systemSymbolName: "power", accessibilityDescription: nil)
+        menu.addItem(mQuit)
 
         statusItem.menu = menu
     }
@@ -116,9 +145,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func startCheckingForRemoteIngester() {
-        startTimer()
-
         Task {
+            await startTimer()
+            await updateStatusMenu(isIngestingRunning: true)
+
             while true {
                 try? await Task.sleep(for: .seconds(5)) // TODO: initial 5 secs might be too little!
 
@@ -128,10 +158,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                     OSLog.general.debug("==> Is remote ingester running: \(value)")
                     if !value {
                         await self.stopTimer()
+                        await self.updateStatusMenu(isIngestingRunning: false)
                         return
                     }
                 case .failure:
                     await self.stopTimer()
+                    await self.updateStatusMenu(isIngestingRunning: false)
                     return
                 }
             }
@@ -140,6 +172,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // also show a menuitem with "Indexing in progress..."
     }
 
+    @MainActor
     private func startTimer() {
         self.timer = Timer.scheduledTimer(timeInterval: 0.37, target: self, selector: #selector(updateStatusItemConfig), userInfo: nil, repeats: true)
 
@@ -160,9 +193,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func updateStatusItemConfig() {
         let colors: [NSColor] = colorAnimationSwitch ? paletteColors1 : paletteColors2
-        var statusConfig = NSImage.SymbolConfiguration(textStyle: .body,
-                                                       scale: .medium)
-        statusConfig = statusConfig.applying(.init(paletteColors: colors))
+        let statusConfig = NSImage.SymbolConfiguration(paletteColors: colors)
+//        statusConfig = statusConfig.applying(.init(paletteColors: colors))
 
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "mountain.2.fill", accessibilityDescription: nil)?
