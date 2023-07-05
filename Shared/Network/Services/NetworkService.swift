@@ -13,7 +13,7 @@ protocol NetworkServiceable {
     func querySimilarities(userId: UUID, vector: [Double], maxCount: Int) async -> Result<[QueryMatch], RequestError>
     func askGPT(prompt: String, systemPrompt: String?) async -> Result<String, RequestError>
 
-    func ask(question: String) async -> Result<RawResponse, RequestError>
+    func ask(question: String, onAnswerStreaming: StreamingHandler, onSourcesStreaming: StreamingHandler) async -> Result<Void, RequestError>
     func upload(data: Data, filePath: URL, mimeType: String) async -> Result<Void, RequestError>
     func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError>
     func isRemoteIngesterRunning() async -> Result<Bool, RequestError>
@@ -67,12 +67,8 @@ struct NetworkService: HTTPClient, NetworkServiceable {
         }
     }
 
-    func ask(question: String) async -> Result<RawResponse, RequestError> {
-        let response = await sendRequest(endpoint: BubbleEndpoint.ask(question: question),
-                                         responseModel: AskResponse.self)
-        return response.map { resp in
-            return resp.response
-        }
+    func ask(question: String, onAnswerStreaming: StreamingHandler, onSourcesStreaming: StreamingHandler) async -> Result<Void, RequestError> {
+        return await sendStreamingRequest(endpoint: BubbleEndpoint.ask(question: question), onAnswerStreaming: onAnswerStreaming, onSourcesStreaming: onSourcesStreaming)
     }
 
     func upload(data: Data, filePath: URL, mimeType: String) async -> Result<Void, RequestError> {
