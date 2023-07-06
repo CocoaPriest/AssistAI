@@ -20,7 +20,12 @@
 		9E61D01B2A4CD31E0040EC29 /* MultipartFormDataKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E61D01A2A4CD31E0040EC29 /* MultipartFormDataKit */; };
 		9E61D01E2A536A900040EC29 /* AskResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D01D2A536A900040EC29 /* AskResponse.swift */; };
 		9E61D0202A54B17A0040EC29 /* BoolResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D01F2A54B17A0040EC29 /* BoolResponse.swift */; };
-		9E61D0222A56CA100040EC29 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D0212A56CA100040EC29 /* SettingsViewController.swift */; };
+		9E61D0222A56CA100040EC29 /* FoldersSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D0212A56CA100040EC29 /* FoldersSettingsViewController.swift */; };
+		9E61D0252A5742AA0040EC29 /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = 9E61D0242A5742AA0040EC29 /* Settings */; };
+		9E61D0272A5743170040EC29 /* GeneralSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D0262A5743170040EC29 /* GeneralSettingsViewController.swift */; };
+		9E61D02C2A5745EF0040EC29 /* GeneralSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E61D02B2A5745EF0040EC29 /* GeneralSettingsViewController.xib */; };
+		9E61D02E2A574D940040EC29 /* SettingsPaneIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D02D2A574D940040EC29 /* SettingsPaneIdentifiers.swift */; };
+		9E61D0302A574E180040EC29 /* FoldersSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E61D02F2A574E180040EC29 /* FoldersSettingsViewController.xib */; };
 		9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
 		9EBE4B332A1C30F50014975D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* NetworkService.swift */; };
@@ -56,7 +61,11 @@
 		9E61D01C2A4CE5BA0040EC29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9E61D01D2A536A900040EC29 /* AskResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskResponse.swift; sourceTree = "<group>"; };
 		9E61D01F2A54B17A0040EC29 /* BoolResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolResponse.swift; sourceTree = "<group>"; };
-		9E61D0212A56CA100040EC29 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		9E61D0212A56CA100040EC29 /* FoldersSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersSettingsViewController.swift; sourceTree = "<group>"; };
+		9E61D0262A5743170040EC29 /* GeneralSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsViewController.swift; sourceTree = "<group>"; };
+		9E61D02B2A5745EF0040EC29 /* GeneralSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GeneralSettingsViewController.xib; sourceTree = "<group>"; };
+		9E61D02D2A574D940040EC29 /* SettingsPaneIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPaneIdentifiers.swift; sourceTree = "<group>"; };
+		9E61D02F2A574E180040EC29 /* FoldersSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FoldersSettingsViewController.xib; sourceTree = "<group>"; };
 		9EBE4B302A1C30960014975D /* VectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorManager.swift; sourceTree = "<group>"; };
 		9EBE4B3E2A1C33B50014975D /* QueryMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryMatch.swift; sourceTree = "<group>"; };
 		9EBE4B412A1CE6F20014975D /* PineconeQueryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeQueryResponse.swift; sourceTree = "<group>"; };
@@ -89,6 +98,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E61CFE12A4642410040EC29 /* FileWatcher in Frameworks */,
+				9E61D0252A5742AA0040EC29 /* Settings in Frameworks */,
 				9E61D01B2A4CD31E0040EC29 /* MultipartFormDataKit in Frameworks */,
 				9E61CFF22A4BAEAC0040EC29 /* DequeModule in Frameworks */,
 			);
@@ -97,6 +107,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E61D02A2A5744590040EC29 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				9E61D0212A56CA100040EC29 /* FoldersSettingsViewController.swift */,
+				9E61D02F2A574E180040EC29 /* FoldersSettingsViewController.xib */,
+				9E61D02D2A574D940040EC29 /* SettingsPaneIdentifiers.swift */,
+				9E61D0262A5743170040EC29 /* GeneralSettingsViewController.swift */,
+				9E61D02B2A5745EF0040EC29 /* GeneralSettingsViewController.xib */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		9EBE4B3D2A1C33B00014975D /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,7 +251,7 @@
 				9E2DAC202A44C2EA00E5CF06 /* main.swift */,
 				9ECCB1292A1C2727002F1239 /* AppDelegate.swift */,
 				9ECCB12B2A1C2727002F1239 /* ViewController.swift */,
-				9E61D0212A56CA100040EC29 /* SettingsViewController.swift */,
+				9E61D02A2A5744590040EC29 /* Settings */,
 				9EBE4B4B2A1D6E1D0014975D /* GPTManager.swift */,
 				9ECCB0DF2A1B8727002F1239 /* Ingester.swift */,
 				9E61D0112A4C61900040EC29 /* APICall.swift */,
@@ -262,6 +284,7 @@
 				9E61CFE02A4642410040EC29 /* FileWatcher */,
 				9E61CFF12A4BAEAC0040EC29 /* DequeModule */,
 				9E61D01A2A4CD31E0040EC29 /* MultipartFormDataKit */,
+				9E61D0242A5742AA0040EC29 /* Settings */,
 			);
 			productName = AssistAI;
 			productReference = 9ECCB1272A1C2727002F1239 /* AssistAI.app */;
@@ -295,6 +318,7 @@
 				9E61CFDF2A4642410040EC29 /* XCRemoteSwiftPackageReference "FileWatcher" */,
 				9E61CFF02A4BAEAC0040EC29 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				9E61D0192A4CD31E0040EC29 /* XCRemoteSwiftPackageReference "MultipartFormDataKit" */,
+				9E61D0232A5742AA0040EC29 /* XCRemoteSwiftPackageReference "Preferences" */,
 			);
 			productRefGroup = 9ECCB0B72A0445B6002F1239 /* Products */;
 			projectDirPath = "";
@@ -310,7 +334,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E61D02C2A5745EF0040EC29 /* GeneralSettingsViewController.xib in Resources */,
 				9ECCB12E2A1C2728002F1239 /* Assets.xcassets in Resources */,
+				9E61D0302A574E180040EC29 /* FoldersSettingsViewController.xib in Resources */,
 				9EBE4B452A1CF5910014975D /* template.txt in Resources */,
 				9ECCB1312A1C2728002F1239 /* Main.storyboard in Resources */,
 			);
@@ -326,6 +352,7 @@
 				9EBE4B382A1C31040014975D /* PineconeUpsertResponse.swift in Sources */,
 				9EBE4B3C2A1C316C0014975D /* Data+Extensions.swift in Sources */,
 				9E61D01E2A536A900040EC29 /* AskResponse.swift in Sources */,
+				9E61D02E2A574D940040EC29 /* SettingsPaneIdentifiers.swift in Sources */,
 				9EBE4B352A1C30FD0014975D /* Endpoint.swift in Sources */,
 				9E61D0182A4CCE5B0040EC29 /* EmptyResponse.swift in Sources */,
 				9E3850F32A44FD7600B6A56F /* AssistWindow.swift in Sources */,
@@ -337,6 +364,7 @@
 				9ECCB12C2A1C2727002F1239 /* ViewController.swift in Sources */,
 				9EBE4B342A1C30FD0014975D /* RequestError.swift in Sources */,
 				9EBE4B4C2A1D6E1D0014975D /* GPTManager.swift in Sources */,
+				9E61D0272A5743170040EC29 /* GeneralSettingsViewController.swift in Sources */,
 				9EBE4B3B2A1C31070014975D /* PineconeEndpoint.swift in Sources */,
 				9E61D0202A54B17A0040EC29 /* BoolResponse.swift in Sources */,
 				9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */,
@@ -346,7 +374,7 @@
 				9EBE4B402A1C33B50014975D /* QueryMatch.swift in Sources */,
 				9E61D0162A4CCA5C0040EC29 /* BubbleEndpoint.swift in Sources */,
 				9E61CFD62A45A7470040EC29 /* Ingester.swift in Sources */,
-				9E61D0222A56CA100040EC29 /* SettingsViewController.swift in Sources */,
+				9E61D0222A56CA100040EC29 /* FoldersSettingsViewController.swift in Sources */,
 				9E61D0142A4C61A70040EC29 /* APICallQueueActor.swift in Sources */,
 				9ECCB12A2A1C2727002F1239 /* AppDelegate.swift in Sources */,
 				9EBE4B432A1CE6F20014975D /* PineconeQueryResponse.swift in Sources */,
@@ -587,6 +615,14 @@
 				kind = branch;
 			};
 		};
+		9E61D0232A5742AA0040EC29 /* XCRemoteSwiftPackageReference "Preferences" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Preferences";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -604,6 +640,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9E61D0192A4CD31E0040EC29 /* XCRemoteSwiftPackageReference "MultipartFormDataKit" */;
 			productName = MultipartFormDataKit;
+		};
+		9E61D0242A5742AA0040EC29 /* Settings */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9E61D0232A5742AA0040EC29 /* XCRemoteSwiftPackageReference "Preferences" */;
+			productName = Settings;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

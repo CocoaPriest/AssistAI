@@ -9,6 +9,7 @@ import Cocoa
 import ServiceManagement
 import os.log
 import Combine
+import Settings
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
@@ -26,6 +27,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var isWindowEffectivelyVisible: Bool {
         return NSApplication.shared.isActive && window.isVisible
     }
+
+    private lazy var settingsWindowController = SettingsWindowController(
+        panes: [
+            FoldersSettingsViewController(),
+            GeneralSettingsViewController()
+        ]
+    )
 
     @MainActor
     private func updateStatusMenu(isIngestingRunning: Bool) {
@@ -102,16 +110,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func didTapOpenSettings(_ sender: Any?) {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        guard let windowController = storyboard.instantiateController(withIdentifier: "settingsWC") as?
-                NSWindowController else { return }
-
-        guard let window = windowController.window else {
-            return
-        }
-
-        window.makeKeyAndOrderFront(self)
-        NSApp.activate(ignoringOtherApps: true)
+        settingsWindowController.show()
     }
 
     @objc func didTapQuit(_ sender: Any?) {
@@ -213,6 +212,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.colorAnimationSwitch.toggle()
     }
+
+    
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application

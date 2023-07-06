@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "preferences",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sindresorhus/Preferences",
+      "state" : {
+        "revision" : "11e232f5f928ff9bf5260f40b6b40047ae37c9f2",
+        "version" : "3.0.2"
+      }
+    },
+    {
       "identity" : "swift-collections",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",

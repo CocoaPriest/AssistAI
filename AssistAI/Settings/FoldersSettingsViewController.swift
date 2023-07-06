@@ -1,25 +1,28 @@
 //
-//  SettingsViewController.swift
+//  FoldersSettingsViewController.swift
 //  AssistAI
 //
 //  Created by Konstantin Gonikman on 06.07.23.
 //
 
 import Cocoa
-import os.log
-import ServiceManagement
+import Settings
 
 struct PathInfo {
     let url: URL
     let numberOfFiles: Int
 }
 
-final class SettingsViewController: NSViewController {
+final class FoldersSettingsViewController: NSViewController, SettingsPane {
+    let paneIdentifier = Settings.PaneIdentifier.folders
+    let paneTitle = "Folders"
+    let toolbarItemIcon = NSImage(systemSymbolName: "folder", accessibilityDescription: "Folders settings")!
 
+    override var nibName: NSNib.Name? { "FoldersSettingsViewController" }
+    
     @IBOutlet weak var btnRemoveFolder: NSButton!
     @IBOutlet weak var tableView: NSTableView!
-    @IBOutlet weak var btnAutologin: NSButton!
-    private let loginItem = SMAppService.mainApp
+
     private var urls: [PathInfo] = []
 
     override func viewDidLoad() {
@@ -28,8 +31,7 @@ final class SettingsViewController: NSViewController {
         btnRemoveFolder.isEnabled = false
 
         tableView.dataSource = self
-        tableView.delegate = self
-        btnAutologin.state = (loginItem.status == .enabled) ? .on : .off
+        tableView.delegate = self        
     }
     
     @IBAction func didTapAddFolder(_ sender: Any) {
@@ -77,40 +79,9 @@ final class SettingsViewController: NSViewController {
 
     @IBAction func didTapExclude(_ sender: Any) {
     }
-
-    @IBAction func didToggleAutologin(_ sender: Any) {
-        do {
-            if btnAutologin.state == .on {
-                OSLog.general.log("SMAppService: registering...")
-
-                switch loginItem.status {
-                case .notFound:
-                    try loginItem.register()
-                    OSLog.general.log("SMAppService: registered")
-                case .requiresApproval:
-                    OSLog.general.warning("SMAppService: requires approval")
-                case .notRegistered:
-                    OSLog.general.warning("SMAppService: not registered")
-                    // LATER: show message 'too often toggled, please wait'
-                case .enabled:
-                    OSLog.general.log("SMAppService: enabled")
-                @unknown default:
-                    OSLog.general.log("SMAppService: unknown state")
-                }
-
-            } else {
-                OSLog.general.log("SMAppService: unregistering...")
-                try loginItem.unregister()
-            }
-        } catch {
-            OSLog.general.error("SMAppService error: \(error.localizedDescription)")
-        }
-
-        btnAutologin.state = (loginItem.status == .enabled) ? .on : .off
-    }
 }
 
-extension SettingsViewController: NSTableViewDataSource {
+extension FoldersSettingsViewController: NSTableViewDataSource {
     func numberOfRows(in tableView: NSTableView) -> Int {
         return urls.count
     }
@@ -128,7 +99,7 @@ extension SettingsViewController: NSTableViewDataSource {
     }
 }
 
-extension SettingsViewController: NSTableViewDelegate {
+extension FoldersSettingsViewController: NSTableViewDelegate {
     func tableViewSelectionDidChange(_ notification: Notification) {
         btnRemoveFolder.isEnabled = self.tableView.selectedRow >= 0
     }
