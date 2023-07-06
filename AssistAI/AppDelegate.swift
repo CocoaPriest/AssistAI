@@ -64,18 +64,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         menu.addItem(NSMenuItem.separator())
 
-        let mAsk = NSMenuItem(title: "Ask Lumira...", action: #selector(AppDelegate.didTapOpenMainWindow(_:)), keyEquivalent: "")
+        let mAsk = NSMenuItem(title: "Ask Lumira...", action: #selector(AppDelegate.didTapOpenMainWindow(_:)), keyEquivalent: "a")
+        mAsk.keyEquivalentModifierMask = .command
         mAsk.image = NSImage(systemSymbolName: "questionmark.bubble", accessibilityDescription: nil)
         menu.addItem(mAsk)
 
         menu.addItem(NSMenuItem.separator())
 
         menu.addItem(NSMenuItem(title: "View Session Logs...", action: #selector(AppDelegate.didTapViewSessionLogs(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Settings...", action: #selector(AppDelegate.didTapOpenSettings(_:)), keyEquivalent: ""))
+        let miSettings = NSMenuItem(title: "Settings...", action: #selector(AppDelegate.didTapOpenSettings(_:)), keyEquivalent: ",")
+        miSettings.keyEquivalentModifierMask = .command
+        menu.addItem(miSettings)
 
         menu.addItem(NSMenuItem.separator())
 
-        let mQuit = NSMenuItem(title: "Quit", action: #selector(AppDelegate.didTapQuit(_:)), keyEquivalent: "")
+        let mQuit = NSMenuItem(title: "Quit", action: #selector(AppDelegate.didTapQuit(_:)), keyEquivalent: "q")
+        mQuit.keyEquivalentModifierMask = [.command]
         mQuit.image = NSImage(systemSymbolName: "power", accessibilityDescription: nil)
         menu.addItem(mQuit)
 
