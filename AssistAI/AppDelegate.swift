@@ -63,7 +63,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
 
         menu.addItem(NSMenuItem(title: "View Session Logs...", action: #selector(AppDelegate.didTapViewSessionLogs(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Settings...", action: nil, keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Settings...", action: #selector(AppDelegate.didTapOpenSettings(_:)), keyEquivalent: ""))
 
         menu.addItem(NSMenuItem.separator())
 
@@ -99,6 +99,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func didTapViewSessionLogs(_ sender: Any?) {
         OSLog.general.debug("View logs...")
+    }
+
+    @objc func didTapOpenSettings(_ sender: Any?) {
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        guard let windowController = storyboard.instantiateController(withIdentifier: "settingsWC") as?
+                NSWindowController else { return }
+
+        guard let window = windowController.window else {
+            return
+        }
+
+        window.makeKeyAndOrderFront(self)
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     @objc func didTapQuit(_ sender: Any?) {
@@ -168,8 +181,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
-
-        // also show a menuitem with "Indexing in progress..."
     }
 
     @MainActor
@@ -194,7 +205,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func updateStatusItemConfig() {
         let colors: [NSColor] = colorAnimationSwitch ? paletteColors1 : paletteColors2
         let statusConfig = NSImage.SymbolConfiguration(paletteColors: colors)
-//        statusConfig = statusConfig.applying(.init(paletteColors: colors))
 
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "mountain.2.fill", accessibilityDescription: nil)?
@@ -203,25 +213,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.colorAnimationSwitch.toggle()
     }
-
-    // TODO: do it in onboarding
-//    private func registerAsAutoLoginApp() {
-//        OSLog.general.log("SMAppService: registering...")
-//        let loginItem = SMAppService.mainApp
-//        do {
-//            switch loginItem.status {
-//            case .notFound:
-//                try loginItem.register()
-//                OSLog.general.log("SMAppService: done")
-//            case .requiresApproval:
-//                OSLog.general.log("SMAppService: requires approval")
-//            default:
-//                OSLog.general.log("SMAppService: no action required")
-//            }
-//        } catch {
-//            OSLog.general.error("SMAppService error: \(error.localizedDescription)")
-//        }
-//    }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
