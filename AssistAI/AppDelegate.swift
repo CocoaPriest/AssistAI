@@ -24,6 +24,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
     private let networkService = NetworkService()
 
+    override init() {
+        super.init()
+
+        self.setupUserSettingsManager()
+        self.ingester.isRunningSubject = isRunningSubject
+    }
+
     private var isWindowEffectivelyVisible: Bool {
         return NSApplication.shared.isActive && window.isVisible
     }
@@ -155,8 +162,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
             .store(in: &cancellables)
 
+        self.startIngester(removedFolders: nil)
+    }
+
+    private func setupUserSettingsManager() {
+        UserSettingsManager.shared.foldersChangePublisher
+            .dropFirst()
+            .debounce(for: .seconds(3), scheduler: DispatchQueue.main)
+            .sink { [weak self] (_, removedFolders) in
+                self?.startIngester(removedFolders: removedFolders)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func startIngester(removedFolders: [URL]?) {
         Task(priority: .utility) {
-            await self.ingester.start(isRunningSubject: isRunningSubject)
+            await ingester.resetQueue()
+            await ingester.start()
+            ingester.setupFileWatcher()
+
+            if let removedFolders {
+                removedFolders.forEach { ingester.enqueueRemoveFolderCall(folder: $0) }
+            }
         }
     }
 
@@ -216,8 +243,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.colorAnimationSwitch.toggle()
     }
-
-    
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application

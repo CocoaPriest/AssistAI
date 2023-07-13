@@ -7,6 +7,7 @@
 
 import Cocoa
 import Settings
+import Combine
 
 struct PathInfo {
     let url: URL
@@ -17,21 +18,34 @@ final class FoldersSettingsViewController: NSViewController, SettingsPane {
     let paneIdentifier = Settings.PaneIdentifier.folders
     let paneTitle = "Folders"
     let toolbarItemIcon = NSImage(systemSymbolName: "folder", accessibilityDescription: "Folders settings")!
+    private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
 
     override var nibName: NSNib.Name? { "FoldersSettingsViewController" }
     
     @IBOutlet weak var btnRemoveFolder: NSButton!
     @IBOutlet weak var tableView: NSTableView!
 
-    private var urls: [PathInfo] = []
+    private var pathInfos: [PathInfo] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         btnRemoveFolder.isEnabled = false
+        tableView.registerForDraggedTypes([.fileURL])
 
-        tableView.dataSource = self
-        tableView.delegate = self        
+        setupUserSettingsManager()
+    }
+
+    private func setupUserSettingsManager() {
+        UserSettingsManager.shared.foldersChangePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] (existingUrls, _) in
+                self?.pathInfos = existingUrls.compactMap { url in
+                    PathInfo(url: url, numberOfFiles: 0)
+                }
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
     }
     
     @IBAction func didTapAddFolder(_ sender: Any) {
@@ -41,19 +55,10 @@ final class FoldersSettingsViewController: NSViewController, SettingsPane {
         folderSelectionDialog.allowsMultipleSelection = true
         folderSelectionDialog.prompt = "Select" // button
         folderSelectionDialog.message = "Please select one or more folders"
-        folderSelectionDialog.beginSheetModal(for: self.view.window!) {  [unowned self] response in
+        folderSelectionDialog.beginSheetModal(for: self.view.window!) { response in
             if response == NSApplication.ModalResponse.OK {
                 print("User selected folder: \(folderSelectionDialog.urls)")
-                let pathInfos = folderSelectionDialog.urls.compactMap { url in
-                    PathInfo(url: url, numberOfFiles: 0)
-                }
-
-                urls.append(contentsOf: pathInfos)
-
-                // TODO: don't let the user make overlapping selections:
-                // - If a subfolder already selected -> take root folder, remove this subfolder
-                // - If a root folder already selected -> ignore any subfolder selection
-                tableView.reloadData()
+                UserSettingsManager.shared.addFolders(folderSelectionDialog.urls)
             }
         }
     }
@@ -64,26 +69,32 @@ final class FoldersSettingsViewController: NSViewController, SettingsPane {
         }
 
         let alert = NSAlert()
-        alert.messageText = "Remove folder?"
-        alert.informativeText = "This removes this folder from being indexed."
+        alert.messageText = "Remove folders?"
+        alert.informativeText = "This removes selected folders from being indexed."
         alert.addButton(withTitle: "Cancel")
         alert.addButton(withTitle: "Remove")
 
         let modalResult = alert.runModal()
         if modalResult == .alertSecondButtonReturn {
-            urls.remove(at: tableView.selectedRow)
+            let selectedUrls = tableView.selectedRowIndexes.map { pathInfos[$0].url }
+            UserSettingsManager.shared.removeFolders(selectedUrls)
             btnRemoveFolder.isEnabled = false
-            tableView.reloadData()
         }
     }
 
     @IBAction func didTapExclude(_ sender: Any) {
     }
+
+    private func isDirectory(fileURL: URL) -> Bool {
+        var isDirectory: ObjCBool = false
+        let fileExists = FileManager.default.fileExists(atPath: fileURL.path, isDirectory: &isDirectory)
+        return fileExists && isDirectory.boolValue
+    }
 }
 
 extension FoldersSettingsViewController: NSTableViewDataSource {
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return urls.count
+        return pathInfos.count
     }
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
@@ -92,10 +103,37 @@ extension FoldersSettingsViewController: NSTableViewDataSource {
         }
 
         if ident.rawValue == "cPath" {
-            return urls[row].url.path(percentEncoded: false)
+            return pathInfos[row].url.path(percentEncoded: false)
         } else {
-            return urls[row].numberOfFiles
+            return pathInfos[row].numberOfFiles
         }
+    }
+
+    func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
+        guard let pasteboardItems = info.draggingPasteboard.pasteboardItems else {
+            return false
+        }
+
+        let urls = pasteboardItems.compactMap { item in
+            if let fileUrlString = item.string(forType: NSPasteboard.PasteboardType.fileURL),
+               let fileUrl = URL(string: fileUrlString), self.isDirectory(fileURL: fileUrl) {
+                return fileUrl
+            }
+            return nil
+        }
+
+        guard urls.count > 0 else {
+            return false
+        }
+
+        UserSettingsManager.shared.addFolders(urls)
+
+        return true
+    }
+
+    func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
+        // LATER: basically do the same stuff here as in `acceptDrop` above, to check if drag has valid data.
+        return .copy
     }
 }
 

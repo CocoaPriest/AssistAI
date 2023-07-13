@@ -18,4 +18,6 @@ public extension OSLog {
     static let networking = Logger(subsystem: subsystem, category: "networking")
 
     static let embeddings = Logger(subsystem: subsystem, category: "embeddings")
+
+    static let ingester = Logger(subsystem: subsystem, category: "ingester")
 }

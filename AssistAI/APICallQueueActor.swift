@@ -17,16 +17,16 @@ actor APICallQueueActor {
         guard !queue.contains(call) else {
             // LATER: maybe it's a bad idea after all. If we have multiple add/remove actions
             // in the queue, then some action may be not executed. Watch this.
-            OSLog.general.warning("Already in the upload queue. Ignoring: \(call)")
+            OSLog.ingester.warning("Already in the upload queue. Ignoring: \(call)")
             return
         }
 
         queue.append(call)
-        OSLog.general.log("Added to the upload queue: \(call)")
+        OSLog.ingester.log("Added to the upload queue: \(call)")
     }
 
     func run(isRunningSubject: CurrentValueSubject<Bool, Never>) async {
-        OSLog.general.log("Start APICallQueueActor...")
+        OSLog.ingester.log("Start APICallQueueActor...")
 
         while true {
             if let call = queue.popFirst() {
@@ -38,5 +38,10 @@ actor APICallQueueActor {
                 try? await Task.sleep(for: .seconds(1))
             }
         }
+    }
+
+    func reset() {
+        queue.removeAll()
+        OSLog.ingester.log("Upload queue reset")
     }
 }

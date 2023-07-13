@@ -32,7 +32,7 @@
                         <rect key="frame" x="1" y="1" width="620" height="172"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" headerView="5KX-xm-xcF" viewBased="YES" id="XLe-Tk-FfV">
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" headerView="5KX-xm-xcF" viewBased="YES" id="XLe-Tk-FfV">
                                 <rect key="frame" x="0.0" y="0.0" width="620" height="144"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="17" height="0.0"/>
@@ -110,6 +110,10 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                 </tableColumns>
+                                <connections>
+                                    <outlet property="dataSource" destination="-2" id="JBd-iH-Xf8"/>
+                                    <outlet property="delegate" destination="-2" id="Zpx-kr-Slt"/>
+                                </connections>
                             </tableView>
                         </subviews>
                     </clipView>
@@ -118,7 +122,7 @@
                         <constraint firstAttribute="width" constant="622" id="6xV-Ss-krv"/>
                     </constraints>
                     <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="ZmR-Dv-QxB">
-                        <rect key="frame" x="1" y="119" width="223" height="15"/>
+                        <rect key="frame" x="1" y="158" width="620" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="1Re-Uc-qK1">

@@ -39,6 +39,6 @@ extension APICall: Equatable {
 
 extension APICall: CustomStringConvertible {
     var description: String {
-        return "Action: \(action), file: \(filePath.path(percentEncoded: false))"
+        return "Action: \(action), resource: \(filePath.path(percentEncoded: false))"
     }
 }

@@ -13,6 +13,7 @@ enum BubbleEndpoint {
     case ask(question: String)
     case ingest(data: Data, mimeType: String, uri: String, machineId: String)
     case removeFromIndex(uri: String, machineId: String)
+    case removeFolderFromIndex(uri: String, machineId: String)
     case isRemoteIngesterRunning
 }
 
@@ -27,7 +28,7 @@ extension BubbleEndpoint: Endpoint {
             return "/ask"
         case .ingest:
             return "/ingest"
-        case .removeFromIndex:
+        case .removeFromIndex, .removeFolderFromIndex:
             return "/resource"
         case .isRemoteIngesterRunning:
             return "/is_ingester_running"
@@ -40,7 +41,7 @@ extension BubbleEndpoint: Endpoint {
             return .post
         case .ingest:
             return .put
-        case .removeFromIndex:
+        case .removeFromIndex, .removeFolderFromIndex:
             return .delete
         case .isRemoteIngesterRunning:
             return .get
@@ -68,7 +69,14 @@ extension BubbleEndpoint: Endpoint {
         case let .removeFromIndex(uri, machineId):
             return [
                 "uri": uri,
-                "machine_id": machineId
+                "machine_id": machineId,
+                "is_folder" : false
+            ]
+        case let .removeFolderFromIndex(uri, machineId):
+            return [
+                "uri": uri,
+                "machine_id": machineId,
+                "is_folder" : true
             ]
         case let .ask(question):
             return ["question": question]

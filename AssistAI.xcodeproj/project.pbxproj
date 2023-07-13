@@ -26,6 +26,7 @@
 		9E61D02C2A5745EF0040EC29 /* GeneralSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E61D02B2A5745EF0040EC29 /* GeneralSettingsViewController.xib */; };
 		9E61D02E2A574D940040EC29 /* SettingsPaneIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E61D02D2A574D940040EC29 /* SettingsPaneIdentifiers.swift */; };
 		9E61D0302A574E180040EC29 /* FoldersSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E61D02F2A574E180040EC29 /* FoldersSettingsViewController.xib */; };
+		9E7BDBB52A5C214400BA9D43 /* UserSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7BDBB42A5C214400BA9D43 /* UserSettingsManager.swift */; };
 		9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */; };
 		9EBE4B322A1C30960014975D /* VectorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBE4B302A1C30960014975D /* VectorManager.swift */; };
 		9EBE4B332A1C30F50014975D /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1072A1B9E51002F1239 /* NetworkService.swift */; };
@@ -66,6 +67,7 @@
 		9E61D02B2A5745EF0040EC29 /* GeneralSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GeneralSettingsViewController.xib; sourceTree = "<group>"; };
 		9E61D02D2A574D940040EC29 /* SettingsPaneIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPaneIdentifiers.swift; sourceTree = "<group>"; };
 		9E61D02F2A574E180040EC29 /* FoldersSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FoldersSettingsViewController.xib; sourceTree = "<group>"; };
+		9E7BDBB42A5C214400BA9D43 /* UserSettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsManager.swift; sourceTree = "<group>"; };
 		9EBE4B302A1C30960014975D /* VectorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorManager.swift; sourceTree = "<group>"; };
 		9EBE4B3E2A1C33B50014975D /* QueryMatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryMatch.swift; sourceTree = "<group>"; };
 		9EBE4B412A1CE6F20014975D /* PineconeQueryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PineconeQueryResponse.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				9EBE4B302A1C30960014975D /* VectorManager.swift */,
+				9E7BDBB42A5C214400BA9D43 /* UserSettingsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				9EBE4B382A1C31040014975D /* PineconeUpsertResponse.swift in Sources */,
 				9EBE4B3C2A1C316C0014975D /* Data+Extensions.swift in Sources */,
 				9E61D01E2A536A900040EC29 /* AskResponse.swift in Sources */,
+				9E7BDBB52A5C214400BA9D43 /* UserSettingsManager.swift in Sources */,
 				9E61D02E2A574D940040EC29 /* SettingsPaneIdentifiers.swift in Sources */,
 				9EBE4B352A1C30FD0014975D /* Endpoint.swift in Sources */,
 				9E61D0182A4CCE5B0040EC29 /* EmptyResponse.swift in Sources */,

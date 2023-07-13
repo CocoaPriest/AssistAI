@@ -16,6 +16,7 @@ protocol NetworkServiceable {
     func ask(question: String, onAnswerStreaming: StreamingHandler, onSourcesStreaming: StreamingHandler) async -> Result<Void, RequestError>
     func upload(data: Data, filePath: URL, mimeType: String) async -> Result<Void, RequestError>
     func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError>
+    func removeFolderFromIndex(_ folderPath: URL) async -> Result<Void, RequestError>
     func isRemoteIngesterRunning() async -> Result<Bool, RequestError>
 }
 
@@ -84,6 +85,15 @@ struct NetworkService: HTTPClient, NetworkServiceable {
     func removeFromIndex(_ filePath: URL) async -> Result<Void, RequestError> {
         let response = await sendRequest(endpoint: BubbleEndpoint.removeFromIndex(uri: filePath.path(percentEncoded: false),
                                                                                   machineId: machineId),
+                                         responseModel: EmptyResponse.self)
+        return response.flatMap { _ in
+            return .success(())
+        }
+    }
+
+    func removeFolderFromIndex(_ folderPath: URL) async -> Result<Void, RequestError> {
+        let response = await sendRequest(endpoint: BubbleEndpoint.removeFolderFromIndex(uri: folderPath.path(percentEncoded: false),
+                                                                                        machineId: machineId),
                                          responseModel: EmptyResponse.self)
         return response.flatMap { _ in
             return .success(())
