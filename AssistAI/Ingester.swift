@@ -119,13 +119,46 @@ final class Ingester {
                 switch result {
                 case .success:
                     OSLog.ingester.log("=====> Upload complete")
-                    // TODO: after successful upload, update both ext. attributes
+                    // After successful upload, update extended attributes
+                    if case .uploadFile = action {
+                        self.updateExtendedAttrAfterUpload(at: filePath)
+                    }
                 case .failure(let error):
                     OSLog.ingester.error("Service error: \(error.localizedDescription)")
                 }
             }
 
             await self.uploadCallQueue.addCall(call)
+        }
+    }
+
+    private func updateExtendedAttrAfterUpload(at url: URL) {
+        OSLog.ingester.log("Updating extendedAttr after upload for `\(url.path(percentEncoded: false))`")
+
+        do {
+            let currentFullPath = sha256(from: url.path(percentEncoded: false))
+            OSLog.ingester.log("Calculated full path for `\(url.path(percentEncoded: false))`: `\(currentFullPath)`")
+
+            guard let dataFilename = currentFullPath.data(using: .utf8) else {
+                OSLog.ingester.error("Can't calculate sha256 for string `\(url.path(percentEncoded: false))`")
+                return
+            }
+
+            try FileManager.default.setExtendedAttribute(fileAttributeIndexedFilenameKey, on: url, data: dataFilename)
+
+            let fileSha = try fileSha256(at: url)
+            OSLog.ingester.log("Calculated sha256 for `\(url.path(percentEncoded: false))`: `\(fileSha)`")
+            guard let dataSha256 = fileSha.data(using: .utf8) else {
+                OSLog.ingester.error("Can't calculate fileSha256 for `\(url.path(percentEncoded: false))`")
+                return
+            }
+
+            try FileManager.default.setExtendedAttribute(fileAttributeIndexedSha256Key, on: url, data: dataSha256)
+
+        } catch let error as ExtendedAttributeError {
+            OSLog.ingester.error("Can't write extended attribute for `\(url.path(percentEncoded: false))`: \(error)")
+        } catch {
+            OSLog.ingester.error("Generic error (probably can't calculate sha256) while setting xattr for `\(url)`: \(error)")
         }
     }
 
@@ -176,7 +209,7 @@ final class Ingester {
             let lastSavedFullPath = String(decoding: dataFilename, as: UTF8.self)
             OSLog.ingester.log("Full path for `\(url.path(percentEncoded: false))` from xattr: `\(lastSavedFullPath)`")
 
-            let currentFullPath = sha256(from: url.path)
+            let currentFullPath = sha256(from: url.path(percentEncoded: false))
             OSLog.ingester.log("Calculated full path for `\(url.path(percentEncoded: false))`: `\(currentFullPath)`")
 
             let dataSha256 = try FileManager.default.extendedAttribute(fileAttributeIndexedSha256Key, on: url)
@@ -196,6 +229,7 @@ final class Ingester {
         }
     }
 
+    // TODO: both funcs refactor to categories
     private func sha256(from string: String) -> String {
         let inputData = Data(string.utf8)
         let hashed = SHA256.hash(data: inputData)
