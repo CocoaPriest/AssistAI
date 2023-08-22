@@ -16,8 +16,7 @@ final class Ingester {
     private let validExtensions = [
         "pdf"
     ]
-    private let fileAttributeIndexedSha256Key = "com.alstertouch.AssistAI.sha256"
-    private let fileAttributeIndexedFilenameKey = "com.alstertouch.AssistAI.filepath"
+
     private let uploadCallQueue = APICallQueueActor()
     private let networkService = NetworkService()
     private var cancellables: Set<AnyCancellable> = Set<AnyCancellable>()
@@ -144,7 +143,7 @@ final class Ingester {
                 return
             }
 
-            try FileManager.default.setExtendedAttribute(fileAttributeIndexedFilenameKey, on: url, data: dataFilename)
+            try FileManager.default.setExtendedAttribute(Constants.fileAttributeIndexedFilenameKey, on: url, data: dataFilename)
 
             let fileSha = try fileSha256(at: url)
             OSLog.ingester.log("Calculated sha256 for `\(url.path(percentEncoded: false))`: `\(fileSha)`")
@@ -153,7 +152,7 @@ final class Ingester {
                 return
             }
 
-            try FileManager.default.setExtendedAttribute(fileAttributeIndexedSha256Key, on: url, data: dataSha256)
+            try FileManager.default.setExtendedAttribute(Constants.fileAttributeIndexedSha256Key, on: url, data: dataSha256)
 
         } catch let error as ExtendedAttributeError {
             OSLog.ingester.error("Can't write extended attribute for `\(url.path(percentEncoded: false))`: \(error)")
@@ -205,14 +204,14 @@ final class Ingester {
         }
 
         do {
-            let dataFilename = try FileManager.default.extendedAttribute(fileAttributeIndexedFilenameKey, on: url)
+            let dataFilename = try FileManager.default.extendedAttribute(Constants.fileAttributeIndexedFilenameKey, on: url)
             let lastSavedFullPath = String(decoding: dataFilename, as: UTF8.self)
             OSLog.ingester.log("Full path for `\(url.path(percentEncoded: false))` from xattr: `\(lastSavedFullPath)`")
 
             let currentFullPath = sha256(from: url.path(percentEncoded: false))
             OSLog.ingester.log("Calculated full path for `\(url.path(percentEncoded: false))`: `\(currentFullPath)`")
 
-            let dataSha256 = try FileManager.default.extendedAttribute(fileAttributeIndexedSha256Key, on: url)
+            let dataSha256 = try FileManager.default.extendedAttribute(Constants.fileAttributeIndexedSha256Key, on: url)
             let lastSavedSha256 = String(decoding: dataSha256, as: UTF8.self)
             OSLog.ingester.log("sha256 for `\(url.path(percentEncoded: false))` from xattr: `\(lastSavedSha256)`")
 
@@ -259,28 +258,10 @@ final class Ingester {
     private func filesInAllDirectories() -> [URL] {
         var allUrls: [URL] = []
         for directoryURL in UserSettingsManager.shared.getFolders() {
-            let urls = filesInDirectory(at: directoryURL)
+            let urls = directoryURL.filesInDirectory()
             allUrls.append(contentsOf: urls)
         }
 
         return allUrls
-    }
-
-    private func filesInDirectory(at url: URL) -> [URL] {
-        guard let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: nil) else {
-            OSLog.ingester.critical("Failed to create enumerator.")
-            return []
-        }
-
-        let urls = enumerator.compactMap { $0 as? URL }
-
-        if urls.isEmpty {
-            OSLog.ingester.warning("Failed to find any files at \(url)")
-        } else {
-            OSLog.ingester.log("Found \(urls.count) files at \(url):")
-            urls.forEach { OSLog.ingester.log("=> \($0.path(percentEncoded: false))") }
-        }
-
-        return urls
     }
 }

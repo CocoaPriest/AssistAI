@@ -78,6 +78,7 @@ final class FoldersSettingsViewController: NSViewController, SettingsPane {
         if modalResult == .alertSecondButtonReturn {
             let selectedUrls = tableView.selectedRowIndexes.map { pathInfos[$0].url }
             UserSettingsManager.shared.removeFolders(selectedUrls)
+            IngesterHelper.shared.cleanUpAttributes(for: selectedUrls)
             btnRemoveFolder.isEnabled = false
         }
     }
