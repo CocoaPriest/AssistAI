@@ -10,7 +10,6 @@ import os.log
 import PDFKit
 
 final class ViewController: NSViewController {
-//    private let gptManager = GPTManager()
     private let networkService = NetworkService()
 
     @IBOutlet weak var questionField: NSTextField!
