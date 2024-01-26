@@ -37,6 +37,11 @@
 		9EC9A1162A95168800B3D27B /* IngesterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC9A1152A95168800B3D27B /* IngesterHelper.swift */; };
 		9EC9A1182A95186500B3D27B /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC9A1172A95186500B3D27B /* URL+Extensions.swift */; };
 		9EC9A11A2A951C4F00B3D27B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC9A1192A951C4F00B3D27B /* Constants.swift */; };
+		9EC9A1A62A96BD6700B3D27B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC9A1A52A96BD6700B3D27B /* ChatView.swift */; };
+		9EC9A1A92A96BE2E00B3D27B /* TinyConstraints in Frameworks */ = {isa = PBXBuildFile; productRef = 9EC9A1A82A96BE2E00B3D27B /* TinyConstraints */; };
+		9EC9A1AE2A9767FF00B3D27B /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC9A1AD2A9767FF00B3D27B /* ChatMessage.swift */; };
+		9EC9A1B02A97682400B3D27B /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC9A1AF2A97682400B3D27B /* ChatController.swift */; };
+		9EC9A1B42A97CE3A00B3D27B /* ChatMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC9A1B32A97CE3A00B3D27B /* ChatMessageSender.swift */; };
 		9ECCB12A2A1C2727002F1239 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB1292A1C2727002F1239 /* AppDelegate.swift */; };
 		9ECCB12C2A1C2727002F1239 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECCB12B2A1C2727002F1239 /* ViewController.swift */; };
 		9ECCB12E2A1C2728002F1239 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9ECCB12D2A1C2728002F1239 /* Assets.xcassets */; };
@@ -63,6 +68,10 @@
 		9EC9A1152A95168800B3D27B /* IngesterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngesterHelper.swift; sourceTree = "<group>"; };
 		9EC9A1172A95186500B3D27B /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		9EC9A1192A951C4F00B3D27B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9EC9A1A52A96BD6700B3D27B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		9EC9A1AD2A9767FF00B3D27B /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		9EC9A1AF2A97682400B3D27B /* ChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
+		9EC9A1B32A97CE3A00B3D27B /* ChatMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageSender.swift; sourceTree = "<group>"; };
 		9ECCB0DC2A1B85DA002F1239 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
 		9ECCB0DF2A1B8727002F1239 /* Ingester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingester.swift; sourceTree = "<group>"; };
 		9ECCB0E52A1B9333002F1239 /* Data+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
@@ -85,6 +94,7 @@
 			files = (
 				9E61CFE12A4642410040EC29 /* FileWatcher in Frameworks */,
 				9E61D0252A5742AA0040EC29 /* Settings in Frameworks */,
+				9EC9A1A92A96BE2E00B3D27B /* TinyConstraints in Frameworks */,
 				9E61D01B2A4CD31E0040EC29 /* MultipartFormDataKit in Frameworks */,
 				9E61CFF22A4BAEAC0040EC29 /* DequeModule in Frameworks */,
 			);
@@ -108,6 +118,7 @@
 		9EBE4B462A1D6B220014975D /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				9EC9A1AC2A9767F900B3D27B /* Models */,
 				9EBE4B4D2A1D6E630014975D /* Managers */,
 				9ECCB0ED2A1B9E51002F1239 /* Network */,
 				9ECCB0DE2A1B85DD002F1239 /* Extensions */,
@@ -130,8 +141,18 @@
 			children = (
 				9E7BDBB42A5C214400BA9D43 /* UserSettingsManager.swift */,
 				9EC9A1152A95168800B3D27B /* IngesterHelper.swift */,
+				9EC9A1AF2A97682400B3D27B /* ChatController.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		9EC9A1AC2A9767F900B3D27B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9EC9A1AD2A9767FF00B3D27B /* ChatMessage.swift */,
+				9EC9A1B32A97CE3A00B3D27B /* ChatMessageSender.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		9ECCB0AD2A0445B6002F1239 = {
@@ -223,6 +244,7 @@
 				9E2DAC202A44C2EA00E5CF06 /* main.swift */,
 				9ECCB1292A1C2727002F1239 /* AppDelegate.swift */,
 				9ECCB12B2A1C2727002F1239 /* ViewController.swift */,
+				9EC9A1A52A96BD6700B3D27B /* ChatView.swift */,
 				9E61D02A2A5744590040EC29 /* Settings */,
 				9ECCB0DF2A1B8727002F1239 /* Ingester.swift */,
 				9E61D0112A4C61900040EC29 /* APICall.swift */,
@@ -256,6 +278,7 @@
 				9E61CFF12A4BAEAC0040EC29 /* DequeModule */,
 				9E61D01A2A4CD31E0040EC29 /* MultipartFormDataKit */,
 				9E61D0242A5742AA0040EC29 /* Settings */,
+				9EC9A1A82A96BE2E00B3D27B /* TinyConstraints */,
 			);
 			productName = AssistAI;
 			productReference = 9ECCB1272A1C2727002F1239 /* AssistAI.app */;
@@ -290,6 +313,7 @@
 				9E61CFF02A4BAEAC0040EC29 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				9E61D0192A4CD31E0040EC29 /* XCRemoteSwiftPackageReference "MultipartFormDataKit" */,
 				9E61D0232A5742AA0040EC29 /* XCRemoteSwiftPackageReference "Preferences" */,
+				9EC9A1A72A96BE2E00B3D27B /* XCRemoteSwiftPackageReference "TinyConstraints" */,
 			);
 			productRefGroup = 9ECCB0B72A0445B6002F1239 /* Products */;
 			projectDirPath = "";
@@ -331,14 +355,18 @@
 				9E61CFEA2A4B0F5C0040EC29 /* FileManager+xattr.swift in Sources */,
 				9EBE4B362A1C30FD0014975D /* HttpClient.swift in Sources */,
 				9E2DAC212A44C2EA00E5CF06 /* main.swift in Sources */,
+				9EC9A1B02A97682400B3D27B /* ChatController.swift in Sources */,
 				9ECCB12C2A1C2727002F1239 /* ViewController.swift in Sources */,
 				9EBE4B342A1C30FD0014975D /* RequestError.swift in Sources */,
 				9E61D0272A5743170040EC29 /* GeneralSettingsViewController.swift in Sources */,
 				9E61D0202A54B17A0040EC29 /* BoolResponse.swift in Sources */,
 				9EBE4B2F2A1C2E100014975D /* OSLog+Extensions.swift in Sources */,
 				9E61D0122A4C61900040EC29 /* APICall.swift in Sources */,
+				9EC9A1B42A97CE3A00B3D27B /* ChatMessageSender.swift in Sources */,
 				9EC9A1182A95186500B3D27B /* URL+Extensions.swift in Sources */,
 				9E61D0162A4CCA5C0040EC29 /* BubbleEndpoint.swift in Sources */,
+				9EC9A1A62A96BD6700B3D27B /* ChatView.swift in Sources */,
+				9EC9A1AE2A9767FF00B3D27B /* ChatMessage.swift in Sources */,
 				9E61CFD62A45A7470040EC29 /* Ingester.swift in Sources */,
 				9E61D0222A56CA100040EC29 /* FoldersSettingsViewController.swift in Sources */,
 				9E61D0142A4C61A70040EC29 /* APICallQueueActor.swift in Sources */,
@@ -587,6 +615,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		9EC9A1A72A96BE2E00B3D27B /* XCRemoteSwiftPackageReference "TinyConstraints" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/roberthein/TinyConstraints.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -609,6 +645,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9E61D0232A5742AA0040EC29 /* XCRemoteSwiftPackageReference "Preferences" */;
 			productName = Settings;
+		};
+		9EC9A1A82A96BE2E00B3D27B /* TinyConstraints */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9EC9A1A72A96BE2E00B3D27B /* XCRemoteSwiftPackageReference "TinyConstraints" */;
+			productName = TinyConstraints;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

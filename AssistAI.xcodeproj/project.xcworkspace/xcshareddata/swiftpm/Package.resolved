@@ -35,6 +35,15 @@
         "branch" : "release/1.1",
         "revision" : "9eece74f39c2c103118c46a5731f058e68c746bf"
       }
+    },
+    {
+      "identity" : "tinyconstraints",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/roberthein/TinyConstraints.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a89996a77d364eb85abdd09d42d2274e35ba56dc"
+      }
     }
   ],
   "version" : 2

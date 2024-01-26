@@ -686,7 +686,7 @@
                 <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" sceneMemberID="viewController">
                     <window key="window" title="AssistAI" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA" customClass="AssistWindow" customModule="AssistAI" customModuleProvider="target">
                         <windowStyleMask key="styleMask" titled="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+                        <rect key="contentRect" x="196" y="240" width="600" height="400"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="nQo-9z-ez7"/>
@@ -705,75 +705,17 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="AssistAI" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SuJ-vb-TVm">
-                                <rect key="frame" x="20" y="219" width="367" height="31"/>
-                                <textFieldCell key="cell" controlSize="large" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Your question" drawsBackground="YES" id="WdK-CA-mVD">
-                                    <font key="font" textStyle="title1" name=".SFNS-Regular"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w7B-IN-z94">
-                                <rect key="frame" x="20" y="20" width="440" height="167"/>
-                                <clipView key="contentView" drawsBackground="NO" id="tWm-AO-00h">
-                                    <rect key="frame" x="0.0" y="0.0" width="425" height="167"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <textView wantsLayer="YES" editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" smartInsertDelete="YES" id="MKa-dg-lOu">
-                                            <rect key="frame" x="0.0" y="0.0" width="425" height="167"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="425" height="167"/>
-                                            <size key="maxSize" width="440" height="10000000"/>
-                                            <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                        </textView>
-                                    </subviews>
-                                </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="9kQ-fS-R1X">
-                                    <rect key="frame" x="-100" y="-100" width="225" height="15"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="N5y-6I-mTu">
-                                    <rect key="frame" x="425" y="0.0" width="15" height="167"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                            </scrollView>
-                            <progressIndicator maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="aQl-W8-vkh">
-                                <rect key="frame" x="225" y="195" width="16" height="16"/>
+                            <progressIndicator fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="aQl-W8-vkh">
+                                <rect key="frame" x="225" y="325" width="16" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eS5-ry-sEX">
-                                <rect key="frame" x="389" y="215" width="77" height="40"/>
-                                <buttonCell key="cell" type="push" title="✨ Ask" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5bu-kF-P3d">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="didTapAsk:" target="XfG-lQ-9wD" id="bXP-NH-CXa"/>
-                                </connections>
-                            </button>
                         </subviews>
-                        <constraints>
-                            <constraint firstItem="w7B-IN-z94" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="0Lq-cg-Z15"/>
-                            <constraint firstAttribute="bottom" secondItem="w7B-IN-z94" secondAttribute="bottom" constant="20" symbolic="YES" id="9cF-BH-plN"/>
-                            <constraint firstItem="SuJ-vb-TVm" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="Dsf-Gh-lzh"/>
-                            <constraint firstItem="SuJ-vb-TVm" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="Hxk-1r-hVA"/>
-                            <constraint firstAttribute="trailing" secondItem="w7B-IN-z94" secondAttribute="trailing" constant="20" symbolic="YES" id="LV9-Bd-7vP"/>
-                            <constraint firstItem="eS5-ry-sEX" firstAttribute="centerY" secondItem="SuJ-vb-TVm" secondAttribute="centerY" id="U2b-Za-vIK"/>
-                            <constraint firstAttribute="trailing" secondItem="eS5-ry-sEX" secondAttribute="trailing" constant="20" symbolic="YES" id="Xjl-QD-ET2"/>
-                            <constraint firstItem="MKa-dg-lOu" firstAttribute="top" secondItem="aQl-W8-vkh" secondAttribute="bottom" constant="8" symbolic="YES" id="c9l-jL-YWu"/>
-                            <constraint firstItem="aQl-W8-vkh" firstAttribute="centerX" secondItem="MKa-dg-lOu" secondAttribute="centerX" id="nvl-cz-heC"/>
-                            <constraint firstItem="aQl-W8-vkh" firstAttribute="top" secondItem="SuJ-vb-TVm" secondAttribute="bottom" constant="8" symbolic="YES" id="qiX-hI-Z4o"/>
-                            <constraint firstItem="eS5-ry-sEX" firstAttribute="leading" secondItem="SuJ-vb-TVm" secondAttribute="trailing" constant="8" symbolic="YES" id="qvP-cG-W5u"/>
-                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="outputTextView" destination="MKa-dg-lOu" id="Y60-W2-nCJ"/>
                         <outlet property="progressIndicator" destination="aQl-W8-vkh" id="8Xv-5w-Lk6"/>
-                        <outlet property="questionField" destination="SuJ-vb-TVm" id="dCu-mX-hZa"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
